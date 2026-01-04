@@ -1,0 +1,39 @@
+{
+  "common": {
+    "actions": {
+      "refresh": "새로고침"
+    },
+    "status": {
+      "ongoing": "진행중",
+      "upcoming": "진행 예정",
+      "ended": "종료됨"
+    },
+    "messages": {
+      "errorPrefix": "오류 발생:",
+      "emptyList": "등록된 이벤트가 없습니다."
+    },
+    "detail": {
+      "loading": "불러오는 중...",
+      "periodLabel": "이벤트 기간",
+      "publishedLabel": "등록일",
+      "ctaButton": "자세히 보러가기",
+      "placeholder": "이벤트 상세 내용을 불러올 수 없습니다."
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobX 이벤트 | 최신 소식",
+    "metaDescription": "GlobX의 다양한 이벤트와 프로모션을 확인해보세요.",
+    "header": {
+      "title": "GlobX 이벤트",
+      "subtitle": "회원님을 위한 특별한 혜택과 소식을 확인하세요."
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quanty 이벤트 | AI 투자 혜택",
+    "metaDescription": "Quanty가 제공하는 특별한 분석 이벤트와 혜택을 놓치지 마세요.",
+    "header": {
+      "title": "Quanty 이벤트",
+      "subtitle": "데이터 기반의 특별한 투자 혜택을 만나보세요."
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "내 계정",
+    "subtitle": "계정 정보, 보안 설정 및 지갑 주소를 관리하세요."
+  },
+  "info": {
+    "title": "기본 정보",
+    "username": "아이디",
+    "email": "이메일",
+    "name": "이름",
+    "country": "국가"
+  },
+  "referral": {
+    "title": "친구 초대",
+    "desc": "초대 링크를 친구에게 공유하고 함께 혜택을 누리세요."
+  },
+  "otp": {
+    "title": "Google OTP",
+    "alreadyEnabled": "OTP가 안전하게 설정되어 있습니다.",
+    "scanDesc": "Google Authenticator 앱으로 QR 코드를 스캔하세요.",
+    "secretKey": "백업 키 (분실 시 복구용)",
+    "registerBtn": "OTP 등록",
+    "initFail": "OTP 초기화 실패",
+    "registerFail": "등록 실패",
+    "registerSuccess": "OTP가 성공적으로 등록되었습니다."
+  },
+  "wallet": {
+    "title": "출금 지갑",
+    "inputLabel": "EVM 지갑 주소 (0x...)",
+    "invalidFormat": "올바른 EVM 주소 형식이 아닙니다.",
+    "registerBtn": "주소 등록",
+    "currentAddress": "등록된 출금 주소",
+    "requireOtp": "지갑 등록 전 OTP 설정이 필요합니다.",
+    "otpVerify": "OTP 인증",
+    "otpVerifyDesc": "보안을 위해 OTP 코드를 입력해주세요.",
+    "invalidAddress": "유효하지 않은 주소입니다.",
+    "saveSuccess": "지갑 주소가 등록되었습니다.",
+    "saveFail": "저장 실패"
+  },
+  "password": {
+    "title": "비밀번호 변경",
+    "current": "현재 비밀번호",
+    "new": "새 비밀번호",
+    "confirm": "새 비밀번호 확인",
+    "changeBtn": "비밀번호 변경",
+    "changeSuccess": "비밀번호가 변경되었습니다.",
+    "changeFail": "비밀번호 변경 실패"
+  },
+  "status": {
+    "registered": "등록됨",
+    "unregistered": "미등록"
+  },
+  "action": {
+    "copy": "복사",
+    "cancel": "취소",
+    "confirm": "확인"
+  },
+  "toast": {
+    "copySuccess": "복사 완료",
+    "refLinkCopied": "레퍼럴 링크가 복사되었습니다.",
+    "walletCopied": "지갑 주소가 복사되었습니다.",
+    "copyFail": "복사 실패",
+    "copyManual": "직접 선택하여 복사해주세요."
+  },
+  "error": {
+    "loadFailed": "프로필 조회 실패 (HTTP {status})",
+    "loadUnknown": "프로필 로드 중 오류가 발생했습니다."
+  }
+}

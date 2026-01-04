@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Lịch sử Giao dịch",
+    "subtitle": "Xem hồ sơ khớp lệnh và thanh lý được lọc theo bot."
+  },
+  "filter": {
+    "bot": "Chọn Bot",
+    "symbol": "Chọn Cặp",
+    "allBots": "Tất cả Bot",
+    "allSymbols": "Tất cả Cặp"
+  },
+  "action": {
+    "apply": "Áp dụng",
+    "refresh": "Làm mới"
+  },
+  "list": {
+    "total": "Tổng {count} bản ghi",
+    "empty": "Không có lịch sử giao dịch."
+  },
+  "status": {
+    "open": "Đang mở",
+    "closed": "Đã đóng"
+  },
+  "column": {
+    "status": "Trạng thái",
+    "bot": "Tên Bot",
+    "market": "Sàn/Cặp",
+    "side": "Hướng",
+    "leverage": "Đòn bẩy",
+    "entryPrice": "Giá vào",
+    "entryUsdt": "Số tiền vào",
+    "profit": "PnL (USDT)",
+    "roi": "ROI",
+    "openedAt": "Thời gian mở",
+    "closedAt": "Thời gian đóng"
+  }
+}

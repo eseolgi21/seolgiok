@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "My Config",
+    "subtitle": "Manage exchange API keys and bot activation status."
+  },
+  "form": {
+    "title": "Bot Status & Credentials"
+  },
+  "field": {
+    "enabled": "Enable Bot",
+    "exchange": "Exchange",
+    "uid": "Exchange UID",
+    "apiKey": "API Key",
+    "apiSecret": "API Secret",
+    "passphrase": "API Passphrase"
+  },
+  "placeholder": {
+    "selectExchange": "Select Exchange",
+    "uid": "Account UID (Required)",
+    "apiKey": "Enter API Key",
+    "apiSecret": "Enter API Secret",
+    "passphrase": "Enter KuCoin Passphrase"
+  },
+  "action": {
+    "save": "Save",
+    "deleteSelected": "Delete Selected ({count})"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin requires Key, Secret, and Passphrase."
+  },
+  "history": {
+    "title": "Saved API History",
+    "empty": "No saved history found."
+  },
+  "table": {
+    "updatedAt": "Updated",
+    "exchange": "Exchange",
+    "uid": "UID",
+    "createdAt": "Created"
+  }
+}

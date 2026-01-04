@@ -1,0 +1,65 @@
+{
+  "form": {
+    "title": "Cấu hình Bot Giao dịch",
+    "subtitle": "Tạo bot mới hoặc điều chỉnh cài đặt hiện có."
+  },
+  "field": {
+    "botName": "Tên Bot",
+    "symbol": "Cặp giao dịch",
+    "strategy": "Chiến lược",
+    "exchangeMarket": "Sàn-Thị trường",
+    "marketKind": "Loại Thị trường",
+    "exchange": "Sàn giao dịch",
+    "market": "Thị trường",
+    "allocation": "Phân bổ (bps)",
+    "enabled": "Kích hoạt"
+  },
+  "placeholder": {
+    "botName": "Nhập tên bot",
+    "selectSymbol": "Chọn cặp giao dịch",
+    "selectStrategy": "Chọn chiến lược",
+    "select": "Chọn"
+  },
+  "mode": {
+    "single": "Chế độ Đơn (SINGLE)",
+    "multi": "Chế độ Đa (MULTI)"
+  },
+  "group": {
+    "a_title": "Nhóm A",
+    "b_title": "Nhóm B",
+    "a": "Nhóm A (Mua/Long)",
+    "b": "Nhóm B (Bán/Short)"
+  },
+  "action": {
+    "addExchange": "Thêm Sàn",
+    "save": "Lưu Cấu hình",
+    "saving": "Đang lưu..."
+  },
+  "message": {
+    "noExchanges": "Chưa có sàn giao dịch nào được đăng ký. Vui lòng nhấn Thêm."
+  },
+  "list": {
+    "title": "Danh sách Bot",
+    "empty": "Chưa có bot nào được đăng ký."
+  },
+  "error": {
+    "metaLoadFail": "Không thể tải dữ liệu meta."
+  },
+  "toast": {
+    "validationError": "Lỗi xác thực",
+    "saveSuccess": "Lưu thành công",
+    "saveSuccessDesc": "Cấu hình bot đã được lưu thành công.",
+    "saveFail": "Lưu thất bại",
+    "networkError": "Lỗi Mạng",
+    "networkErrorDesc": "Đã xảy ra lỗi trong quá trình giao tiếp máy chủ.",
+    "deleteSuccess": "Xóa thành công",
+    "deleteSuccessDesc": "Bot đã được xóa.",
+    "deleteFail": "Xóa thất bại",
+    "deleteFailDesc": "Đã xảy ra lỗi trong quá trình xóa.",
+    "startFail": "Khởi động thất bại",
+    "stopFail": "Dừng thất bại"
+  },
+  "confirm": {
+    "delete": "Bạn có chắc chắn muốn xóa bot đã chọn không? Thao tác này không thể hoàn tác."
+  }
+}

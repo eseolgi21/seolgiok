@@ -1,0 +1,60 @@
+{
+  "GlobX": {
+    "title": "Đăng nhập",
+    "subtitle": "Vui lòng đăng nhập để sử dụng dịch vụ.",
+    "fields": {
+      "idLabel": "ID hoặc Email",
+      "idPlaceholder": "Nhập ID hoặc Email",
+      "idError": "Vui lòng kiểm tra định dạng ID/Email.",
+      "pwLabel": "Mật khẩu",
+      "pwPlaceholder": "Nhập mật khẩu",
+      "pwError": "Vui lòng nhập mật khẩu."
+    },
+    "buttons": {
+      "submit": "Đăng nhập",
+      "findId": "Tìm ID",
+      "findPw": "Tìm mật khẩu",
+      "signup": "Đăng ký"
+    },
+    "messages": {
+      "successTitle": "Đăng nhập thành công",
+      "successDesc": "Chào mừng trở lại, {username}.",
+      "invalidCredentials": "ID hoặc mật khẩu không khớp.",
+      "validationError": "Giá trị nhập không chính xác.",
+      "generalError": "Đã xảy ra lỗi khi đăng nhập.",
+      "failTitle": "Đăng nhập thất bại",
+      "serverErrorTitle": "Lỗi máy chủ",
+      "networkErrorTitle": "Lỗi mạng",
+      "networkErrorDesc": "Không thể kết nối với máy chủ."
+    }
+  },
+  "Quanty": {
+    "title": "Đăng nhập Quanty",
+    "subtitle": "Chào mừng bạn đến với đầu tư AI dựa trên dữ liệu, Quanty.",
+    "fields": {
+      "idLabel": "ID tài khoản",
+      "idPlaceholder": "Nhập ID Quanty",
+      "idError": "Định dạng ID không chính xác.",
+      "pwLabel": "Mật khẩu",
+      "pwPlaceholder": "Vui lòng nhập mật khẩu",
+      "pwError": "Vui lòng nhập mật khẩu."
+    },
+    "buttons": {
+      "submit": "Đăng nhập",
+      "findId": "Tìm ID",
+      "findPw": "Tìm mật khẩu",
+      "signup": "Đăng ký"
+    },
+    "messages": {
+      "successTitle": "Kết nối thành công",
+      "successDesc": "Chào {username}, Quanty AI đã sẵn sàng.",
+      "invalidCredentials": "Thông tin tài khoản không khớp.",
+      "validationError": "Vui lòng kiểm tra lại thông tin đã nhập.",
+      "generalError": "Đã xảy ra lỗi hệ thống.",
+      "failTitle": "Kết nối thất bại",
+      "serverErrorTitle": "Lỗi hệ thống",
+      "networkErrorTitle": "Kết nối thất bại",
+      "networkErrorDesc": "Vui lòng kiểm tra trạng thái kết nối máy chủ."
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "Tài khoản của tôi",
+    "subtitle": "Quản lý hồ sơ, cài đặt bảo mật và địa chỉ ví của bạn."
+  },
+  "info": {
+    "title": "Thông tin cơ bản",
+    "username": "Tên đăng nhập",
+    "email": "Email",
+    "name": "Tên",
+    "country": "Quốc gia"
+  },
+  "referral": {
+    "title": "Mời bạn bè",
+    "desc": "Chia sẻ liên kết giới thiệu với bạn bè và cùng nhận thưởng."
+  },
+  "otp": {
+    "title": "Google OTP",
+    "alreadyEnabled": "OTP đã được bật an toàn.",
+    "scanDesc": "Quét mã QR này bằng ứng dụng Google Authenticator.",
+    "secretKey": "Khóa sao lưu (Dùng để khôi phục)",
+    "registerBtn": "Bật OTP",
+    "initFail": "Khởi tạo OTP thất bại",
+    "registerFail": "Đăng ký thất bại",
+    "registerSuccess": "OTP đã được bật thành công."
+  },
+  "wallet": {
+    "title": "Ví rút tiền",
+    "inputLabel": "Địa chỉ ví EVM (0x...)",
+    "invalidFormat": "Định dạng địa chỉ EVM không hợp lệ.",
+    "registerBtn": "Đăng ký địa chỉ",
+    "currentAddress": "Địa chỉ đã đăng ký",
+    "requireOtp": "Cần thiết lập OTP trước khi đăng ký ví.",
+    "otpVerify": "Xác minh OTP",
+    "otpVerifyDesc": "Nhập mã OTP để xác minh bảo mật.",
+    "invalidAddress": "Địa chỉ không hợp lệ.",
+    "saveSuccess": "Địa chỉ ví đã được đăng ký.",
+    "saveFail": "Lưu thất bại"
+  },
+  "password": {
+    "title": "Đổi mật khẩu",
+    "current": "Mật khẩu hiện tại",
+    "new": "Mật khẩu mới",
+    "confirm": "Xác nhận mật khẩu mới",
+    "changeBtn": "Đổi mật khẩu",
+    "changeSuccess": "Mật khẩu đã được thay đổi.",
+    "changeFail": "Đổi mật khẩu thất bại."
+  },
+  "status": {
+    "registered": "Đã đăng ký",
+    "unregistered": "Chưa đăng ký"
+  },
+  "action": {
+    "copy": "Sao chép",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận"
+  },
+  "toast": {
+    "copySuccess": "Đã sao chép",
+    "refLinkCopied": "Đã sao chép liên kết giới thiệu.",
+    "walletCopied": "Đã sao chép địa chỉ ví.",
+    "copyFail": "Sao chép thất bại",
+    "copyManual": "Vui lòng sao chép thủ công."
+  },
+  "error": {
+    "loadFailed": "Tải hồ sơ thất bại (HTTP {status})",
+    "loadUnknown": "Đã xảy ra lỗi khi tải hồ sơ."
+  }
+}

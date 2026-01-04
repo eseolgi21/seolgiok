@@ -1,0 +1,60 @@
+{
+  "GlobX": {
+    "title": "登录",
+    "subtitle": "使用服务需要登录。",
+    "fields": {
+      "idLabel": "ID或邮箱",
+      "idPlaceholder": "请输入ID或邮箱",
+      "idError": "请确认ID/邮箱格式。",
+      "pwLabel": "密码",
+      "pwPlaceholder": "请输入密码",
+      "pwError": "请输入密码。"
+    },
+    "buttons": {
+      "submit": "登录",
+      "findId": "找回ID",
+      "findPw": "找回密码",
+      "signup": "注册会员"
+    },
+    "messages": {
+      "successTitle": "登录成功",
+      "successDesc": "欢迎您，{username}。",
+      "invalidCredentials": "ID或密码不一致。",
+      "validationError": "输入值不正确。",
+      "generalError": "登录过程中发生错误。",
+      "failTitle": "登录失败",
+      "serverErrorTitle": "服务器错误",
+      "networkErrorTitle": "网络错误",
+      "networkErrorDesc": "无法连接服务器。"
+    }
+  },
+  "Quanty": {
+    "title": "Quanty 登录",
+    "subtitle": "欢迎来到基于数据的AI投资 Quanty。",
+    "fields": {
+      "idLabel": "账户ID",
+      "idPlaceholder": "请输入 Quanty ID",
+      "idError": "ID格式不正确。",
+      "pwLabel": "密码",
+      "pwPlaceholder": "请输入密码",
+      "pwError": "请输入密码。"
+    },
+    "buttons": {
+      "submit": "登录",
+      "findId": "找回ID",
+      "findPw": "找回密码",
+      "signup": "注册会员"
+    },
+    "messages": {
+      "successTitle": "连接成功",
+      "successDesc": "{username}，Quanty AI 已准备就绪。",
+      "invalidCredentials": "账户信息不一致。",
+      "validationError": "请再次确认输入信息。",
+      "generalError": "发生系统错误。",
+      "failTitle": "连接失败",
+      "serverErrorTitle": "系统错误",
+      "networkErrorTitle": "连接失败",
+      "networkErrorDesc": "请确认服务器连接状态。"
+    }
+  }
+}

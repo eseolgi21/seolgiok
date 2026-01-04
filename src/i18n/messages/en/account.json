@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "My Account",
+    "subtitle": "Manage your profile, security, and wallet settings."
+  },
+  "info": {
+    "title": "Basic Info",
+    "username": "Username",
+    "email": "Email",
+    "name": "Name",
+    "country": "Country"
+  },
+  "referral": {
+    "title": "Invite Friends",
+    "desc": "Share your referral link and earn rewards together."
+  },
+  "otp": {
+    "title": "Google OTP",
+    "alreadyEnabled": "OTP is enabled and secure.",
+    "scanDesc": "Scan this QR code with Google Authenticator app.",
+    "secretKey": "Backup Key",
+    "registerBtn": "Enable OTP",
+    "initFail": "Failed to init OTP",
+    "registerFail": "Registration Failed",
+    "registerSuccess": "OTP successfully enabled."
+  },
+  "wallet": {
+    "title": "Withdrawal Wallet",
+    "inputLabel": "EVM Wallet Address (0x...)",
+    "invalidFormat": "Invalid EVM address format.",
+    "registerBtn": "Register Address",
+    "currentAddress": "Registered Address",
+    "requireOtp": "OTP setup is required before wallet registration.",
+    "otpVerify": "OTP Verification",
+    "otpVerifyDesc": "Enter OTP code for security verification.",
+    "invalidAddress": "Invalid address.",
+    "saveSuccess": "Wallet address registered.",
+    "saveFail": "Save Failed"
+  },
+  "password": {
+    "title": "Change Password",
+    "current": "Current Password",
+    "new": "New Password",
+    "confirm": "Confirm Password",
+    "changeBtn": "Change Password",
+    "changeSuccess": "Password changed successfully.",
+    "changeFail": "Failed to change password."
+  },
+  "status": {
+    "registered": "Registered",
+    "unregistered": "Not Registered"
+  },
+  "action": {
+    "copy": "Copy",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "toast": {
+    "copySuccess": "Copied",
+    "refLinkCopied": "Referral link copied.",
+    "walletCopied": "Wallet address copied.",
+    "copyFail": "Copy Failed",
+    "copyManual": "Please copy manually."
+  },
+  "error": {
+    "loadFailed": "Failed to load profile (HTTP {status})",
+    "loadUnknown": "An error occurred while loading profile."
+  }
+}

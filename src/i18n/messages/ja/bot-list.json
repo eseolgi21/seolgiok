@@ -1,0 +1,21 @@
+{
+  "list": {
+    "title": "ボット一覧",
+    "total": "全 {count} 件",
+    "empty": "登録されたボットはありません。"
+  },
+  "action": {
+    "start": "開始",
+    "stop": "停止",
+    "delete": "削除",
+    "refresh": "更新"
+  },
+  "status": {
+    "running": "実行中",
+    "stopped": "停止中",
+    "starting": "起動中...",
+    "stopping": "停止中...",
+    "error": "エラー",
+    "unknown": "不明"
+  }
+}

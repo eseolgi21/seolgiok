@@ -1,0 +1,39 @@
+{
+  "common": {
+    "actions": {
+      "refresh": "Làm mới"
+    },
+    "status": {
+      "ongoing": "Đang diễn ra",
+      "upcoming": "Sắp diễn ra",
+      "ended": "Đã kết thúc"
+    },
+    "messages": {
+      "errorPrefix": "Lỗi:",
+      "emptyList": "Không có sự kiện nào."
+    },
+    "detail": {
+      "loading": "Đang tải...",
+      "periodLabel": "Thời gian sự kiện",
+      "publishedLabel": "Ngày đăng",
+      "ctaButton": "Xem chi tiết",
+      "placeholder": "Không thể tải chi tiết sự kiện."
+    }
+  },
+  "GlobX": {
+    "metaTitle": "Sự kiện GlobX | Tin tức mới nhất",
+    "metaDescription": "Khám phá các sự kiện và khuyến mãi đa dạng từ GlobX.",
+    "header": {
+      "title": "Sự kiện GlobX",
+      "subtitle": "Kiểm tra các ưu đãi và tin tức đặc biệt dành cho bạn."
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Sự kiện Quanty | Ưu đãi đầu tư AI",
+    "metaDescription": "Đừng bỏ lỡ các sự kiện phân tích đặc biệt và ưu đãi từ Quanty.",
+    "header": {
+      "title": "Sự kiện Quanty",
+      "subtitle": "Khám phá các ưu đãi đầu tư đặc biệt dựa trên dữ liệu."
+    }
+  }
+}

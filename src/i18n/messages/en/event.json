@@ -1,0 +1,39 @@
+{
+  "common": {
+    "actions": {
+      "refresh": "Refresh"
+    },
+    "status": {
+      "ongoing": "Ongoing",
+      "upcoming": "Upcoming",
+      "ended": "Ended"
+    },
+    "messages": {
+      "errorPrefix": "Error:",
+      "emptyList": "No events available."
+    },
+    "detail": {
+      "loading": "Loading...",
+      "periodLabel": "Event Period",
+      "publishedLabel": "Published Date",
+      "ctaButton": "View Details",
+      "placeholder": "Unable to load event details."
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobX Events | Latest News",
+    "metaDescription": "Check out various events and promotions from GlobX.",
+    "header": {
+      "title": "GlobX Events",
+      "subtitle": "Check out special benefits and news just for you."
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quanty Events | AI Investment Benefits",
+    "metaDescription": "Don't miss out on special analysis events and benefits provided by Quanty.",
+    "header": {
+      "title": "Quanty Events",
+      "subtitle": "Discover special investment benefits based on data."
+    }
+  }
+}

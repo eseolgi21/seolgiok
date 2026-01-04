@@ -1,0 +1,63 @@
+{
+  "title": "注册",
+  "subtitle": "创建新账户并开始使用服务。",
+  "fields": {
+    "username": "账号",
+    "usernamePlaceholder": "4~16位小写字母/数字/下划线",
+    "email": "邮箱",
+    "emailPlaceholder": "you@example.com",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "nickname": "昵称",
+    "nicknamePlaceholder": "请输入昵称",
+    "country": "国家",
+    "countryPlaceholder": "选择国家（可选）",
+    "referrer": "推荐人",
+    "referrerPlaceholder": "推荐人账号 or 邮箱",
+    "search": "搜索"
+  },
+  "checklist": {
+    "len": "8~18个字符",
+    "letter": "包含字母",
+    "digit": "包含数字",
+    "upper": "至少1个大写字母",
+    "symbol": "至少1个符号",
+    "mismatch": "密码不一致。"
+  },
+  "agreements": {
+    "terms": "我同意服务条款。",
+    "view": "（查看）",
+    "privacy": "我同意隐私政策。",
+    "required": "* 请勾选必须同意的条款。"
+  },
+  "buttons": {
+    "submit": "注册"
+  },
+  "messages": {
+    "validReferrer": "有效的推荐人。",
+    "invalidReferrer": "未找到推荐人。",
+    "checkRefTitle": "确认推荐人",
+    "inputErrorTitle": "输入错误",
+    "inputErrorDesc": "请检查必填项和格式。",
+    "successTitle": "注册成功",
+    "successDesc": "请使用邮箱或账号登录。",
+    "failTitle": "注册失败"
+  },
+  "errors": {
+    "usernameFormat": "请检查账号格式。",
+    "emailFormat": "请检查邮箱格式。",
+    "nicknameReq": "请输入昵称。",
+    "countryReq": "请选择国家代码。",
+    "usernameTaken": "该账号已被使用。",
+    "emailTaken": "该邮箱已被使用。",
+    "referrerNotFound": "未找到推荐人。",
+    "sponsorNotFound": "未找到赞助人。",
+    "countryCodeInvalid": "国家代码必须是2个英文字母（例如：CN, US）。",
+    "countryNotFound": "未找到该国家代码。",
+    "checkInput": "请重新检查输入内容。",
+    "serverError": "发生服务器/网络错误。",
+    "tempError": "由于暂时性问题无法处理。"
+  }
+}

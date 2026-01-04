@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "マイアカウント",
+    "subtitle": "プロフィール、セキュリティ設定、およびウォレットアドレスを管理します。"
+  },
+  "info": {
+    "title": "基本情報",
+    "username": "ユーザー名",
+    "email": "メールアドレス",
+    "name": "名前",
+    "country": "国"
+  },
+  "referral": {
+    "title": "友達招待",
+    "desc": "招待リンクを友達に共有して、一緒に報酬を獲得しましょう。"
+  },
+  "otp": {
+    "title": "Google OTP",
+    "alreadyEnabled": "OTPは安全に設定されています。",
+    "scanDesc": "Google AuthenticatorアプリでQRコードをスキャンしてください。",
+    "secretKey": "バックアップキー (紛失時の復旧用)",
+    "registerBtn": "OTP登録",
+    "initFail": "OTP初期化失敗",
+    "registerFail": "登録失敗",
+    "registerSuccess": "OTPが正常に登録されました。"
+  },
+  "wallet": {
+    "title": "出金ウォレット",
+    "inputLabel": "EVMウォレットアドレス (0x...)",
+    "invalidFormat": "正しいEVMアドレス形式ではありません。",
+    "registerBtn": "アドレス登録",
+    "currentAddress": "登録済み出金アドレス",
+    "requireOtp": "ウォレット登録の前にOTP設定が必要です。",
+    "otpVerify": "OTP認証",
+    "otpVerifyDesc": "セキュリティのためOTPコードを入力してください。",
+    "invalidAddress": "無効なアドレスです。",
+    "saveSuccess": "ウォレットアドレスが登録されました。",
+    "saveFail": "保存失敗"
+  },
+  "password": {
+    "title": "パスワード変更",
+    "current": "現在のパスワード",
+    "new": "新しいパスワード",
+    "confirm": "新しいパスワード確認",
+    "changeBtn": "パスワード変更",
+    "changeSuccess": "パスワードが変更されました。",
+    "changeFail": "パスワード変更に失敗しました。"
+  },
+  "status": {
+    "registered": "登録済み",
+    "unregistered": "未登録"
+  },
+  "action": {
+    "copy": "コピー",
+    "cancel": "キャンセル",
+    "confirm": "確認"
+  },
+  "toast": {
+    "copySuccess": "コピー完了",
+    "refLinkCopied": "招待リンクをコピーしました。",
+    "walletCopied": "ウォレットアドレスをコピーしました。",
+    "copyFail": "コピー失敗",
+    "copyManual": "手動でコピーしてください。"
+  },
+  "error": {
+    "loadFailed": "プロフィールの読み込みに失敗しました (HTTP {status})",
+    "loadUnknown": "プロフィールの読み込み中にエラーが発生しました。"
+  }
+}

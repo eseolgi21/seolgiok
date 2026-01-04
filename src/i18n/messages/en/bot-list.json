@@ -1,0 +1,21 @@
+{
+  "list": {
+    "title": "Bot List",
+    "total": "Total {count}",
+    "empty": "No bots found."
+  },
+  "action": {
+    "start": "Start",
+    "stop": "Stop",
+    "delete": "Delete",
+    "refresh": "Refresh"
+  },
+  "status": {
+    "running": "RUNNING",
+    "stopped": "STOPPED",
+    "starting": "STARTING...",
+    "stopping": "STOPPING...",
+    "error": "ERROR",
+    "unknown": "UNKNOWN"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "common": {
+    "actions": {
+      "refresh": "更新"
+    },
+    "status": {
+      "ongoing": "開催中",
+      "upcoming": "開催予定",
+      "ended": "終了"
+    },
+    "messages": {
+      "errorPrefix": "エラー:",
+      "emptyList": "登録されたイベントがありません。"
+    },
+    "detail": {
+      "loading": "読み込み中...",
+      "periodLabel": "イベント期間",
+      "publishedLabel": "登録日",
+      "ctaButton": "詳細を見る",
+      "placeholder": "イベントの詳細を読み込めません。"
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobXイベント | 最新ニュース",
+    "metaDescription": "GlobXの様々なイベントやプロモーションをご確認ください。",
+    "header": {
+      "title": "GlobX イベント",
+      "subtitle": "会員様のための特別な特典やニュースをご確認ください。"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quantyイベント | AI投資特典",
+    "metaDescription": "Quantyが提供する特別な分析イベントや特典をお見逃しなく。",
+    "header": {
+      "title": "Quanty イベント",
+      "subtitle": "データに基づいた特別な投資特典をご覧ください。"
+    }
+  }
+}

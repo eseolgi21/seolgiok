@@ -1,0 +1,21 @@
+{
+  "list": {
+    "title": "机器人列表",
+    "total": "共 {count} 个",
+    "empty": "暂无机器人"
+  },
+  "action": {
+    "start": "启动",
+    "stop": "停止",
+    "delete": "删除",
+    "refresh": "刷新"
+  },
+  "status": {
+    "running": "运行中",
+    "stopped": "已停止",
+    "starting": "启动中...",
+    "stopping": "停止中...",
+    "error": "错误",
+    "unknown": "未知"
+  }
+}

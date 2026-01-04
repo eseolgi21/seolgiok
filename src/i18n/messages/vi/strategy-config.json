@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "Cấu hình Chiến lược",
+    "subtitle": "Thiết lập tham số chiến lược cho bot giao dịch tự động."
+  },
+  "create": {
+    "title": "Tạo chiến lược mới"
+  },
+  "edit": {
+    "title": "Sửa chiến lược",
+    "id": "ID Chiến lược"
+  },
+  "section": {
+    "common": "Cài đặt chung",
+    "strategySelect": "Chọn loại chiến lược",
+    "entry": "Cài đặt vào lệnh",
+    "martingale": "Cài đặt Martingale",
+    "trend": "Cài đặt Xu hướng (TREND)",
+    "box": "Cài đặt Hộp (BOX)",
+    "signalConfirm": "Xác nhận tín hiệu / Tham số phụ"
+  },
+  "field": {
+    "name": "Tên chiến lược",
+    "kind": "Loại chiến lược",
+    "timeframe": "Khung thời gian",
+    "rsiLength": "Độ dài RSI",
+    "leverage": "Đòn bẩy (x)",
+    "profit": "Lợi nhuận mục tiêu (%)",
+    "loss": "Cắt lỗ (%)",
+    "defaultSize": "Số tiền vào lệnh cơ bản",
+    "maxSize": "Số tiền vào lệnh tối đa",
+    "useMartin": "Sử dụng Martingale",
+    "martinMultiplier": "Hệ số Martingale",
+    "rangeFollowTrendOnly": "Chỉ theo xu hướng trong hộp",
+    "reverseEntry": "Cho phép vào lệnh ngược chiều",
+    "trendUpper": "Pullback trên",
+    "trendLower": "Pullback dưới",
+    "boxUpper": "Ngưỡng trên",
+    "boxLower": "Ngưỡng dưới",
+    "boxTouch": "Chạm hộp %",
+    "volatilityIndex": "Chỉ số biến động (Min ATR%)"
+  },
+  "placeholder": {
+    "name": "Nhập tên chiến lược",
+    "floatOrNull": "Nhập giá trị",
+    "selectExchange": "Chọn sàn giao dịch"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin yêu cầu nhập Passphrase."
+  },
+  "action": {
+    "create": "Tạo chiến lược",
+    "update": "Lưu thay đổi",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "close": "Đóng",
+    "deleteSelected": "Xóa đã chọn ({count})"
+  },
+  "list": {
+    "title": "Danh sách chiến lược",
+    "empty": "Chưa có chiến lược nào được đăng ký."
+  },
+  "table": {
+    "updatedAt": "Cập nhật",
+    "name": "Tên",
+    "kind": "Loại",
+    "detail": "Chi tiết"
+  },
+  "presets": {
+    "A": {
+      "label": "Chiến lược A (Tấn công)",
+      "description": "Vào lệnh tần suất cao, chấp nhận biến động thấp"
+    },
+    "B": {
+      "label": "Chiến lược B (Trung lập)",
+      "description": "Thời điểm vào lệnh cân bằng"
+    },
+    "C": {
+      "label": "Chiến lược C (Phòng thủ)",
+      "description": "Chỉ vào lệnh ở vùng chắc chắn, yêu cầu biến động cao"
+    },
+    "D": {
+      "label": "Chiến lược D (Tùy chỉnh)",
+      "description": "Tự thiết lập tất cả các tham số."
+    }
+  },
+  "customModal": {
+    "title": "Cài đặt chiến lược tùy chỉnh",
+    "apply": "Áp dụng"
+  }
+}

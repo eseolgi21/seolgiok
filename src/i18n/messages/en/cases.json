@@ -1,0 +1,76 @@
+{
+  "common": {
+    "statLabel": "Key Performance",
+    "badge": "Verified",
+    "actions": {
+      "readMore": "View Full Report"
+    },
+    "footer": {
+      "notice": "※ Past performance is not indicative of future results. Investment decisions and risks are the sole responsibility of the user."
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobX Success Stories | Bot Trading",
+    "metaDescription": "Discover real-world profit cases driven by GlobX's high-frequency trading algorithms.",
+    "title": "GlobX Bot Trading Performance",
+    "subtitle": "Real-world profit cases driven by 0.1s high-frequency trading algorithms.",
+    "tags": {
+      "all": "All Cases",
+      "arbitrage": "Arbitrage",
+      "scalping": "Scalping",
+      "volatility": "Volatility"
+    },
+    "items": {
+      "case1": {
+        "title": "USDT-KRW Kimchi Premium Bot",
+        "desc": "Real-time tracking of price differences between global exchanges to realize risk-free arbitrage profits.",
+        "stat": "Daily Avg +0.45%",
+        "tag": "Arbitrage"
+      },
+      "case2": {
+        "title": "Volatility Breakout Scalping",
+        "desc": "Detects sharp price spikes to enter and exit positions instantly, securing quick profits with high efficiency.",
+        "stat": "Win Rate 78%",
+        "tag": "Scalping"
+      },
+      "case3": {
+        "title": "Hybrid Market Making",
+        "desc": "Generates consistent liquidity profits using order book spreads, even during sideways market conditions.",
+        "stat": "Monthly +12%",
+        "tag": "Volatility"
+      }
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quanty Analysis Report | AI Investment",
+    "metaDescription": "Check out Quanty's success stories, featuring market trends predicted by Big Data and Machine Learning.",
+    "title": "Quanty AI Analysis Report",
+    "subtitle": "Market trends predicted by Big Data and Machine Learning. Strategies proven by data.",
+    "tags": {
+      "all": "All Reports",
+      "trend": "Trend Following",
+      "sentiment": "Sentiment Analysis",
+      "macro": "Macro Indicators"
+    },
+    "items": {
+      "case1": {
+        "title": "AI Trend Master V2",
+        "desc": "Learns from 5 years of on-chain data to accurately predict the start of bull markets.",
+        "stat": "Annual +145%",
+        "tag": "Trend Following"
+      },
+      "case2": {
+        "title": "Fear/Greed Contrarian Strategy",
+        "desc": "A reverse-thinking AI model that accumulates assets when public sentiment reaches extreme fear.",
+        "stat": "MDD -5% Defended",
+        "tag": "Sentiment Analysis"
+      },
+      "case3": {
+        "title": "Global Macro Hedging",
+        "desc": "Analyzes macro indicators like interest rates and forex to automatically adjust asset allocation during downturns.",
+        "stat": "Risk Reduced 60%",
+        "tag": "Macro Indicators"
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "机器人入门指南",
+    "subtitle": "通过简单的三步设置，开启您的专属AI交易机器人，新手也能轻松上手。"
+  },
+  "steps": {
+    "step1": {
+      "title": "1. API密钥设置",
+      "desc": "在交易所获取API Key，并在“API设置”菜单中注册。"
+    },
+    "step2": {
+      "title": "2. 策略配置",
+      "desc": "选择所需的交易策略并设置风险管理参数。"
+    },
+    "step3": {
+      "title": "3. 创建并启动机器人",
+      "desc": "基于设定的策略创建机器人并开始自动交易。"
+    }
+  },
+  "apiCaution": {
+    "title": "API连接注意事项",
+    "items": {
+      "trade": "请激活交易所API权限中的“交易(Trade)”权限。",
+      "withdraw": "绝对不要激活“提现(Withdraw)”权限。",
+      "ip": "设置IP白名单可以进一步加强安全性。"
+    },
+    "imagePlaceholder": "API设置示例图片"
+  },
+  "strategyTips": {
+    "title": "策略优化建议",
+    "items": {
+      "smallAmount": "最初请尝试用小额资金运行测试机器人。",
+      "leverage": "杠杆建议设置在3倍~5倍以下的低水平以确保安全。",
+      "pause": "在波动剧烈的市场中，暂停机器人也是一种策略。"
+    },
+    "imagePlaceholder": "策略优化图表示例"
+  }
+}

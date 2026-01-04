@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "Cài đặt cá nhân",
+    "subtitle": "Quản lý khóa API sàn giao dịch và trạng thái kích hoạt bot."
+  },
+  "form": {
+    "title": "Trạng thái Bot & Thông tin xác thực"
+  },
+  "field": {
+    "enabled": "Kích hoạt Bot",
+    "exchange": "Sàn giao dịch",
+    "uid": "UID Sàn",
+    "apiKey": "API Key",
+    "apiSecret": "API Secret",
+    "passphrase": "API Passphrase"
+  },
+  "placeholder": {
+    "selectExchange": "Chọn sàn",
+    "uid": "UID tài khoản (Bắt buộc)",
+    "apiKey": "Nhập API Key",
+    "apiSecret": "Nhập API Secret",
+    "passphrase": "Nhập KuCoin Passphrase"
+  },
+  "action": {
+    "save": "Lưu",
+    "deleteSelected": "Xóa đã chọn ({count})"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin yêu cầu Key, Secret và Passphrase."
+  },
+  "history": {
+    "title": "Lịch sử lưu API",
+    "empty": "Không có lịch sử."
+  },
+  "table": {
+    "updatedAt": "Cập nhật",
+    "exchange": "Sàn",
+    "uid": "UID",
+    "createdAt": "Ngày tạo"
+  }
+}

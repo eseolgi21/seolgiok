@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "策略配置",
+    "subtitle": "设置自动交易机器人的策略参数。"
+  },
+  "create": {
+    "title": "创建新策略"
+  },
+  "edit": {
+    "title": "修改策略",
+    "id": "策略ID"
+  },
+  "section": {
+    "common": "通用设置",
+    "strategySelect": "选择策略类型",
+    "entry": "入场设置",
+    "martingale": "马丁格尔设置",
+    "trend": "趋势(TREND)设置",
+    "box": "震荡(BOX)设置",
+    "signalConfirm": "信号确认 / 辅助参数"
+  },
+  "field": {
+    "name": "策略名称",
+    "kind": "策略类型",
+    "timeframe": "时间周期",
+    "rsiLength": "RSI长度",
+    "leverage": "杠杆 (x)",
+    "profit": "止盈 (%)",
+    "loss": "止损 (%)",
+    "defaultSize": "基础入场金额",
+    "maxSize": "最大入场金额",
+    "useMartin": "启用马丁格尔",
+    "martinMultiplier": "马丁倍数",
+    "rangeFollowTrendOnly": "仅震荡顺势",
+    "reverseEntry": "允许反向入场",
+    "trendUpper": "上方回调",
+    "trendLower": "下方回调",
+    "boxUpper": "上方阈值",
+    "boxLower": "下方阈值",
+    "boxTouch": "箱体触及 %",
+    "volatilityIndex": "波动率指数 (Min ATR%)"
+  },
+  "placeholder": {
+    "name": "请输入策略名称",
+    "floatOrNull": "输入数值",
+    "selectExchange": "选择交易所"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin 必须输入 Passphrase。"
+  },
+  "action": {
+    "create": "创建策略",
+    "update": "保存修改",
+    "save": "保存",
+    "saving": "保存中...",
+    "close": "关闭",
+    "deleteSelected": "删除所选 ({count})"
+  },
+  "list": {
+    "title": "策略列表",
+    "empty": "暂无注册策略。"
+  },
+  "table": {
+    "updatedAt": "更新时间",
+    "name": "名称",
+    "kind": "类型",
+    "detail": "详细设置"
+  },
+  "presets": {
+    "A": {
+      "label": "策略 A (激进型)",
+      "description": "高频入场，允许低波动"
+    },
+    "B": {
+      "label": "策略 B (中立型)",
+      "description": "平衡的入场时机"
+    },
+    "C": {
+      "label": "策略 C (保守型)",
+      "description": "仅在确定性高的区间入场，要求高波动"
+    },
+    "D": {
+      "label": "策略 D (自定义)",
+      "description": "手动配置所有参数。"
+    }
+  },
+  "customModal": {
+    "title": "自定义策略设置",
+    "apply": "应用"
+  }
+}

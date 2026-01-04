@@ -1,0 +1,27 @@
+// prisma/schema/ReferralEdge.prisma
+model ReferralEdge {
+  id String @id @default(cuid())
+
+  type EdgeType
+  parentId String
+  parent   User   @relation("EdgeParent", fields: [parentId], references: [id], onDelete: Cascade)
+
+  childId String
+  child   User   @relation("EdgeChild", fields: [childId], references: [id], onDelete: Cascade)
+
+  position Int?
+  groupNo  Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([childId, type], map: "uniq_direct_parent_per_tree")
+  @@index([parentId, type])
+  @@index([childId, type])
+  @@index([parentId, createdAt])   // 최신 하위 가입자 탐색
+}
+
+enum EdgeType {
+  REFERRER
+  SPONSOR
+}

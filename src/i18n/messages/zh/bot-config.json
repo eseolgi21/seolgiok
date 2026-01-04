@@ -1,0 +1,65 @@
+{
+  "form": {
+    "title": "交易机器人配置",
+    "subtitle": "创建新机器人或修改现有设置。"
+  },
+  "field": {
+    "botName": "机器人名称",
+    "symbol": "交易对",
+    "strategy": "策略",
+    "exchangeMarket": "交易所-市场",
+    "marketKind": "市场类型",
+    "exchange": "交易所",
+    "market": "市场",
+    "allocation": "分配 (bps)",
+    "enabled": "启用"
+  },
+  "placeholder": {
+    "botName": "输入机器人名称",
+    "selectSymbol": "选择交易对",
+    "selectStrategy": "选择策略",
+    "select": "选择"
+  },
+  "mode": {
+    "single": "单例模式 (SINGLE)",
+    "multi": "多例模式 (MULTI)"
+  },
+  "group": {
+    "a_title": "组 A",
+    "b_title": "组 B",
+    "a": "组 A (买入/做多)",
+    "b": "组 B (卖出/做空)"
+  },
+  "action": {
+    "addExchange": "添加交易所",
+    "save": "保存配置",
+    "saving": "保存中..."
+  },
+  "message": {
+    "noExchanges": "未注册交易所。请点击添加按钮进行添加。"
+  },
+  "list": {
+    "title": "机器人列表",
+    "empty": "暂无机器人。"
+  },
+  "error": {
+    "metaLoadFail": "加载元数据失败。"
+  },
+  "toast": {
+    "validationError": "验证错误",
+    "saveSuccess": "保存成功",
+    "saveSuccessDesc": "机器人配置已成功保存。",
+    "saveFail": "保存失败",
+    "networkError": "网络错误",
+    "networkErrorDesc": "服务器通讯过程中发生错误。",
+    "deleteSuccess": "删除成功",
+    "deleteSuccessDesc": "机器人已被删除。",
+    "deleteFail": "删除失败",
+    "deleteFailDesc": "删除过程中发生错误。",
+    "startFail": "启动失败",
+    "stopFail": "停止失败"
+  },
+  "confirm": {
+    "delete": "确定要删除选中的机器人吗？此操作不可撤销。"
+  }
+}

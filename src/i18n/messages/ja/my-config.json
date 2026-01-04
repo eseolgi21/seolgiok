@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "個人設定",
+    "subtitle": "取引所APIキーとボットの有効化状態を管理します。"
+  },
+  "form": {
+    "title": "ボット状態 & 認証情報"
+  },
+  "field": {
+    "enabled": "ボット有効化",
+    "exchange": "取引所",
+    "uid": "取引所 UID",
+    "apiKey": "APIキー",
+    "apiSecret": "APIシークレット",
+    "passphrase": "APIパスフレーズ"
+  },
+  "placeholder": {
+    "selectExchange": "取引所を選択",
+    "uid": "アカウントUID (必須)",
+    "apiKey": "APIキーを入力",
+    "apiSecret": "APIシークレットを入力",
+    "passphrase": "KuCoinパスフレーズを入力"
+  },
+  "action": {
+    "save": "保存",
+    "deleteSelected": "選択削除 ({count})"
+  },
+  "message": {
+    "kucoinNotice": "KuCoinにはKey、Secret、Passphraseの3つが必要です。"
+  },
+  "history": {
+    "title": "API保存履歴",
+    "empty": "保存された履歴がありません。"
+  },
+  "table": {
+    "updatedAt": "更新日時",
+    "exchange": "取引所",
+    "uid": "UID",
+    "createdAt": "作成日"
+  }
+}

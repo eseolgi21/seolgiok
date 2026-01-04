@@ -1,0 +1,35 @@
+model DailySales {
+  id          String   @id @default(cuid())
+  date        DateTime @unique @db.Date
+
+  salesAmount Int      @default(0) // 매출 (KRW)
+  costAmount  Int      @default(0) // 매입 (KRW)
+  
+  note        String? // 비고
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+
+  @@index([date])
+}
+
+model CardTransaction {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date // 이용일
+  confirmedAt DateTime? @db.Date // 확정일
+  
+  cardName    String // 카드명
+  merchant    String // 가맹점명
+  bizNo       String? // 사업자번호
+  approvalNo  String // 승인번호 (Removed @unique to allow partial cancels)
+  installment String? // 할부개월
+  
+  amount      Int // 이용금액
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([date])
+  @@unique([approvalNo, amount])
+}

@@ -1,0 +1,21 @@
+{
+  "list": {
+    "title": "봇 목록",
+    "total": "총 {count}개",
+    "empty": "등록된 봇이 없습니다."
+  },
+  "action": {
+    "start": "시작",
+    "stop": "정지",
+    "delete": "삭제",
+    "refresh": "새로고침"
+  },
+  "status": {
+    "running": "실행중",
+    "stopped": "중지됨",
+    "starting": "시작중...",
+    "stopping": "중지중...",
+    "error": "에러",
+    "unknown": "알 수 없음"
+  }
+}

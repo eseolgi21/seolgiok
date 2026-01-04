@@ -1,0 +1,37 @@
+{
+  "public": {
+    "about": "About Us",
+    "announcements": "Announcements",
+    "cases": "Success Cases",
+    "events": "Events",
+    "help": "Help Center"
+  },
+  "app": {
+    "botGuide": "Bot Guide",
+    "botConfig": "Bot Config",
+    "strategyConfig": "Strategy Config",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "myConfig": "My Settings",
+    "apiConfig": "API Settings",
+    "botList": "Bot List"
+  },
+  "auth": {
+    "signup": "Sign Up",
+    "login": "Log In",
+    "logout": "Log Out",
+    "admin": "Admin",
+    "pleaseLogin": "Please log in."
+  },
+  "aria": {
+    "home": "Go to Home",
+    "myAccount": "My Account",
+    "menu": "Main Menu",
+    "settings": "Settings",
+    "footerNav": "Footer Navigation"
+  },
+  "status": {
+    "startFailed": "Start Failed",
+    "stopFailed": "Stop Failed"
+  }
+}

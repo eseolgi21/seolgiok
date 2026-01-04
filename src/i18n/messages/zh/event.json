@@ -1,0 +1,39 @@
+{
+  "common": {
+    "actions": {
+      "refresh": "刷新"
+    },
+    "status": {
+      "ongoing": "进行中",
+      "upcoming": "即将开始",
+      "ended": "已结束"
+    },
+    "messages": {
+      "errorPrefix": "错误:",
+      "emptyList": "暂无活动。"
+    },
+    "detail": {
+      "loading": "加载中...",
+      "periodLabel": "活动时间",
+      "publishedLabel": "发布日期",
+      "ctaButton": "查看详情",
+      "placeholder": "无法加载活动详情。"
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobX 活动 | 最新消息",
+    "metaDescription": "查看 GlobX 的各种活动和促销信息。",
+    "header": {
+      "title": "GlobX 活动",
+      "subtitle": "查看为您准备的特别优惠和消息。"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quanty 活动 | AI 投资福利",
+    "metaDescription": "不要错过 Quanty 提供的特别分析活动和福利。",
+    "header": {
+      "title": "Quanty 活动",
+      "subtitle": "探索基于数据的特别投资福利。"
+    }
+  }
+}

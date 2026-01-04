@@ -1,0 +1,37 @@
+{
+  "public": {
+    "about": "Giới thiệu",
+    "announcements": "Thông báo",
+    "cases": "Thành tựu",
+    "events": "Sự kiện",
+    "help": "Hỗ trợ"
+  },
+  "app": {
+    "botGuide": "Hướng dẫn Bot",
+    "botConfig": "Cấu hình Bot",
+    "strategyConfig": "Cấu hình Chiến lược",
+    "dashboard": "Bảng điều khiển",
+    "history": "Lịch sử",
+    "myConfig": "Cài đặt cá nhân",
+    "apiConfig": "Cài đặt API",
+    "botList": "Danh sách Bot"
+  },
+  "auth": {
+    "signup": "Đăng ký",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "admin": "Quản trị",
+    "pleaseLogin": "Vui lòng đăng nhập."
+  },
+  "aria": {
+    "home": "Trang chủ",
+    "myAccount": "Tài khoản",
+    "menu": "Menu chính",
+    "settings": "Cài đặt",
+    "footerNav": "Điều hướng chân trang"
+  },
+  "status": {
+    "startFailed": "Khởi động thất bại",
+    "stopFailed": "Dừng thất bại"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "common": {
+    "categories": {
+      "program": "程序安装/错误",
+      "account": "账户/登录",
+      "trading": "交易/策略设置",
+      "funds": "充提/资产",
+      "data": "数据/安全"
+    },
+    "searchPlaceholder": "搜索您想了解的内容（例如：安装、手续费）",
+    "searchButton": "搜索",
+    "contact": {
+      "title": "需要更多帮助吗？",
+      "description": "如果在常见问题中找不到答案，请联系客服中心。",
+      "emailLabel": "电子邮箱",
+      "phoneLabel": "电话号码",
+      "telegramLabel": "Telegram",
+      "hoursLabel": "运营时间",
+      "hoursValue": "工作日 09:00 ~ 18:00 (周末/节假日休息)"
+    }
+  },
+  "GlobX": {
+    "metaTitle": "GlobX 客服中心 | 常见问题",
+    "metaDescription": "快速解决使用 GlobX 过程中的疑问。",
+    "header": {
+      "title": "有什么可以帮您？",
+      "subtitle": "搜索 GlobX 相关问题或按类别查找。"
+    },
+    "qna": {
+      "program_q1": "如何安装 GlobX 机器人？",
+      "program_a1": "请在官网顶部的“下载”菜单中下载适合您操作系统的安装文件并运行。",
+      "program_q2": "运行时出现安全警告。",
+      "program_a2": "Windows Defender 可能会误报。点击“更多信息” -> “仍要运行”即可正常启动 GlobX。",
+      "program_q3": "可以在 Mac 上使用吗？",
+      "program_a3": "目前仅支持 Windows 版本，Mac 版本将在稍后推出。",
+      "program_q4": "如何更新？",
+      "program_a4": "运行 GlobX 机器人时会自动检查最新版本并进行更新。",
+      "account_q1": "忘记了密码。",
+      "account_a1": "可以通过登录界面底部的“找回密码”链接进行邮箱验证后重置。",
+      "account_q2": "如何注销账户？",
+      "account_a2": "可以在“我的页面 > 账户管理”中申请注销。",
+      "trading_q1": "最低运行资金是多少？",
+      "trading_a1": "为了 GlobX 机器人的顺畅运行，建议最低资金为 500 USDT。",
+      "trading_q2": "支持哪些交易所？",
+      "trading_a2": "目前支持币安 (Binance)、Bybit、OKX 等主要海外交易所。",
+      "trading_q3": "收益率有保证吗？",
+      "trading_a3": "所有投资责任由用户自行承担，过去的收益率不代表未来的表现。",
+      "trading_q4": "机器人停止运行了。",
+      "trading_a4": "请检查网络连接。如果问题持续，请附上日志文件联系客服。",
+      "funds_q1": "如何充值？",
+      "funds_a1": "向绑定的交易所钱包地址转账加密货币，机器人会自动识别余额。",
+      "funds_q2": "提现手续费是多少？",
+      "funds_a2": "GlobX 不收取额外的提现手续费，仅产生交易所的网络手续费。",
+      "funds_q3": "资产未显示。",
+      "funds_a3": "请确认 API 密钥权限中是否包含“读取 (Read)”权限。",
+      "data_q1": "我的 API 密钥安全吗？",
+      "data_a1": "GlobX 不会将 API 密钥存储在服务器上，而是加密后存储在本地，非常安全。"
+    },
+    "contactInfo": {
+      "email": "support@globx.com",
+      "phone": "+82-70-1111-1111"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Quanty 客服中心 | 常见问题",
+    "metaDescription": "Quanty AI 投资服务使用指南及常见问题。",
+    "header": {
+      "title": "Quanty 帮助中心",
+      "subtitle": "关于数据驱动的 AI 投资 Quanty，欢迎随时提问。"
+    },
+    "qna": {
+      "program_q1": "如何应用 Quanty AI 模型？",
+      "program_a1": "在仪表板中选择所需的 AI 策略（趋势/逆势），点击“应用”即可立即生效。",
+      "program_q2": "分析数据无法加载。",
+      "program_a2": "请清除浏览器缓存或尝试强制刷新 (Ctrl+F5)。",
+      "program_q3": "有手机 App 吗？",
+      "program_a3": "目前 Quanty 支持响应式网页，专用 App 正在开发中。",
+      "program_q4": "在哪里设置通知？",
+      "program_a4": "可以在“设置 > 通知”菜单中开启或关闭交易成交及主要行情通知。",
+      "account_q1": "我想解除账户锁定。",
+      "account_a1": "为了安全起见，登录失败 5 次以上会锁定账户。请联系客服进行身份验证后解锁。",
+      "account_q2": "我想设置双重验证 (2FA)。",
+      "account_a2": "可以在安全设置菜单中注册 Google OTP 以保护账户安全。",
+      "trading_q1": "AI 不进行交易。",
+      "trading_a1": "Quanty AI 仅在出现明确的进场信号时才进行交易。根据市场情况，等待时间可能会较长。",
+      "trading_q2": "回测结果可信吗？",
+      "trading_a2": "这是基于过去 5 年的逐笔数据，包含滑点在内保守计算出的结果。",
+      "trading_q3": "可以调整杠杆吗？",
+      "trading_a3": "是的，您可以在策略设置页面手动指定最大杠杆倍数。",
+      "trading_q4": "有止损 (Stop-loss) 功能吗？",
+      "trading_a4": "是的，Quanty AI 基本包含基于策略的止损逻辑，用户也可以手动强制平仓。",
+      "funds_q1": "我想增加投资金额。",
+      "funds_a1": "如果在交易所账户中追加充值，从下一次进场开始，仓位比重将自动根据增加的本金进行调整。",
+      "funds_q2": "可以随时提取收益吗？",
+      "funds_a2": "是的，只要机器人未持有仓位，您可以随时从交易所提现。",
+      "funds_q3": "可以使用 USDT 以外的币种吗？",
+      "funds_a3": "目前 Quanty 基于 USDT 合约市场运行。",
+      "data_q1": "我想了解隐私政策。",
+      "data_a1": "您可以在底部页脚的“隐私政策”链接中查看详细内容。"
+    },
+    "contactInfo": {
+      "telegram": "t.me/BEE10045"
+    }
+  }
+}

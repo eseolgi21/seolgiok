@@ -1,0 +1,11 @@
+/* src/styles/globals.css */
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  /* 내장 테마 전체 사용 */
+  themes: all;
+
+  /* base 스타일 중 'properties' 파트 끄기
+     (= @property --radialprogress 같은 at-rule 안 만들어지게) */
+  exclude: properties;
+}

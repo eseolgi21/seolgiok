@@ -1,0 +1,7 @@
+// prisma/schema/Country.prisma
+model Country {
+  code String @id @db.Char(2)
+  name String
+
+  users User[]
+}

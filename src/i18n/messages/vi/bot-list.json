@@ -1,0 +1,21 @@
+{
+  "list": {
+    "title": "Danh sách Bot",
+    "total": "Tổng {count}",
+    "empty": "Không tìm thấy bot nào."
+  },
+  "action": {
+    "start": "Bắt đầu",
+    "stop": "Dừng",
+    "delete": "Xóa",
+    "refresh": "Làm mới"
+  },
+  "status": {
+    "running": "Đang chạy",
+    "stopped": "Đã dừng",
+    "starting": "Đang khởi động...",
+    "stopping": "Đang dừng...",
+    "error": "Lỗi",
+    "unknown": "Không xác định"
+  }
+}

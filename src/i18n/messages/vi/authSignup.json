@@ -1,0 +1,63 @@
+{
+  "title": "Đăng ký",
+  "subtitle": "Tạo tài khoản mới và bắt đầu dịch vụ.",
+  "fields": {
+    "username": "Tên đăng nhập",
+    "usernamePlaceholder": "4~16 chữ thường/số/gạch dưới",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "Nhập mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+    "nickname": "Biệt danh",
+    "nicknamePlaceholder": "Nhập biệt danh",
+    "country": "Quốc gia",
+    "countryPlaceholder": "Chọn quốc gia (Tùy chọn)",
+    "referrer": "Người giới thiệu",
+    "referrerPlaceholder": "ID hoặc Email người giới thiệu",
+    "search": "Tìm kiếm"
+  },
+  "checklist": {
+    "len": "Độ dài 8~18 ký tự",
+    "letter": "Bao gồm chữ cái",
+    "digit": "Bao gồm số",
+    "upper": "Ít nhất 1 chữ hoa",
+    "symbol": "Ít nhất 1 ký tự đặc biệt",
+    "mismatch": "Mật khẩu không khớp."
+  },
+  "agreements": {
+    "terms": "Tôi đồng ý với Điều khoản dịch vụ.",
+    "view": "(Xem)",
+    "privacy": "Tôi đồng ý với Chính sách bảo mật.",
+    "required": "* Vui lòng tích vào các mục bắt buộc."
+  },
+  "buttons": {
+    "submit": "Đăng ký"
+  },
+  "messages": {
+    "validReferrer": "Người giới thiệu hợp lệ.",
+    "invalidReferrer": "Không tìm thấy người giới thiệu.",
+    "checkRefTitle": "Kiểm tra người giới thiệu",
+    "inputErrorTitle": "Lỗi nhập liệu",
+    "inputErrorDesc": "Vui lòng kiểm tra các mục bắt buộc và định dạng.",
+    "successTitle": "Đăng ký thành công",
+    "successDesc": "Vui lòng đăng nhập bằng Email/ID.",
+    "failTitle": "Đăng ký thất bại"
+  },
+  "errors": {
+    "usernameFormat": "Vui lòng kiểm tra định dạng tên đăng nhập.",
+    "emailFormat": "Vui lòng kiểm tra định dạng email.",
+    "nicknameReq": "Vui lòng nhập biệt danh.",
+    "countryReq": "Vui lòng chọn mã quốc gia.",
+    "usernameTaken": "Tên đăng nhập đã được sử dụng.",
+    "emailTaken": "Email đã được sử dụng.",
+    "referrerNotFound": "Không tìm thấy người giới thiệu.",
+    "sponsorNotFound": "Không tìm thấy người bảo trợ.",
+    "countryCodeInvalid": "Mã quốc gia phải là 2 chữ cái tiếng Anh (Ví dụ: VN, US).",
+    "countryNotFound": "Không tìm thấy mã quốc gia tương ứng.",
+    "checkInput": "Vui lòng kiểm tra lại thông tin đầu vào.",
+    "serverError": "Đã xảy ra lỗi máy chủ/mạng.",
+    "tempError": "Không thể xử lý do sự cố tạm thời."
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "title": "회원가입",
+  "subtitle": "새로운 계정을 생성하고 서비스를 시작하세요.",
+  "fields": {
+    "username": "아이디",
+    "usernamePlaceholder": "영문 소문자/숫자/밑줄 4~16자",
+    "email": "이메일",
+    "emailPlaceholder": "you@example.com",
+    "password": "패스워드",
+    "passwordPlaceholder": "비밀번호를 입력하세요",
+    "confirmPassword": "패스워드 확인",
+    "confirmPasswordPlaceholder": "비밀번호를 다시 입력",
+    "nickname": "닉네임",
+    "nicknamePlaceholder": "닉네임 입력",
+    "country": "국가",
+    "countryPlaceholder": "국가 선택(선택)",
+    "referrer": "추천인",
+    "referrerPlaceholder": "추천인 아이디 또는 이메일",
+    "search": "검색"
+  },
+  "checklist": {
+    "len": "8~18 문자 길이",
+    "letter": "문자 포함",
+    "digit": "숫자 포함",
+    "upper": "대문자 1자 이상",
+    "symbol": "기호 1자 이상",
+    "mismatch": "비밀번호가 일치하지 않습니다."
+  },
+  "agreements": {
+    "terms": "이용약관에 동의합니다.",
+    "view": "(보기)",
+    "privacy": "개인정보 이용 정책에 동의합니다.",
+    "required": "* 필수 동의 항목에 체크해 주세요."
+  },
+  "buttons": {
+    "submit": "회원가입"
+  },
+  "messages": {
+    "validReferrer": "유효한 추천인입니다.",
+    "invalidReferrer": "추천인을 찾을 수 없습니다.",
+    "checkRefTitle": "추천인 확인",
+    "inputErrorTitle": "입력값 오류",
+    "inputErrorDesc": "필수 항목과 형식을 확인해 주세요.",
+    "successTitle": "회원가입 완료",
+    "successDesc": "이메일/아이디로 로그인해 주세요.",
+    "failTitle": "회원가입 실패"
+  },
+  "errors": {
+    "usernameFormat": "아이디 형식을 확인해 주세요.",
+    "emailFormat": "이메일 형식을 확인해 주세요.",
+    "nicknameReq": "닉네임을 입력해 주세요.",
+    "countryReq": "국가 코드를 선택해 주세요.",
+    "usernameTaken": "이미 사용 중인 아이디입니다.",
+    "emailTaken": "이미 사용 중인 이메일입니다.",
+    "referrerNotFound": "추천인을 찾을 수 없습니다.",
+    "sponsorNotFound": "후원인을 찾을 수 없습니다.",
+    "countryCodeInvalid": "국가 코드는 영문 2글자여야 합니다. (예: KR, US)",
+    "countryNotFound": "해당 국가 코드를 찾을 수 없습니다.",
+    "checkInput": "입력값을 다시 확인해 주세요.",
+    "serverError": "서버/네트워크 오류가 발생했습니다.",
+    "tempError": "일시적인 문제로 처리할 수 없습니다."
+  }
+}

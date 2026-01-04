@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "개인 설정",
+    "subtitle": "거래소 API 키 및 봇 활성화 상태를 관리합니다."
+  },
+  "form": {
+    "title": "봇 상태 & 자격 증명"
+  },
+  "field": {
+    "enabled": "봇 활성화",
+    "exchange": "거래소",
+    "uid": "거래소 UID",
+    "apiKey": "API Key",
+    "apiSecret": "API Secret",
+    "passphrase": "API Passphrase"
+  },
+  "placeholder": {
+    "selectExchange": "거래소 선택",
+    "uid": "거래소 계정 UID (필수)",
+    "apiKey": "API Key 입력",
+    "apiSecret": "API Secret 입력",
+    "passphrase": "KuCoin Passphrase 입력"
+  },
+  "action": {
+    "save": "저장",
+    "deleteSelected": "선택 삭제 ({count})"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin API는 Key / Secret / Passphrase 3가지가 모두 필요합니다."
+  },
+  "history": {
+    "title": "API 저장 내역",
+    "empty": "저장된 내역이 없습니다."
+  },
+  "table": {
+    "updatedAt": "수정시각",
+    "exchange": "거래소",
+    "uid": "UID",
+    "createdAt": "생성일"
+  }
+}

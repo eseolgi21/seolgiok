@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "Strategy Configuration",
+    "subtitle": "Configure strategy parameters for the automated trading bot."
+  },
+  "create": {
+    "title": "Create New Strategy"
+  },
+  "edit": {
+    "title": "Edit Strategy",
+    "id": "Strategy ID"
+  },
+  "section": {
+    "common": "Common Settings",
+    "strategySelect": "Select Strategy Type",
+    "entry": "Entry Settings",
+    "martingale": "Martingale Settings",
+    "trend": "Trend Settings",
+    "box": "Box (Range) Settings",
+    "signalConfirm": "Signal Confirmation / Auxiliary Parameters"
+  },
+  "field": {
+    "name": "Strategy Name",
+    "kind": "Strategy Type",
+    "timeframe": "Timeframe",
+    "rsiLength": "RSI Length",
+    "leverage": "Leverage (x)",
+    "profit": "Target Profit (%)",
+    "loss": "Stop Loss (%)",
+    "defaultSize": "Base Entry Amount",
+    "maxSize": "Max Entry Amount",
+    "useMartin": "Use Martingale",
+    "martinMultiplier": "Martingale Multiplier",
+    "rangeFollowTrendOnly": "Range Trend Follow Only",
+    "reverseEntry": "Allow Reverse Entry",
+    "trendUpper": "Upper Pullback",
+    "trendLower": "Lower Pullback",
+    "boxUpper": "Upper Threshold",
+    "boxLower": "Lower Threshold",
+    "boxTouch": "Box Touch %",
+    "volatilityIndex": "Volatility Index (Min ATR%)"
+  },
+  "placeholder": {
+    "name": "Enter strategy name",
+    "floatOrNull": "Enter value",
+    "selectExchange": "Select Exchange"
+  },
+  "message": {
+    "kucoinNotice": "Passphrase is required for KuCoin."
+  },
+  "action": {
+    "create": "Create Strategy",
+    "update": "Save Changes",
+    "save": "Save",
+    "saving": "Saving...",
+    "close": "Close",
+    "deleteSelected": "Delete Selected ({count})"
+  },
+  "list": {
+    "title": "Strategy List",
+    "empty": "No strategies registered."
+  },
+  "table": {
+    "updatedAt": "Updated At",
+    "name": "Name",
+    "kind": "Type",
+    "detail": "Details"
+  },
+  "presets": {
+    "A": {
+      "label": "Strategy A (Aggressive)",
+      "description": "High frequency entries, allows low volatility"
+    },
+    "B": {
+      "label": "Strategy B (Neutral)",
+      "description": "Balanced entry timing"
+    },
+    "C": {
+      "label": "Strategy C (Defensive)",
+      "description": "Entries only in high-certainty zones, requires high volatility"
+    },
+    "D": {
+      "label": "Strategy D (Custom)",
+      "description": "Manually configure all parameters."
+    }
+  },
+  "customModal": {
+    "title": "Custom Strategy Settings",
+    "apply": "Apply"
+  }
+}

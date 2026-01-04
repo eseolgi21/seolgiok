@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Trade History",
+    "subtitle": "View your execution and liquidation records filtered by bot."
+  },
+  "filter": {
+    "bot": "Select Bot",
+    "symbol": "Select Symbol",
+    "allBots": "All Bots",
+    "allSymbols": "All Symbols"
+  },
+  "action": {
+    "apply": "Apply",
+    "refresh": "Refresh"
+  },
+  "list": {
+    "total": "Total {count} records",
+    "empty": "No transaction history found."
+  },
+  "status": {
+    "open": "OPEN",
+    "closed": "CLOSED"
+  },
+  "column": {
+    "status": "Status",
+    "bot": "Bot Name",
+    "market": "Exchange/Symbol",
+    "side": "Side",
+    "leverage": "Lev",
+    "entryPrice": "Entry Price",
+    "entryUsdt": "Entry Amt",
+    "profit": "PnL (USDT)",
+    "roi": "ROI",
+    "openedAt": "Opened",
+    "closedAt": "Closed"
+  }
+}

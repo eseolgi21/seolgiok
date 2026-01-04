@@ -1,0 +1,44 @@
+{
+  "Globx": {
+    "metaTitle": "お知らせ - GlobX",
+    "metaDescription": "GlobXの最新ニュースとアップデートをご確認ください。",
+    "header": {
+      "title": "お知らせ",
+      "subtitle": "GlobXの最新ニュースとアップデートをご確認ください。"
+    },
+    "actions": {
+      "searchPlaceholder": "検索ワードを入力...",
+      "refresh": "更新"
+    },
+    "list": {
+      "title": "すべての記事",
+      "totalPosts": "全 {count} 件"
+    },
+    "messages": {
+      "errorPrefix": "エラーが発生しました：",
+      "emptyList": "登録されたお知らせはありません。",
+      "contentNotAvailable": "内容を読み込めません。"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "お知らせ - Quanty",
+    "metaDescription": "Quantyの最新ニュースとアップデートをご確認ください。",
+    "header": {
+      "title": "お知らせ",
+      "subtitle": "Quantyの最新ニュースとアップデートをご確認ください。"
+    },
+    "actions": {
+      "searchPlaceholder": "検索ワードを入力...",
+      "refresh": "更新"
+    },
+    "list": {
+      "title": "すべての記事",
+      "totalPosts": "全 {count} 件"
+    },
+    "messages": {
+      "errorPrefix": "エラーが発生しました：",
+      "emptyList": "登録されたお知らせはありません。",
+      "contentNotAvailable": "内容を読み込めません。"
+    }
+  }
+}

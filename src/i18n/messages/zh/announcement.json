@@ -1,0 +1,44 @@
+{
+  "Globx": {
+    "metaTitle": "公告 - GlobX",
+    "metaDescription": "请查看GlobX的最新消息和更新。",
+    "header": {
+      "title": "公告",
+      "subtitle": "请查看GlobX的最新消息和更新。"
+    },
+    "actions": {
+      "searchPlaceholder": "请输入搜索词...",
+      "refresh": "刷新"
+    },
+    "list": {
+      "title": "全部文章",
+      "totalPosts": "共 {count} 条"
+    },
+    "messages": {
+      "errorPrefix": "发生错误：",
+      "emptyList": "暂无公告。",
+      "contentNotAvailable": "无法加载内容。"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "公告 - Quanty",
+    "metaDescription": "请查看Quanty的最新消息和更新。",
+    "header": {
+      "title": "公告",
+      "subtitle": "请查看Quanty的最新消息和更新。"
+    },
+    "actions": {
+      "searchPlaceholder": "请输入搜索词...",
+      "refresh": "刷新"
+    },
+    "list": {
+      "title": "全部文章",
+      "totalPosts": "共 {count} 条"
+    },
+    "messages": {
+      "errorPrefix": "发生错误：",
+      "emptyList": "暂无公告。",
+      "contentNotAvailable": "无法加载内容。"
+    }
+  }
+}

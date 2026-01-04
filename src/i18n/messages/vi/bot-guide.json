@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Hướng dẫn Bắt đầu Bot",
+    "subtitle": "Bắt đầu bot giao dịch AI của riêng bạn với thiết lập 3 bước đơn giản mà người mới bắt đầu cũng có thể làm theo."
+  },
+  "steps": {
+    "step1": {
+      "title": "1. Thiết lập Khóa API",
+      "desc": "Lấy Khóa API từ sàn giao dịch và đăng ký trong menu 'Cài đặt API'."
+    },
+    "step2": {
+      "title": "2. Cấu hình Chiến lược",
+      "desc": "Chọn chiến lược giao dịch mong muốn và thiết lập các tham số quản lý rủi ro."
+    },
+    "step3": {
+      "title": "3. Tạo và Khởi động Bot",
+      "desc": "Tạo bot dựa trên chiến lược đã thiết lập và bắt đầu giao dịch tự động."
+    }
+  },
+  "apiCaution": {
+    "title": "Lưu ý khi kết nối API",
+    "items": {
+      "trade": "Vui lòng kích hoạt quyền 'Giao dịch (Trade)' trong quyền hạn API của sàn.",
+      "withdraw": "Tuyệt đối không kích hoạt quyền 'Rút tiền (Withdraw)'.",
+      "ip": "Thiết lập danh sách trắng IP sẽ tăng cường bảo mật hơn."
+    },
+    "imagePlaceholder": "Ví dụ Cài đặt API"
+  },
+  "strategyTips": {
+    "title": "Mẹo tối ưu hóa chiến lược",
+    "items": {
+      "smallAmount": "Ban đầu hãy thử chạy bot kiểm tra với số tiền nhỏ.",
+      "leverage": "Đòn bẩy nên được đặt thấp ở mức 3x~5x để an toàn.",
+      "pause": "Tạm dừng bot trong thị trường biến động mạnh cũng là một phương pháp."
+    },
+    "imagePlaceholder": "Ví dụ Biểu đồ Tối ưu hóa"
+  }
+}

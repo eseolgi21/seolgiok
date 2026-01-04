@@ -1,0 +1,105 @@
+{
+  "common": {
+    "categories": {
+      "program": "Cài đặt/Lỗi chương trình",
+      "account": "Tài khoản/Đăng nhập",
+      "trading": "Giao dịch/Chiến lược",
+      "funds": "Nạp/Rút tiền & Tài sản",
+      "data": "Dữ liệu/Bảo mật"
+    },
+    "searchPlaceholder": "Tìm kiếm nội dung (ví dụ: cài đặt, phí)",
+    "searchButton": "Tìm kiếm",
+    "contact": {
+      "title": "Bạn cần hỗ trợ thêm?",
+      "description": "Nếu không tìm thấy câu trả lời trong FAQ, vui lòng liên hệ bộ phận hỗ trợ.",
+      "emailLabel": "Email",
+      "phoneLabel": "Điện thoại",
+      "telegramLabel": "Telegram",
+      "hoursLabel": "Giờ làm việc",
+      "hoursValue": "Thứ 2 - Thứ 6, 09:00 ~ 18:00 (Nghỉ cuối tuần/Lễ)"
+    }
+  },
+  "GlobX": {
+    "metaTitle": "Hỗ trợ khách hàng GlobX | FAQ",
+    "metaDescription": "Giải quyết nhanh chóng các thắc mắc trong quá trình sử dụng GlobX.",
+    "header": {
+      "title": "Chúng tôi có thể giúp gì cho bạn?",
+      "subtitle": "Tìm kiếm câu hỏi hoặc duyệt qua các danh mục về GlobX."
+    },
+    "qna": {
+      "program_q1": "Làm thế nào để cài đặt bot GlobX?",
+      "program_a1": "Tải xuống tệp cài đặt phù hợp với hệ điều hành từ menu 'Tải xuống' ở đầu trang chủ và chạy tệp.",
+      "program_q2": "Cảnh báo bảo mật xuất hiện khi chạy.",
+      "program_a2": "Windows Defender có thể nhận diện sai. Nhấp vào 'Thông tin thêm' -> 'Vẫn chạy' để khởi chạy GlobX bình thường.",
+      "program_q3": "Có dùng được trên Mac không?",
+      "program_a3": "Hiện tại chỉ hỗ trợ phiên bản Windows, phiên bản Mac sẽ được hỗ trợ sau.",
+      "program_q4": "Làm thế nào để cập nhật?",
+      "program_a4": "Bot GlobX sẽ tự động kiểm tra phiên bản mới nhất và cập nhật khi khởi chạy.",
+      "account_q1": "Tôi quên mật khẩu.",
+      "account_a1": "Bạn có thể đặt lại mật khẩu thông qua xác thực email bằng liên kết 'Quên mật khẩu' ở cuối màn hình đăng nhập.",
+      "account_q2": "Làm thế nào để xóa tài khoản?",
+      "account_a2": "Bạn có thể yêu cầu xóa tài khoản trong Trang của tôi > Quản lý tài khoản.",
+      "trading_q1": "Vốn vận hành tối thiểu là bao nhiêu?",
+      "trading_a1": "Chúng tôi khuyến nghị tối thiểu 500 USDT để bot GlobX hoạt động trơn tru.",
+      "trading_q2": "Hỗ trợ những sàn giao dịch nào?",
+      "trading_a2": "Hiện tại hỗ trợ các sàn giao dịch quốc tế lớn như Binance, Bybit, OKX.",
+      "trading_q3": "Lợi nhuận có được đảm bảo không?",
+      "trading_a3": "Mọi trách nhiệm đầu tư thuộc về người dùng và lợi nhuận trong quá khứ không đảm bảo kết quả tương lai.",
+      "trading_q4": "Bot đã dừng hoạt động.",
+      "trading_a4": "Vui lòng kiểm tra kết nối internet. Nếu vấn đề vẫn tiếp diễn, hãy liên hệ hỗ trợ kèm theo tệp nhật ký (log).",
+      "funds_q1": "Làm thế nào để nạp tiền?",
+      "funds_a1": "Chuyển tiền mã hóa đến địa chỉ ví của sàn giao dịch đã liên kết, bot sẽ tự động nhận diện số dư.",
+      "funds_q2": "Phí rút tiền là bao nhiêu?",
+      "funds_a2": "GlobX không tính phí rút tiền riêng, chỉ phát sinh phí mạng của sàn giao dịch.",
+      "funds_q3": "Tài sản không hiển thị.",
+      "funds_a3": "Vui lòng đảm bảo quyền API key có quyền 'Đọc (Read)'.",
+      "data_q1": "API key của tôi có an toàn không?",
+      "data_a1": "GlobX không lưu API key trên máy chủ mà mã hóa và lưu trữ cục bộ để đảm bảo an toàn."
+    },
+    "contactInfo": {
+      "email": "support@globx.com",
+      "phone": "+82-70-1111-1111"
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Hỗ trợ khách hàng Quanty | FAQ",
+    "metaDescription": "Hướng dẫn sử dụng và câu hỏi thường gặp về dịch vụ đầu tư AI Quanty.",
+    "header": {
+      "title": "Trung tâm trợ giúp Quanty",
+      "subtitle": "Hỏi bất cứ điều gì về đầu tư AI dựa trên dữ liệu, Quanty."
+    },
+    "qna": {
+      "program_q1": "Làm thế nào để áp dụng mô hình AI Quanty?",
+      "program_a1": "Chọn chiến lược AI mong muốn (Xu hướng/Ngược xu hướng) trên bảng điều khiển và nhấp 'Áp dụng' để phản ánh ngay lập tức.",
+      "program_q2": "Dữ liệu phân tích không tải được.",
+      "program_a2": "Vui lòng xóa bộ nhớ đệm trình duyệt hoặc thử tải lại trang (Ctrl+F5).",
+      "program_q3": "Có ứng dụng di động không?",
+      "program_a3": "Hiện tại Quanty hỗ trợ web phản hồi (responsive web), ứng dụng chuyên dụng đang được phát triển.",
+      "program_q4": "Cài đặt thông báo ở đâu?",
+      "program_a4": "Bạn có thể bật/tắt thông báo khớp lệnh và thị trường chính trong menu Cài đặt > Thông báo.",
+      "account_q1": "Tôi muốn mở khóa tài khoản.",
+      "account_a1": "Vì lý do bảo mật, tài khoản bị khóa sau 5 lần đăng nhập sai. Liên hệ hỗ trợ để xác minh danh tính và mở khóa.",
+      "account_q2": "Tôi muốn cài đặt xác thực 2 lớp (2FA).",
+      "account_a2": "Bạn có thể đăng ký Google OTP trong menu Cài đặt bảo mật để bảo vệ tài khoản.",
+      "trading_q1": "AI không thực hiện giao dịch.",
+      "trading_a1": "Quanty AI chỉ giao dịch khi có tín hiệu vào lệnh rõ ràng. Thời gian chờ có thể lâu tùy thuộc vào điều kiện thị trường.",
+      "trading_q2": "Kết quả backtest có đáng tin cậy không?",
+      "trading_a2": "Kết quả được tính toán thận trọng dựa trên dữ liệu tick 5 năm qua, bao gồm cả trượt giá (slippage).",
+      "trading_q3": "Có thể điều chỉnh đòn bẩy không?",
+      "trading_a3": "Có, bạn có thể chỉ định thủ công mức đòn bẩy tối đa trên trang cài đặt chiến lược.",
+      "trading_q4": "Có chức năng Cắt lỗ (Stop-loss) không?",
+      "trading_a4": "Có, Quanty AI cơ bản bao gồm logic cắt lỗ theo chiến lược, và người dùng cũng có thể đóng vị thế thủ công.",
+      "funds_q1": "Tôi muốn tăng vốn đầu tư.",
+      "funds_a1": "Nếu bạn nạp thêm tiền vào tài khoản sàn, tỷ trọng sẽ tự động điều chỉnh theo số vốn tăng thêm từ lần vào lệnh tiếp theo.",
+      "funds_q2": "Có thể rút lợi nhuận bất cứ lúc nào không?",
+      "funds_a2": "Có, bạn có thể rút tiền từ sàn giao dịch bất cứ khi nào bot không giữ vị thế.",
+      "funds_q3": "Có thể dùng coin khác ngoài USDT không?",
+      "funds_a3": "Hiện tại Quanty hoạt động dựa trên thị trường USDT Futures.",
+      "data_q1": "Tôi muốn biết Chính sách quyền riêng tư.",
+      "data_a1": "Bạn có thể kiểm tra chi tiết trong liên kết 'Chính sách quyền riêng tư' ở chân trang."
+    },
+    "contactInfo": {
+      "telegram": "t.me/BEE10045"
+    }
+  }
+}

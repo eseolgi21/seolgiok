@@ -1,0 +1,44 @@
+{
+  "Globx": {
+    "metaTitle": "Announcements - GlobX",
+    "metaDescription": "Check out the latest news and updates from GlobX.",
+    "header": {
+      "title": "Announcements",
+      "subtitle": "Check out the latest news and updates from GlobX."
+    },
+    "actions": {
+      "searchPlaceholder": "Search...",
+      "refresh": "Refresh"
+    },
+    "list": {
+      "title": "All Posts",
+      "totalPosts": "Total {count} items"
+    },
+    "messages": {
+      "errorPrefix": "Error occurred:",
+      "emptyList": "No announcements found.",
+      "contentNotAvailable": "Content not available."
+    }
+  },
+  "Quanty": {
+    "metaTitle": "Announcements - Quanty",
+    "metaDescription": "Check out the latest news and updates from Quanty.",
+    "header": {
+      "title": "Announcements",
+      "subtitle": "Check out the latest news and updates from Quanty."
+    },
+    "actions": {
+      "searchPlaceholder": "Search...",
+      "refresh": "Refresh"
+    },
+    "list": {
+      "title": "All Posts",
+      "totalPosts": "Total {count} items"
+    },
+    "messages": {
+      "errorPrefix": "Error occurred:",
+      "emptyList": "No announcements found.",
+      "contentNotAvailable": "Content not available."
+    }
+  }
+}

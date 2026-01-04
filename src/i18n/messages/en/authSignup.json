@@ -1,0 +1,63 @@
+{
+  "title": "Sign Up",
+  "subtitle": "Create a new account and get started.",
+  "fields": {
+    "username": "Username",
+    "usernamePlaceholder": "4-16 lowercase letters, numbers, or underscores",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Enter nickname",
+    "country": "Country",
+    "countryPlaceholder": "Select Country (Optional)",
+    "referrer": "Referrer",
+    "referrerPlaceholder": "Referrer ID or Email",
+    "search": "Search"
+  },
+  "checklist": {
+    "len": "8-18 characters",
+    "letter": "Contains letter",
+    "digit": "Contains number",
+    "upper": "At least 1 uppercase",
+    "symbol": "At least 1 symbol",
+    "mismatch": "Passwords do not match."
+  },
+  "agreements": {
+    "terms": "I agree to the Terms of Service.",
+    "view": "(View)",
+    "privacy": "I agree to the Privacy Policy.",
+    "required": "* Please check the required fields."
+  },
+  "buttons": {
+    "submit": "Sign Up"
+  },
+  "messages": {
+    "validReferrer": "Valid referrer.",
+    "invalidReferrer": "Referrer not found.",
+    "checkRefTitle": "Check Referrer",
+    "inputErrorTitle": "Input Error",
+    "inputErrorDesc": "Please check the required fields and format.",
+    "successTitle": "Sign Up Successful",
+    "successDesc": "Please log in with your email/ID.",
+    "failTitle": "Sign Up Failed"
+  },
+  "errors": {
+    "usernameFormat": "Please check the username format.",
+    "emailFormat": "Please check the email format.",
+    "nicknameReq": "Please enter a nickname.",
+    "countryReq": "Please select a country code.",
+    "usernameTaken": "Username is already taken.",
+    "emailTaken": "Email is already taken.",
+    "referrerNotFound": "Referrer not found.",
+    "sponsorNotFound": "Sponsor not found.",
+    "countryCodeInvalid": "Country code must be 2 letters (e.g., US, KR).",
+    "countryNotFound": "Country code not found.",
+    "checkInput": "Please check your input.",
+    "serverError": "A server/network error occurred.",
+    "tempError": "Unable to process due to a temporary issue."
+  }
+}

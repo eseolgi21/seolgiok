@@ -1,0 +1,41 @@
+{
+  "page": {
+    "title": "个人设置",
+    "subtitle": "管理交易所 API 密钥和机器人激活状态。"
+  },
+  "form": {
+    "title": "机器人状态 & 凭证"
+  },
+  "field": {
+    "enabled": "启用机器人",
+    "exchange": "交易所",
+    "uid": "交易所 UID",
+    "apiKey": "API Key",
+    "apiSecret": "API Secret",
+    "passphrase": "API Passphrase"
+  },
+  "placeholder": {
+    "selectExchange": "选择交易所",
+    "uid": "账户 UID (必填)",
+    "apiKey": "输入 API Key",
+    "apiSecret": "输入 API Secret",
+    "passphrase": "输入 KuCoin Passphrase"
+  },
+  "action": {
+    "save": "保存",
+    "deleteSelected": "删除选中 ({count})"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin 需要 Key、Secret 和 Passphrase。"
+  },
+  "history": {
+    "title": "API 保存历史",
+    "empty": "暂无保存记录。"
+  },
+  "table": {
+    "updatedAt": "更新时间",
+    "exchange": "交易所",
+    "uid": "UID",
+    "createdAt": "创建日期"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "거래 히스토리",
+    "subtitle": "나의 봇 기준으로 필터링된 체결 및 청산 기록을 확인하세요."
+  },
+  "filter": {
+    "bot": "봇 선택",
+    "symbol": "심볼 선택",
+    "allBots": "전체 봇",
+    "allSymbols": "전체 심볼"
+  },
+  "action": {
+    "apply": "조회",
+    "refresh": "새로고침"
+  },
+  "list": {
+    "total": "총 {count} 건",
+    "empty": "표시할 거래 내역이 없습니다."
+  },
+  "status": {
+    "open": "진행중",
+    "closed": "종료됨"
+  },
+  "column": {
+    "status": "상태",
+    "bot": "봇 이름",
+    "market": "거래소/심볼",
+    "side": "방향",
+    "leverage": "레버리지",
+    "entryPrice": "진입가",
+    "entryUsdt": "진입금액",
+    "profit": "실현손익 (USDT)",
+    "roi": "수익률 (ROI)",
+    "openedAt": "진입일시",
+    "closedAt": "청산일시"
+  }
+}

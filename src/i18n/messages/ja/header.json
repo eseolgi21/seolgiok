@@ -1,0 +1,37 @@
+{
+  "public": {
+    "about": "プロジェクト紹介",
+    "announcements": "お知らせ",
+    "cases": "成功事例",
+    "events": "イベント",
+    "help": "サポート"
+  },
+  "app": {
+    "botGuide": "ボットガイド",
+    "botConfig": "ボット設定",
+    "strategyConfig": "戦略設定",
+    "dashboard": "ダッシュボード",
+    "history": "履歴",
+    "myConfig": "個人設定",
+    "apiConfig": "API設定",
+    "botList": "ボットリスト"
+  },
+  "auth": {
+    "signup": "新規登録",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "admin": "管理",
+    "pleaseLogin": "ログインしてください。"
+  },
+  "aria": {
+    "home": "ホームへ移動",
+    "myAccount": "マイアカウント",
+    "menu": "メインメニュー",
+    "settings": "設定",
+    "footerNav": "フッターナビゲーション"
+  },
+  "status": {
+    "startFailed": "開始失敗",
+    "stopFailed": "停止失敗"
+  }
+}

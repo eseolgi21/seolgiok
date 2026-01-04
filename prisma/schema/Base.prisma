@@ -1,0 +1,20 @@
+// prisma/schema/Base.prisma
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../../src/generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+// Zod 스키마 코드 생성기 (prisma-zod-generator 사용)
+generator zod {
+  provider = "prisma-zod-generator"
+  // 생성물 출력 경로: 앱 소스에서 import 할 위치로 지정
+  output   = "../../src/generated/zod"
+  // 필요 시 옵션 추가 가능 (예: "relationModel" = "true")
+}
+
+datasource db {
+  provider   = "postgresql"
+
+  extensions = [citext]
+}

@@ -1,0 +1,37 @@
+{
+  "public": {
+    "about": "프로젝트 소개",
+    "announcements": "공지사항",
+    "cases": "성공사례",
+    "events": "이벤트",
+    "help": "고객센터"
+  },
+  "app": {
+    "botGuide": "봇 가이드",
+    "botConfig": "봇 설정",
+    "strategyConfig": "전략 설정",
+    "dashboard": "대시보드",
+    "history": "히스토리",
+    "myConfig": "개인 설정",
+    "apiConfig": "API 설정",
+    "botList": "봇 리스트"
+  },
+  "auth": {
+    "signup": "회원가입",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "admin": "관리",
+    "pleaseLogin": "로그인을 해주세요."
+  },
+  "aria": {
+    "home": "홈으로 이동",
+    "myAccount": "내 계정",
+    "menu": "메인 메뉴",
+    "settings": "환경설정",
+    "footerNav": "하단 내비게이션"
+  },
+  "status": {
+    "startFailed": "시작 실패",
+    "stopFailed": "정지 실패"
+  }
+}

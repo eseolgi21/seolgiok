@@ -1,0 +1,65 @@
+{
+  "form": {
+    "title": "Trading Bot Configuration",
+    "subtitle": "Create a new bot or modify existing settings."
+  },
+  "field": {
+    "botName": "Bot Name",
+    "symbol": "Symbol",
+    "strategy": "Strategy",
+    "exchangeMarket": "Exchange-Market",
+    "marketKind": "Market Type",
+    "exchange": "Exchange",
+    "market": "Market",
+    "allocation": "Allocation (bps)",
+    "enabled": "Enabled"
+  },
+  "placeholder": {
+    "botName": "Enter bot name",
+    "selectSymbol": "Select Symbol",
+    "selectStrategy": "Select Strategy",
+    "select": "Select"
+  },
+  "mode": {
+    "single": "Single Mode (SINGLE)",
+    "multi": "Multi Mode (MULTI)"
+  },
+  "group": {
+    "a_title": "Group A",
+    "b_title": "Group B",
+    "a": "Group A (Buy/Long)",
+    "b": "Group B (Sell/Short)"
+  },
+  "action": {
+    "addExchange": "Add Exchange",
+    "save": "Save Settings",
+    "saving": "Saving..."
+  },
+  "message": {
+    "noExchanges": "No exchanges registered. Click the Add button to proceed."
+  },
+  "list": {
+    "title": "Bot List",
+    "empty": "No bots registered."
+  },
+  "error": {
+    "metaLoadFail": "Failed to load metadata."
+  },
+  "toast": {
+    "validationError": "Validation Error",
+    "saveSuccess": "Save Complete",
+    "saveSuccessDesc": "Bot configuration saved successfully.",
+    "saveFail": "Save Failed",
+    "networkError": "Network Error",
+    "networkErrorDesc": "An error occurred during server communication.",
+    "deleteSuccess": "Delete Complete",
+    "deleteSuccessDesc": "The bot has been deleted.",
+    "deleteFail": "Delete Failed",
+    "deleteFailDesc": "An error occurred during deletion.",
+    "startFail": "Start Failed",
+    "stopFail": "Stop Failed"
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete the selected bot? This action cannot be undone."
+  }
+}

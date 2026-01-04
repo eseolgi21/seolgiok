@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "交易历史",
+    "subtitle": "查看按机器人筛选的成交和平仓记录。"
+  },
+  "filter": {
+    "bot": "选择机器人",
+    "symbol": "选择交易对",
+    "allBots": "所有机器人",
+    "allSymbols": "所有交易对"
+  },
+  "action": {
+    "apply": "查询",
+    "refresh": "刷新"
+  },
+  "list": {
+    "total": "共 {count} 条",
+    "empty": "暂无交易记录。"
+  },
+  "status": {
+    "open": "进行中",
+    "closed": "已结束"
+  },
+  "column": {
+    "status": "状态",
+    "bot": "机器人名称",
+    "market": "交易所/交易对",
+    "side": "方向",
+    "leverage": "杠杆",
+    "entryPrice": "开仓价",
+    "entryUsdt": "开仓金额",
+    "profit": "盈亏 (USDT)",
+    "roi": "收益率 (ROI)",
+    "openedAt": "开仓时间",
+    "closedAt": "平仓时间"
+  }
+}

@@ -1,0 +1,52 @@
+// prisma/schema/User.prisma
+model User {
+  id           String  @id @default(cuid())
+  username     String  @unique @db.Citext
+  email        String  @unique @db.Citext
+  name         String
+  passwordHash String
+
+  countryCode String?  @db.Char(2)
+  country     Country? @relation(fields: [countryCode], references: [code], onDelete: SetNull)
+
+  downlines ReferralEdge[] @relation("EdgeParent")
+  uplines   ReferralEdge[] @relation("EdgeChild")
+
+  info   UserInfo?   @relation("User_UserInfo")
+
+  // ✅ Board.prisma의 named relation에 대응하는 반대편 필드(Back relation)
+  postsAuthored         Post[]              @relation("PostAuthor")
+  commentsAuthored      Comment[]           @relation("CommentAuthor")
+  ticketAssignments     SupportAssignment[] @relation("TicketAssignee")
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryCode])
+  // 대시보드 정렬/필터 빈도에 따라 선택
+  @@index([createdAt])
+}
+
+// prisma/schema/UserInfo.prisma
+model UserInfo {
+  id String @id @default(cuid())
+
+  // 주 소유자: User 1:1 (관계명 필수 - 동일 모델(User)과 다중 관계 존재)
+  userId String @unique
+  user   User   @relation("User_UserInfo", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // referralCode
+  referralCode String @unique
+
+  // level
+  level Int @default(1)
+
+
+  // Google OTP
+  googleOtpEnabled Boolean @default(false)
+  googleOtpSecret  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

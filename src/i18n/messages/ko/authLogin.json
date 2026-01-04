@@ -1,0 +1,60 @@
+{
+  "GlobX": {
+    "title": "로그인",
+    "subtitle": "서비스 이용을 위해 로그인이 필요합니다.",
+    "fields": {
+      "idLabel": "아이디 또는 이메일",
+      "idPlaceholder": "아이디 또는 이메일 입력",
+      "idError": "아이디/이메일 형식을 확인해 주세요.",
+      "pwLabel": "패스워드",
+      "pwPlaceholder": "비밀번호 입력",
+      "pwError": "비밀번호를 입력해 주세요."
+    },
+    "buttons": {
+      "submit": "로그인",
+      "findId": "아이디 찾기",
+      "findPw": "비밀번호 찾기",
+      "signup": "회원가입"
+    },
+    "messages": {
+      "successTitle": "로그인 성공",
+      "successDesc": "{username}님, 환영합니다.",
+      "invalidCredentials": "아이디 또는 비밀번호가 일치하지 않습니다.",
+      "validationError": "입력 값이 올바르지 않습니다.",
+      "generalError": "로그인 중 오류가 발생했습니다.",
+      "failTitle": "로그인 실패",
+      "serverErrorTitle": "서버 오류",
+      "networkErrorTitle": "네트워크 오류",
+      "networkErrorDesc": "서버와 통신할 수 없습니다."
+    }
+  },
+  "Quanty": {
+    "title": "Quanty 로그인",
+    "subtitle": "데이터 기반 AI 투자, Quanty에 오신 것을 환영합니다.",
+    "fields": {
+      "idLabel": "계정 아이디",
+      "idPlaceholder": "Quanty 아이디 입력",
+      "idError": "아이디 형식이 올바르지 않습니다.",
+      "pwLabel": "비밀번호",
+      "pwPlaceholder": "비밀번호를 입력하세요",
+      "pwError": "비밀번호를 입력해 주세요."
+    },
+    "buttons": {
+      "submit": "로그인",
+      "findId": "아이디 찾기",
+      "findPw": "비밀번호 찾기",
+      "signup": "회원가입"
+    },
+    "messages": {
+      "successTitle": "접속 성공",
+      "successDesc": "{username}님, Quanty AI가 준비되었습니다.",
+      "invalidCredentials": "계정 정보가 일치하지 않습니다.",
+      "validationError": "입력 정보를 다시 확인해주세요.",
+      "generalError": "시스템 오류가 발생했습니다.",
+      "failTitle": "접속 실패",
+      "serverErrorTitle": "시스템 오류",
+      "networkErrorTitle": "연결 실패",
+      "networkErrorDesc": "서버 연결 상태를 확인해주세요."
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Bot Start Guide",
+    "subtitle": "Start your own AI trading bot with a simple 3-step setup suitable for beginners."
+  },
+  "steps": {
+    "step1": {
+      "title": "1. API Key Setup",
+      "desc": "Issue an API Key from the exchange and register it in the 'API Config' menu."
+    },
+    "step2": {
+      "title": "2. Strategy Config",
+      "desc": "Select a desired trading strategy and configure risk management parameters."
+    },
+    "step3": {
+      "title": "3. Create & Start Bot",
+      "desc": "Create a bot based on the configured strategy and start automated trading."
+    }
+  },
+  "apiCaution": {
+    "title": "Precautions for API Connection",
+    "items": {
+      "trade": "Please activate the 'Trade' permission in the exchange API settings.",
+      "withdraw": "Never activate the 'Withdraw' permission.",
+      "ip": "Setting up an IP whitelist enhances security."
+    },
+    "imagePlaceholder": "API Config Example Image"
+  },
+  "strategyTips": {
+    "title": "Strategy Optimization Tips",
+    "items": {
+      "smallAmount": "Start with a small amount to test the bot initially.",
+      "leverage": "It is safe to set leverage low, between 3x and 5x.",
+      "pause": "Pausing the bot during high volatility market conditions is also a strategy."
+    },
+    "imagePlaceholder": "Strategy Optimization Chart Example"
+  }
+}

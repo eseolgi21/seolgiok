@@ -1,0 +1,60 @@
+{
+  "GlobX": {
+    "title": "Login",
+    "subtitle": "Please login to use the service.",
+    "fields": {
+      "idLabel": "ID or Email",
+      "idPlaceholder": "Enter ID or Email",
+      "idError": "Please check your ID/Email format.",
+      "pwLabel": "Password",
+      "pwPlaceholder": "Enter Password",
+      "pwError": "Please enter your password."
+    },
+    "buttons": {
+      "submit": "Login",
+      "findId": "Find ID",
+      "findPw": "Find Password",
+      "signup": "Sign Up"
+    },
+    "messages": {
+      "successTitle": "Login Successful",
+      "successDesc": "Welcome back, {username}.",
+      "invalidCredentials": "ID or password does not match.",
+      "validationError": "Input values are incorrect.",
+      "generalError": "An error occurred during login.",
+      "failTitle": "Login Failed",
+      "serverErrorTitle": "Server Error",
+      "networkErrorTitle": "Network Error",
+      "networkErrorDesc": "Unable to communicate with the server."
+    }
+  },
+  "Quanty": {
+    "title": "Quanty Login",
+    "subtitle": "Welcome to data-driven AI investment, Quanty.",
+    "fields": {
+      "idLabel": "Account ID",
+      "idPlaceholder": "Enter Quanty ID",
+      "idError": "ID format is incorrect.",
+      "pwLabel": "Password",
+      "pwPlaceholder": "Enter your password",
+      "pwError": "Please enter your password."
+    },
+    "buttons": {
+      "submit": "Login",
+      "findId": "Find ID",
+      "findPw": "Find Password",
+      "signup": "Sign Up"
+    },
+    "messages": {
+      "successTitle": "Connection Successful",
+      "successDesc": "Hello {username}, Quanty AI is ready.",
+      "invalidCredentials": "Account information does not match.",
+      "validationError": "Please check your input information again.",
+      "generalError": "A system error occurred.",
+      "failTitle": "Connection Failed",
+      "serverErrorTitle": "System Error",
+      "networkErrorTitle": "Connection Failed",
+      "networkErrorDesc": "Please check the server connection status."
+    }
+  }
+}

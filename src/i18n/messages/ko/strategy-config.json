@@ -1,0 +1,91 @@
+{
+  "page": {
+    "title": "전략 구성",
+    "subtitle": "자동매매 봇이 사용할 전략 파라미터를 설정합니다."
+  },
+  "create": {
+    "title": "새 전략 생성"
+  },
+  "edit": {
+    "title": "전략 수정",
+    "id": "전략 ID"
+  },
+  "section": {
+    "common": "공통 설정",
+    "strategySelect": "전략 유형 선택",
+    "entry": "진입 설정",
+    "martingale": "마틴게일 설정",
+    "trend": "추세(TREND) 설정",
+    "box": "박스권(BOX) 설정",
+    "signalConfirm": "시그널 확증 / 보조 파라미터"
+  },
+  "field": {
+    "name": "전략 이름",
+    "kind": "전략 종류",
+    "timeframe": "타임프레임",
+    "rsiLength": "RSI 길이",
+    "leverage": "레버리지 (x)",
+    "profit": "목표 수익 (%)",
+    "loss": "손절 (%)",
+    "defaultSize": "기본 진입가",
+    "maxSize": "최대 진입가",
+    "useMartin": "마틴게일 사용",
+    "martinMultiplier": "마틴 배수",
+    "rangeFollowTrendOnly": "박스권 추세 추종만",
+    "reverseEntry": "리버스 진입 허용",
+    "trendUpper": "상단 풀백",
+    "trendLower": "하단 풀백",
+    "boxUpper": "상단 임계값",
+    "boxLower": "하단 임계값",
+    "boxTouch": "박스 터치 %",
+    "volatilityIndex": "변동성 지수 (Min ATR%)"
+  },
+  "placeholder": {
+    "name": "전략 이름을 입력하세요",
+    "floatOrNull": "값 입력",
+    "selectExchange": "거래소 선택"
+  },
+  "message": {
+    "kucoinNotice": "KuCoin은 Passphrase 입력이 필수입니다."
+  },
+  "action": {
+    "create": "전략 생성",
+    "update": "수정 저장",
+    "save": "저장",
+    "saving": "저장 중...",
+    "close": "닫기",
+    "deleteSelected": "선택 삭제 ({count})"
+  },
+  "list": {
+    "title": "전략 목록",
+    "empty": "등록된 전략이 없습니다."
+  },
+  "table": {
+    "updatedAt": "수정일",
+    "name": "이름",
+    "kind": "종류",
+    "detail": "상세 설정"
+  },
+  "presets": {
+    "A": {
+      "label": "A 전략 (공격형)",
+      "description": "높은 빈도의 진입, 낮은 변동성 허용"
+    },
+    "B": {
+      "label": "B 전략 (중립형)",
+      "description": "균형 잡힌 진입 시점"
+    },
+    "C": {
+      "label": "C 전략 (방어형)",
+      "description": "확실한 구간에서만 진입, 높은 변동성 요구"
+    },
+    "D": {
+      "label": "D 전략 (커스텀)",
+      "description": "모든 파라미터를 직접 설정합니다."
+    }
+  },
+  "customModal": {
+    "title": "커스텀 전략 설정",
+    "apply": "적용하기"
+  }
+}

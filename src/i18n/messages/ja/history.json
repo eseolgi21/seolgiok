@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "取引履歴",
+    "subtitle": "ボットごとにフィルタリングされた約定および決済記録を確認します。"
+  },
+  "filter": {
+    "bot": "ボット選択",
+    "symbol": "シンボル選択",
+    "allBots": "すべてのボット",
+    "allSymbols": "すべてのシンボル"
+  },
+  "action": {
+    "apply": "検索",
+    "refresh": "更新"
+  },
+  "list": {
+    "total": "全 {count} 件",
+    "empty": "取引履歴がありません。"
+  },
+  "status": {
+    "open": "進行中",
+    "closed": "終了"
+  },
+  "column": {
+    "status": "状態",
+    "bot": "ボット名",
+    "market": "取引所/シンボル",
+    "side": "売買",
+    "leverage": "レバレッジ",
+    "entryPrice": "参入価格",
+    "entryUsdt": "参入額",
+    "profit": "損益 (USDT)",
+    "roi": "収益率 (ROI)",
+    "openedAt": "参入日時",
+    "closedAt": "決済日時"
+  }
+}

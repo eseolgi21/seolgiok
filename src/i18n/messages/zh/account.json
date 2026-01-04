@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "我的账户",
+    "subtitle": "管理您的个人资料、安全设置和钱包地址。"
+  },
+  "info": {
+    "title": "基本信息",
+    "username": "用户名",
+    "email": "邮箱",
+    "name": "姓名",
+    "country": "国家"
+  },
+  "referral": {
+    "title": "邀请好友",
+    "desc": "分享邀请链接给好友，共同获得奖励。"
+  },
+  "otp": {
+    "title": "谷歌验证器 (OTP)",
+    "alreadyEnabled": "OTP 已安全启用。",
+    "scanDesc": "请使用 Google Authenticator 应用扫描此二维码。",
+    "secretKey": "备份密钥 (用于丢失恢复)",
+    "registerBtn": "启用 OTP",
+    "initFail": "OTP 初始化失败",
+    "registerFail": "注册失败",
+    "registerSuccess": "OTP 已成功启用。"
+  },
+  "wallet": {
+    "title": "提现钱包",
+    "inputLabel": "EVM 钱包地址 (0x...)",
+    "invalidFormat": "EVM 地址格式不正确。",
+    "registerBtn": "注册地址",
+    "currentAddress": "已注册提现地址",
+    "requireOtp": "注册钱包前需设置 OTP。",
+    "otpVerify": "OTP 验证",
+    "otpVerifyDesc": "为了安全，请输入 OTP 代码。",
+    "invalidAddress": "无效的地址。",
+    "saveSuccess": "钱包地址已注册。",
+    "saveFail": "保存失败"
+  },
+  "password": {
+    "title": "修改密码",
+    "current": "当前密码",
+    "new": "新密码",
+    "confirm": "确认新密码",
+    "changeBtn": "修改密码",
+    "changeSuccess": "密码已修改。",
+    "changeFail": "修改密码失败。"
+  },
+  "status": {
+    "registered": "已注册",
+    "unregistered": "未注册"
+  },
+  "action": {
+    "copy": "复制",
+    "cancel": "取消",
+    "confirm": "确认"
+  },
+  "toast": {
+    "copySuccess": "复制成功",
+    "refLinkCopied": "邀请链接已复制。",
+    "walletCopied": "钱包地址已复制。",
+    "copyFail": "复制失败",
+    "copyManual": "请手动复制。"
+  },
+  "error": {
+    "loadFailed": "加载个人资料失败 (HTTP {status})",
+    "loadUnknown": "加载个人资料时发生错误。"
+  }
+}
