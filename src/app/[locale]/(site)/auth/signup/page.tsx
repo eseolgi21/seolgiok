@@ -2,21 +2,10 @@
 
 import { SignupForm } from "./view/SignupForm";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
-
-// 환경변수에 따라 브랜드 확인
-const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME;
-
-// 1. 브랜드에 따른 이미지 경로 설정
-const bgImage =
-  BRAND === "Quanty"
-    ? "/Quantyloginbackground.jpg"
-    : "/GlobXloginbackground.png";
-
-// 2. [수정] 브랜드에 따른 박스 배경 투명도 설정
-// Quanty: bg-black/70 (진하게)
-// GlobX: bg-black/40 (기존 유지)
-const boxBgClass = BRAND === "Quanty" ? "bg-black/70" : "bg-black/40";
+// import Image from "next/image";
+// ...
+// const bgImage = ...
+// const boxBgClass = ...
 
 export default function SignupPage() {
   const t = useTranslations("authSignup");

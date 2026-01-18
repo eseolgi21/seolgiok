@@ -2,7 +2,7 @@
 import type { ApiResponse, ApiUser } from "@/types/auth/types";
 
 /** 로그인 에러 코드 */
-export type LoginError = "INVALID_CREDENTIALS" | "VALIDATION_ERROR" | "UNKNOWN";
+export type LoginError = "INVALID_CREDENTIALS" | "VALIDATION_ERROR" | "UNKNOWN" | "USER_NOT_FOUND" | "INVALID_PASSWORD";
 
 /** 성공 payload */
 export type LoginSuccess = { user: ApiUser };

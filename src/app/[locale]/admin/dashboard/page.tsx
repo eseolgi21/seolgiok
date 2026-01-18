@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 import {
     UsersIcon,
     CurrencyDollarIcon,
@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function AdminDashboardPage() {
-    const t = useTranslations("admin"); // Assuming admin translations exist or will fallback
+    // const t = useTranslations("admin");
 
     const stats = [
         {

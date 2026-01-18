@@ -1,8 +1,8 @@
 "use client";
 
 import { Link, usePathname as useIntlPathname } from "@/i18n/routing";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import Image from "next/image";
+import { useCallback } from "react";
+// import Image from "next/image";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 // import MainMenuDropdown from "@/components/MainMenuDropdown";
 import LanguageSwitcher from "@/components/LanguageSwitcher";

@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { format, subMonths, addMonths, startOfYear, endOfYear, eachMonthOfInterval } from "date-fns";
+import { useState, useEffect, useCallback } from "react";
+import { format, subMonths, addMonths } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
@@ -29,11 +29,7 @@ export default function SalesStatsPage() {
     const [stats, setStats] = useState<StatsResponse | null>(null);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetchStats();
-    }, [currentDate, viewMode]);
-
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         setLoading(true);
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
@@ -52,7 +48,11 @@ export default function SalesStatsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentDate, viewMode]);
+
+    useEffect(() => {
+        fetchStats();
+    }, [fetchStats]);
 
     const handlePrev = () => {
         if (viewMode === "month") setCurrentDate(subMonths(currentDate, 1));
@@ -129,8 +129,7 @@ export default function SalesStatsPage() {
                 ) : (
                     <div className="min-w-[600px] h-64 flex items-end gap-2 text-xs">
                         {stats?.data.map((item) => {
-                            // Simple normalization for bar height
-                            const maxVal = Math.max(stats.summary.totalSales, stats.summary.totalCost, 1) * 0.1; // roughly scale
+                            // const maxVal = Math.max(stats.summary.totalSales, stats.summary.totalCost, 1) * 0.1; // roughly scale
                             // Actually let's find local max for scaling
                             const localMax = Math.max(...stats.data.map(d => Math.max(d.salesAmount, d.costAmount)), 1);
 

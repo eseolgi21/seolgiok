@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 
 // Helper to parse "2025년 12월 28일" or basic strings
-function parseKoreanDate(str: any): Date | null {
+function parseKoreanDate(str: unknown): Date | null {
     if (!str) return null;
     if (typeof str === 'number') {
         // Excel serial date
@@ -19,7 +19,7 @@ function parseKoreanDate(str: any): Date | null {
     return isNaN(d.getTime()) ? null : d;
 }
 
-function parseCurrency(str: any): number {
+function parseCurrency(str: unknown): number {
     if (typeof str === 'number') return str;
     if (!str) return 0;
     // "138,230원" -> 138230
@@ -48,19 +48,20 @@ export async function POST(req: NextRequest) {
 
         // 1. Find Header Row dynamically
         // Convert to array of arrays to scan for the header
-        const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+        const aoa = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][];
         let headerRowIndex = 0;
 
         for (let i = 0; i < Math.min(aoa.length, 20); i++) {
             const row = aoa[i];
             // Check if this row looks like a header (contains "승인번호")
-            if (row && row.some((cell: any) => String(cell).includes("승인번호"))) {
+            if (row && row.some((cell: unknown) => String(cell).includes("승인번호"))) {
                 headerRowIndex = i;
                 break;
             }
         }
 
         // 2. Parse with correct range
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rows: any[] = XLSX.utils.sheet_to_json(sheet, { range: headerRowIndex });
 
 
@@ -92,6 +93,7 @@ export async function POST(req: NextRequest) {
         const installKey = keys.find(k => k.includes("할부")) || "할부개월";
 
         // Process rows and prepare data for batch insert
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const validData: any[] = [];
         let failCount = 0;
 
@@ -125,6 +127,7 @@ export async function POST(req: NextRequest) {
             // This efficiently inserts new records and ignores existing approvalNos ("ON CONFLICT DO NOTHING")
             // The result.count will only reflect the number of NEWLY inserted rows.
             const result = await prisma.cardTransaction.createMany({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 data: validData as any,
                 skipDuplicates: true,
             });

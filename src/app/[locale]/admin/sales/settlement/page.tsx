@@ -1,9 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { format, subYears, addYears } from "date-fns";
-import { ko } from "date-fns/locale";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 type MonthlySettlement = {
@@ -14,16 +12,18 @@ type MonthlySettlement = {
     count: number;
 };
 
+type DailyData = {
+    date: string;
+    salesAmount: number;
+    costAmount: number;
+};
+
 export default function SettlementPage() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [data, setData] = useState<MonthlySettlement[]>([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetchSettlement();
-    }, [year]);
-
-    const fetchSettlement = async () => {
+    const fetchSettlement = useCallback(async () => {
         setLoading(true);
         try {
             // Re-use the stats API with year mode implies full year daily data.
@@ -34,7 +34,7 @@ export default function SettlementPage() {
             const res = await fetch(`/api/admin/sales/stats?type=year&year=${year}`);
             if (res.ok) {
                 const json = await res.json();
-                const dailyData: any[] = json.data;
+                const dailyData: DailyData[] = json.data;
 
                 // Aggregate by month
                 const monthlymap = new Map<string, MonthlySettlement>();
@@ -61,7 +61,11 @@ export default function SettlementPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [year]);
+
+    useEffect(() => {
+        fetchSettlement();
+    }, [fetchSettlement]);
 
     return (
         <div className="space-y-6">

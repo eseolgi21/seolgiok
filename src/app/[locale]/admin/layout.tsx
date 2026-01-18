@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import type { ReactNode } from "react";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import AdminSidebar from "@/components/admin/AdminSidebar";

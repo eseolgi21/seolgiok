@@ -77,6 +77,7 @@ export default function LanguageSwitcher({
 
     // 💡 [핵심 수정] 언어 변경 시 브라우저 쿠키에 NEXT_LOCALE 저장 (유효기간 1년)
     // 이렇게 해야 미들웨어가 새로고침 시에도 이 언어를 기억합니다.
+    // eslint-disable-next-line react-hooks/immutability
     document.cookie = `NEXT_LOCALE=${code}; path=/; max-age=31536000; SameSite=Lax`;
 
     router.replace(pathname, { locale: code });
@@ -119,9 +120,8 @@ export default function LanguageSwitcher({
               <span className="text-sm font-normal">{current.label}</span>
             </div>
             <ChevronUpIcon
-              className={`h-3 w-3 transition-transform duration-200 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </>
         )}
@@ -138,9 +138,8 @@ export default function LanguageSwitcher({
                 <button
                   type="button"
                   onClick={() => apply(op.code)}
-                  className={`${itemClassName} justify-between px-3 py-2 ${
-                    op.code === locale ? "active font-bold" : ""
-                  }`}
+                  className={`${itemClassName} justify-between px-3 py-2 ${op.code === locale ? "active font-bold" : ""
+                    }`}
                   role="option"
                   aria-selected={op.code === locale}
                 >

@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, addMonths, subMonths } from "date-fns";
+import { useState, useEffect, useCallback } from "react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, addMonths, subMonths } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
@@ -17,19 +17,15 @@ type DailySale = {
 export default function DailySalesPage() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [data, setData] = useState<Record<string, DailySale>>({});
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     // Modal State
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [editForm, setEditForm] = useState({ sales: 0, cost: 0, note: "" });
     const [isSaving, setIsSaving] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, [currentDate]);
-
-    const fetchData = async () => {
-        setLoading(true);
+    const fetchData = useCallback(async () => {
+        // setLoading(true);
         const start = format(startOfMonth(currentDate), "yyyy-MM-dd");
         const end = format(endOfMonth(currentDate), "yyyy-MM-dd");
         try {
@@ -43,9 +39,13 @@ export default function DailySalesPage() {
                 setData(map);
             }
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
-    };
+    }, [currentDate]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     const days = eachDayOfInterval({
         start: startOfMonth(currentDate),

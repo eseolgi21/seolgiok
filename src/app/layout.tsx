@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={inter.className} // 폰트 클래스 적용
       suppressHydrationWarning // 하이드레이션 경고를 막기 위한 최종 수단
     >
-      <body>{children}</body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

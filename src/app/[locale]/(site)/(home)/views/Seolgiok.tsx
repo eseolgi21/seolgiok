@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 
 export function SeolgiokView() {
     // 나중에 i18n 적용 가능하도록 hook 준비

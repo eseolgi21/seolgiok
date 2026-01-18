@@ -197,6 +197,7 @@ function AdminSidebarMenu() {
   useEffect(() => {
     // URL이 변경되어 defaultOpen이 달라지면, 
     // "현재 활성화된 경로"에 해당하는 메뉴를 *추가로* 펼쳐준다. (기존에 펼친 것은 유지)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOpenKeys((prev) => {
       const next = new Set(prev);
       defaultOpen.forEach((k) => next.add(k));

@@ -2,7 +2,7 @@
 
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import path from "path"; // 💡 [추가] path 모듈 import
+// import path from "path"; // 💡 [추가] path 모듈 import (Unused)
 
 // [핵심 확인] 플러그인 경로가 src/i18n/request.ts를 정확히 가리키는지 확인
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");

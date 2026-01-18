@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         });
 
         return NextResponse.json(record);
-    } catch (e) {
+    } catch {
         return NextResponse.json({ error: "Invalid data" }, { status: 400 });
     }
 }

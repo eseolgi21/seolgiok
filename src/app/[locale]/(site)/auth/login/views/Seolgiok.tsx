@@ -1,13 +1,9 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import {
-    Button,
-    Form,
-} from "@/components/ui";
-import { UserIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { Button, Form } from "@/components/ui";
 import type { LoginResponse } from "@/types/auth/login/types";
 import { useToast } from "@/components/ui/feedback/Toast-provider";
 import Image from "next/image";
@@ -15,11 +11,10 @@ import Image from "next/image";
 export function SeolgiokLogin() {
     const router = useRouter();
     const { toast } = useToast();
-    const t = useTranslations("authLogin.GlobX"); // Fallback to GlobX strings
+    const t = useTranslations("authLogin.GlobX");
 
     const [id, setId] = useState("");
     const [pwd, setPwd] = useState("");
-    const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
 
     // Simple validation
@@ -30,7 +25,6 @@ export function SeolgiokLogin() {
     const onSubmit = useCallback(
         async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            setSubmitted(true);
             if (!formValid || loading) return;
 
             try {
@@ -41,6 +35,7 @@ export function SeolgiokLogin() {
                     body: JSON.stringify({ id: id.trim(), password: pwd }),
                 });
                 const data = (await res.json()) as LoginResponse;
+                console.log("[Seolgiok] Login response:", res.status, data);
 
                 if (res.ok && data.ok) {
                     toast({
@@ -61,9 +56,16 @@ export function SeolgiokLogin() {
 
                 // Error handling
                 if (!res.ok && !data.ok) {
-                    const msg = data.code === "INVALID_CREDENTIALS"
-                        ? t("messages.invalidCredentials")
-                        : t("messages.validationError");
+                    let msg = t("messages.validationError");
+
+                    if (data.code === "USER_NOT_FOUND") {
+                        msg = "존재하지 않는 아이디입니다.";
+                    } else if (data.code === "INVALID_PASSWORD") {
+                        msg = "비밀번호가 올바르지 않습니다.";
+                    } else if (data.code === "INVALID_CREDENTIALS") {
+                        msg = t("messages.invalidCredentials");
+                    }
+
                     toast({
                         title: t("messages.failTitle"),
                         description: msg,

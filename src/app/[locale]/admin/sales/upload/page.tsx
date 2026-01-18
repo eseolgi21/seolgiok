@@ -48,7 +48,7 @@ export default function CardUploadPage() {
             } else {
                 setMessage(`오류 발생: ${data.error}`);
             }
-        } catch (error) {
+        } catch {
             setMessage("업로드 중 오류가 발생했습니다.");
         } finally {
             setLoading(false);
@@ -71,7 +71,7 @@ export default function CardUploadPage() {
             } else {
                 alert(`삭제 실패: ${data.error}`);
             }
-        } catch (e) {
+        } catch {
             alert("삭제 중 오류가 발생했습니다.");
         } finally {
             setIsDeleting(false);
@@ -95,7 +95,7 @@ export default function CardUploadPage() {
             } else {
                 alert(`전체 삭제 실패: ${data.error}`);
             }
-        } catch (e) {
+        } catch {
             alert("삭제 중 오류가 발생했습니다.");
         } finally {
             setIsDeletingAll(false);
@@ -176,9 +176,9 @@ export default function CardUploadPage() {
                     </div>
 
                     <p className="text-sm text-gray-500 mt-2">
-                        * 선택한 "확정일" 기준의 월 데이터가 모두 삭제됩니다.<br />
+                        * 선택한 &quot;확정일&quot; 기준의 월 데이터가 모두 삭제됩니다.<br />
                         * 카드 지출 분석에서 데이터가 중복되거나 잘못된 경우 삭제 후 다시 업로드하세요.<br />
-                        * "전체 삭제"를 누르면 모든 카드 내역이 영구적으로 삭제됩니다.
+                        * &quot;전체 삭제&quot;를 누르면 모든 카드 내역이 영구적으로 삭제됩니다.
                     </p>
                 </div>
             </div>

@@ -2,10 +2,37 @@
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
     const { id, password } = await req.json();
+
+    // 0. Pre-check: Verify user exists to avoid "CredentialsSignin" error log stack trace
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ username: id }, { email: id }],
+      },
+    });
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { ok: false, code: "USER_NOT_FOUND" },
+        { status: 401 }
+      );
+    }
+
+    // 0.1 Pre-check: Verify password matches to avoid "CredentialsSignin" error log
+    if (existingUser.passwordHash) {
+      const isValid = await bcrypt.compare(password, existingUser.passwordHash);
+      if (!isValid) {
+        return NextResponse.json(
+          { ok: false, code: "INVALID_PASSWORD" },
+          { status: 401 }
+        );
+      }
+    }
 
     // 1. NextAuth signIn (Credentials)
     // redirect: false prevents server-side redirect, throws error on failure
@@ -16,11 +43,6 @@ export async function POST(req: Request) {
     });
 
     // 2. Success (signIn didn't throw)
-    // Note: with redirect:false, signIn returns a Promise that resolves on success and throws on error?
-    // Actually in v5, signIn might return different result depending on config.
-    // If redirect: false, it returns nothing on success? 
-    // Let's assume standardized behavior: if it doesn't throw, it succeeded.
-
     return NextResponse.json({
       ok: true,
       user: { username: id },
@@ -29,8 +51,9 @@ export async function POST(req: Request) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
+          // Since we already checked user existence, this must be password mismatch
           return NextResponse.json(
-            { ok: false, code: "INVALID_CREDENTIALS" },
+            { ok: false, code: "INVALID_PASSWORD" },
             { status: 401 }
           );
         default:
