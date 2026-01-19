@@ -25,13 +25,23 @@ const navTree: NavNode[] = [
   },
 
   {
+    label: "매입 관리",
+    children: [
+      { label: "매입 내역 (엑셀)", href: "/admin/purchase" },
+      { label: "매입 분석", href: "/admin/purchase/analysis" },
+    ],
+  },
+  {
     label: "매출 관리",
     children: [
-      { label: "일별 입력", href: "/admin/sales/daily" },
-      { label: "매출 현황", href: "/admin/sales/stats" }, // Day/Week/Month/Year tabs
-      { label: "월별 정산", href: "/admin/sales/settlement" },
-      { label: "카드 내역 업로드", href: "/admin/sales/upload" },
-      { label: "카드 지출 분석", href: "/admin/sales/analysis" },
+      { label: "매출 내역 (엑셀)", href: "/admin/sales/list" },
+      { label: "매출 분석", href: "/admin/sales/analysis" },
+    ],
+  },
+  {
+    label: "순수익 관리",
+    children: [
+      { label: "순수익 분석", href: "/admin/profit/analysis" },
     ],
   },
 

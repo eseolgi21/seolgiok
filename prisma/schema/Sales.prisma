@@ -33,3 +33,20 @@ model CardTransaction {
   @@index([date])
   @@unique([approvalNo, amount])
 }
+
+model SaleItem {
+  id            String   @id @default(cuid())
+  date          DateTime @db.Date // 매출 일자
+  
+  category      String?  // 분류 (매장, 배달, 기타 등)
+  itemName      String   // 상품명
+  amount        Int      // 금액
+  paymentMethod String?  // 결제수단 (카드, 현금, 이체 등)
+  note          String?  // 비고
+  confirmed     Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([date])
+}

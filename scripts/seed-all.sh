@@ -20,10 +20,10 @@ npx prisma generate
 
 # 1) Countries
 log "seed.country"
-time npx tsx prisma/seed.country.ts
+time npx tsx scripts/seed.country.ts
 
 # 2) Create admin user
 log "seed.admin"
-time npx tsx prisma/seed.admin.ts
+time npx tsx scripts/seed.admin.ts
 
 printf "\n✅ All seeds completed successfully.\n"

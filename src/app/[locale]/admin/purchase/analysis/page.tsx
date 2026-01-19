@@ -16,7 +16,7 @@ type Metadata = {
     totalCount: number;
 };
 
-export default function SalesAnalysisPage() {
+export default function PurchaseAnalysisPage() {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(format(startOfMonth(new Date()), "yyyy-MM-dd"));
     const [endDate, setEndDate] = useState(format(endOfMonth(new Date()), "yyyy-MM-dd"));
@@ -31,7 +31,7 @@ export default function SalesAnalysisPage() {
                 startDate,
                 endDate
             });
-            const res = await fetch(`/api/admin/accounting/sales/analysis?${params}`);
+            const res = await fetch(`/api/admin/accounting/purchase/analysis?${params}`);
             if (res.ok) {
                 const data = await res.json();
                 setItems(data.items);
@@ -52,9 +52,9 @@ export default function SalesAnalysisPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold">매출 분석</h1>
+                    <h1 className="text-2xl font-bold">매입 분석</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                        기간별 매출 품목 통계를 확인합니다.
+                        기간별 매입 품목 통계를 확인합니다.
                     </p>
                 </div>
             </div>
@@ -80,14 +80,16 @@ export default function SalesAnalysisPage() {
                         <button className="btn btn-primary" onClick={fetchAnalysis}>조회</button>
                     </div>
                 </div>
-                <div className="card bg-success text-success-content shadow-sm p-4">
+                <div className="card bg-primary text-primary-content shadow-sm p-4">
                     <div className="stat p-0">
-                        <div className="stat-title text-success-content/80">총 매출 금액</div>
-                        <div className="stat-value text-2xl">+{metadata.totalSpending.toLocaleString()}원</div>
-                        <div className="stat-desc text-success-content/80">총 {metadata.totalCount}건</div>
+                        <div className="stat-title text-primary-content/80">총 매입 금액</div>
+                        <div className="stat-value text-2xl">{metadata.totalSpending.toLocaleString()}원</div>
+                        <div className="stat-desc text-primary-content/80">총 {metadata.totalCount}건</div>
                     </div>
                 </div>
             </div>
+
+            {/* Chart (Placeholder for now, using simple progress bars or just table) */}
 
             {/* Table */}
             <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
@@ -97,7 +99,7 @@ export default function SalesAnalysisPage() {
                             <tr className="bg-base-200">
                                 <th className="w-16">순위</th>
                                 <th>품목명</th>
-                                <th className="text-right">판매 횟수</th>
+                                <th className="text-right">구매 횟수</th>
                                 <th className="text-right">평균 단가</th>
                                 <th className="text-right">총 금액</th>
                                 <th className="w-1/4">비중</th>
@@ -130,13 +132,13 @@ export default function SalesAnalysisPage() {
                                             <td className="text-right font-mono text-gray-500">
                                                 {item.averageAmount.toLocaleString()}
                                             </td>
-                                            <td className="text-right font-mono text-success font-bold">
-                                                +{item.totalAmount.toLocaleString()}
+                                            <td className="text-right font-mono text-error font-bold">
+                                                {item.totalAmount.toLocaleString()}
                                             </td>
                                             <td>
                                                 <div className="flex items-center gap-2">
                                                     <progress
-                                                        className="progress progress-success w-full"
+                                                        className="progress progress-error w-full"
                                                         value={percentage}
                                                         max="100"
                                                     ></progress>

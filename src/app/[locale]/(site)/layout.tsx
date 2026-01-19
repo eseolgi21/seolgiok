@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import MainHeader from "@/components/MainHeader";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth/auth";
 import type { ReactNode } from "react";
 
 export default async function SiteLayout({
