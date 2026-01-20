@@ -1,0 +1,38 @@
+model ItemClassification {
+  id        String   @id @default(cuid())
+
+  itemName  String   // 품목명
+  category  String   // 분류
+  type      KeywordType // PURCHASE or SALES
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([itemName])
+}
+
+model ItemCategory {
+  id        String   @id @default(cuid())
+  name      String
+  type      KeywordType // PURCHASE or SALES
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, type])
+  @@index([type])
+}
+
+model ExcelFilter {
+  id        String   @id @default(cuid())
+  keyword   String   // Filter keyword (e.g. "SK")
+  type      KeywordType // PURCHASE or SALES
+  isInclude Boolean @default(false) // false=Excelude, true=Include
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([keyword, type])
+  @@index([type])
+}

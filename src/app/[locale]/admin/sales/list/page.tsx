@@ -23,6 +23,8 @@ type ExcelMapping = {
     colCategory: string | null;
     colPayment: string | null;
     colNote: string | null;
+    filterExclude: string | null;
+    filterInclude: string | null;
 };
 
 type Item = {
@@ -38,6 +40,8 @@ type Item = {
 
 export default function SalesListPage() {
     const [uploading, setUploading] = useState(false);
+    const [excelPassword, setExcelPassword] = useState("");
+    const [filterMode, setFilterMode] = useState<"ALL" | "EXCLUDE" | "INCLUDE">("EXCLUDE");
 
     // Search & Data
     const [inputValue, setInputValue] = useState("");
@@ -61,8 +65,29 @@ export default function SalesListPage() {
         amount: "금액",
         category: "분류",
         payment: "결제수단",
-        note: "비고"
+        note: "비고",
+        filterExclude: "",
+        filterInclude: ""
     });
+
+    // Manual Add State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newItem, setNewItem] = useState({
+        date: format(new Date(), "yyyy-MM-dd"),
+        category: "",
+        itemName: "",
+        amount: "",
+        paymentMethod: "",
+        note: ""
+    });
+
+    // Inline Edit State
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editAmount, setEditAmount] = useState<string>("");
+
+    // Selection
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
 
     // 1. Load Saved Keywords & Mappings
     const fetchKeywords = useCallback(async () => {
@@ -107,7 +132,9 @@ export default function SalesListPage() {
                     colAmount: mapping.amount,
                     colCategory: mapping.category,
                     colPayment: mapping.payment,
-                    colNote: mapping.note
+                    colNote: mapping.note,
+                    filterExclude: mapping.filterExclude,
+                    filterInclude: mapping.filterInclude
                 })
             });
             if (res.ok) {
@@ -147,7 +174,9 @@ export default function SalesListPage() {
                     amount: m.colAmount,
                     category: m.colCategory || "",
                     payment: m.colPayment || "",
-                    note: m.colNote || ""
+                    note: m.colNote || "",
+                    filterExclude: m.filterExclude || "",
+                    filterInclude: m.filterInclude || ""
                 });
             }
         }
@@ -163,7 +192,7 @@ export default function SalesListPage() {
         try {
             const params = new URLSearchParams({
                 page: p.toString(),
-                limit: "20",
+                limit: "100",
                 keywords: keys.join(",")
             });
             const res = await fetch(`/api/admin/accounting/sales/list?${params}`);
@@ -174,6 +203,7 @@ export default function SalesListPage() {
             }
         } finally {
             setLoading(false);
+            setSelectedIds([]);
         }
     }, []);
 
@@ -196,17 +226,24 @@ export default function SalesListPage() {
 
     const handleSearch = () => {
         setPage(1);
-        fetchData(activeKeywords, 1);
+        const newKeys = [...activeKeywords];
+        if (inputValue.trim()) {
+            const inputs = inputValue.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            inputs.forEach(k => {
+                if (!newKeys.includes(k)) {
+                    newKeys.push(k);
+                }
+            });
+        }
+        setActiveKeywords(newKeys);
+        setInputValue("");
+        fetchData(newKeys, 1);
     };
 
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (inputValue.trim()) {
-                handleAddKeyword(inputValue);
-            } else {
-                handleSearch();
-            }
+            handleSearch();
         }
     };
 
@@ -259,7 +296,15 @@ export default function SalesListPage() {
         formData.append("mapAmount", mapping.amount);
         formData.append("mapCategory", mapping.category);
         formData.append("mapPayment", mapping.payment);
+        formData.append("mapPayment", mapping.payment);
         formData.append("mapNote", mapping.note);
+        formData.append("filterExclude", mapping.filterExclude);
+        formData.append("filterExclude", mapping.filterExclude);
+        formData.append("filterInclude", mapping.filterInclude);
+        formData.append("filterMode", filterMode);
+        if (excelPassword) {
+            formData.append("password", excelPassword);
+        }
 
         setUploading(true);
         try {
@@ -279,7 +324,136 @@ export default function SalesListPage() {
             alert("업로드 중 오류가 발생했습니다.");
         } finally {
             setUploading(false);
-            e.target.value = "";
+            if (e.target) e.target.value = "";
+        }
+    };
+
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedIds(items.map(i => i.id));
+        } else {
+            setSelectedIds([]);
+        }
+    };
+
+    const handleCheckboxChange = (id: string) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+        );
+    };
+
+    const handleDeleteSelected = async () => {
+        if (selectedIds.length === 0) return;
+        if (!confirm(`${selectedIds.length}건의 항목을 삭제하시겠습니까?`)) return;
+
+        try {
+            const res = await fetch("/api/admin/accounting/sales/list", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ids: selectedIds })
+            });
+            if (res.ok) {
+                alert("삭제되었습니다.");
+                fetchData(activeKeywords, page);
+            } else {
+                alert("삭제 실패");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const handleCreate = async () => {
+        if (!newItem.category || !newItem.itemName || !newItem.amount) {
+            alert("필수 항목을 입력해주세요.");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/admin/accounting/sales/list", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newItem)
+            });
+
+            if (res.ok) {
+                alert("항목이 추가되었습니다.");
+                setIsAddModalOpen(false);
+                setNewItem({
+                    date: format(new Date(), "yyyy-MM-dd"),
+                    category: "",
+                    itemName: "",
+                    amount: "",
+                    paymentMethod: "",
+                    note: ""
+                });
+                fetchData(activeKeywords, page); // Refresh
+            } else {
+                alert("추가 실패");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const startEditing = (item: Item) => {
+        setEditingId(item.id);
+        setEditAmount(item.amount.toString());
+    };
+
+    const cancelEditing = () => {
+        setEditingId(null);
+        setEditAmount("");
+    };
+
+    const saveEditing = async () => {
+        if (!editingId) return;
+
+        try {
+            const res = await fetch("/api/admin/accounting/sales/list", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: editingId, amount: Number(editAmount) })
+            });
+
+            if (res.ok) {
+                // Update local state directly or refetch
+                setItems(prev => prev.map(item =>
+                    item.id === editingId ? { ...item, amount: Number(editAmount) } : item
+                ));
+                setEditingId(null);
+            } else {
+                alert("수정 실패");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const handleDeleteExcept = async () => {
+        if (activeKeywords.length === 0) return;
+        if (!confirm(`현재 검색된 키워드(${activeKeywords.join(", ")})를 포함하지 않는\n모든 '미확정' 항목을 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) return;
+
+        try {
+            const res = await fetch("/api/admin/accounting/sales/list", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "DELETE_EXCEPT",
+                    keywords: activeKeywords
+                })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                alert(`${data.count}개의 항목이 삭제되었습니다.`);
+                fetchData(activeKeywords, 1);
+            } else {
+                alert("삭제 실패");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("오류 발생");
         }
     };
 
@@ -293,6 +467,14 @@ export default function SalesListPage() {
                     </p>
                 </div>
                 <div className="flex gap-2">
+                    {selectedIds.length > 0 && (
+                        <button className="btn btn-error text-white" onClick={handleDeleteSelected}>
+                            선택 삭제 ({selectedIds.length})
+                        </button>
+                    )}
+                    <button className="btn btn-secondary" onClick={() => setIsAddModalOpen(true)}>
+                        + 직접 추가
+                    </button>
                     <button
                         className={`btn gap-2 ${showMapping ? 'btn-active' : 'btn-ghost'}`}
                         onClick={() => setShowMapping(!showMapping)}
@@ -300,21 +482,60 @@ export default function SalesListPage() {
                         <Cog6ToothIcon className="w-5 h-5" />
                         엑셀 설정
                     </button>
-                    <label className={`btn btn-primary gap-2 ${uploading ? "loading" : ""}`}>
-                        {uploading ? "업로드 중..." : (
-                            <>
-                                <ArrowUpTrayIcon className="w-5 h-5" />
-                                엑셀 업로드
-                            </>
-                        )}
+                    <div className="flex items-center gap-2">
+                        {/* Mapping Dropdown Moved Here */}
+                        <div className="flex gap-1 flex-shrink-0">
+                            <select
+                                className="select select-sm select-bordered w-auto min-w-[160px]"
+                                value={selectedMappingId}
+                                onChange={handleSelectMapping}
+                            >
+                                <option value="">-- 엑셀 설정 선택 --</option>
+                                {mappings.map(m => (
+                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                ))}
+                            </select>
+                            {selectedMappingId && (
+                                <button className="btn btn-sm btn-square btn-outline btn-error" onClick={handleDeleteMapping} title="설정 삭제">
+                                    <XMarkIcon className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Filter Mode Selector */}
+                        <select
+                            className="select select-sm select-bordered max-w-[100px]"
+                            value={filterMode}
+                            onChange={(e) => setFilterMode(e.target.value as "ALL" | "EXCLUDE" | "INCLUDE")}
+                        >
+                            <option value="ALL">전체</option>
+                            <option value="EXCLUDE">제외</option>
+                            <option value="INCLUDE">포함</option>
+                        </select>
+
                         <input
-                            type="file"
-                            accept=".xlsx, .xls"
-                            className="hidden"
-                            onChange={handleUpload}
-                            disabled={uploading}
+                            type="password"
+                            placeholder="엑셀 비밀번호"
+                            className="input input-bordered input-sm w-32"
+                            value={excelPassword}
+                            onChange={(e) => setExcelPassword(e.target.value)}
                         />
-                    </label>
+                        <label className={`btn btn-primary gap-2 ${uploading ? "loading" : ""}`}>
+                            {uploading ? "업로드 중..." : (
+                                <>
+                                    <ArrowUpTrayIcon className="w-5 h-5" />
+                                    엑셀 업로드
+                                </>
+                            )}
+                            <input
+                                type="file"
+                                accept=".xlsx, .xls"
+                                className="hidden"
+                                onChange={handleUpload}
+                                disabled={uploading}
+                            />
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -328,21 +549,7 @@ export default function SalesListPage() {
                                 <p className="text-xs text-gray-500">엑셀 파일의 헤더 이름이 다를 경우 아래 입력칸에 해당 컬럼명을 입력하세요.</p>
                             </div>
                             <div className="flex gap-2">
-                                <select
-                                    className="select select-sm select-bordered max-w-xs"
-                                    value={selectedMappingId}
-                                    onChange={handleSelectMapping}
-                                >
-                                    <option value="">-- 저장된 설정 선택 --</option>
-                                    {mappings.map(m => (
-                                        <option key={m.id} value={m.id}>{m.name}</option>
-                                    ))}
-                                </select>
-                                {selectedMappingId && (
-                                    <button className="btn btn-sm btn-square btn-outline btn-error" onClick={handleDeleteMapping} title="설정 삭제">
-                                        <XMarkIcon className="w-4 h-4" />
-                                    </button>
-                                )}
+
                                 <button className="btn btn-sm btn-outline" onClick={handleSaveMapping}>
                                     현재 설정 저장
                                 </button>
@@ -377,23 +584,26 @@ export default function SalesListPage() {
                         </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Keyword Search Section */}
             <div className="card bg-base-100 shadow-sm border border-base-200">
                 <div className="card-body p-4">
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-2">
-                            <div className="relative flex-1">
+                            <div className="relative flex-1 flex items-center">
                                 <input
                                     type="text"
-                                    placeholder="검색어 추가 (예: 배달의민족) + Enter"
-                                    className="input input-bordered w-full pl-10"
+                                    placeholder="키워드 입력"
+                                    className="input input-bordered w-full max-w-xs"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={handleInputKeyDown}
                                 />
-                                <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-3 text-gray-400" />
+                                <button className="btn btn-square ml-2" onClick={handleSearch}>
+                                    <MagnifyingGlassIcon className="w-5 h-5" />
+                                </button>
                             </div>
                             <button className="btn btn-primary" onClick={handleSearch}>검색 ({activeKeywords.length})</button>
                             <button className="btn btn-secondary" onClick={handleConfirm}>
@@ -413,6 +623,12 @@ export default function SalesListPage() {
                                     </div>
                                 ))}
                                 <button className="btn btn-xs btn-ghost text-gray-500" onClick={() => setActiveKeywords([])}>전체 삭제</button>
+                                <button
+                                    className="btn btn-xs btn-error btn-outline ml-auto"
+                                    onClick={handleDeleteExcept}
+                                >
+                                    검색 결과 외 모두 삭제
+                                </button>
                             </div>
                         )}
 
@@ -447,6 +663,16 @@ export default function SalesListPage() {
                     <table className="table table-zebra w-full">
                         <thead>
                             <tr className="bg-base-200">
+                                <th className="w-10">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox checkbox-sm"
+                                            onChange={handleSelectAll}
+                                            checked={items.length > 0 && selectedIds.length === items.length}
+                                        />
+                                    </label>
+                                </th>
                                 <th>상태</th>
                                 <th>일자</th>
                                 <th>분류</th>
@@ -472,6 +698,16 @@ export default function SalesListPage() {
                             ) : (
                                 items.map((item) => (
                                     <tr key={item.id} className={item.confirmed ? "bg-base-100" : "bg-base-100 opacity-60"}>
+                                        <th>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    className="checkbox checkbox-sm"
+                                                    checked={selectedIds.includes(item.id)}
+                                                    onChange={() => handleCheckboxChange(item.id)}
+                                                />
+                                            </label>
+                                        </th>
                                         <td>
                                             {item.confirmed ? (
                                                 <span className="badge badge-success badge-sm">등록됨</span>
@@ -485,7 +721,27 @@ export default function SalesListPage() {
                                         </td>
                                         <td className="font-medium">{item.itemName}</td>
                                         <td className="text-right font-mono text-success">
-                                            +{item.amount.toLocaleString()}
+                                            {editingId === item.id ? (
+                                                <input
+                                                    type="number"
+                                                    className="input input-xs input-bordered w-24 text-right"
+                                                    value={editAmount}
+                                                    onChange={e => setEditAmount(e.target.value)}
+                                                    onBlur={saveEditing}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter') saveEditing();
+                                                        if (e.key === 'Escape') cancelEditing();
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <span
+                                                    className="cursor-pointer hover:underline decoration-dashed"
+                                                    onClick={() => startEditing(item)}
+                                                >
+                                                    {item.amount > 0 ? '+' : ''}{item.amount.toLocaleString()}
+                                                </span>
+                                            )}
                                         </td>
                                         <td>{item.paymentMethod}</td>
                                         <td className="text-gray-500 text-sm max-w-xs truncate" title={item.note || ""}>{item.note}</td>
@@ -517,6 +773,78 @@ export default function SalesListPage() {
                     </div>
                 </div>
             </div>
-        </div>
+            {/* Add Modal */}
+            {
+                isAddModalOpen && (
+                    <div className="modal modal-open">
+                        <div className="modal-box">
+                            <h3 className="font-bold text-lg mb-4">매출 내역 직접 추가</h3>
+                            <div className="form-control mb-2">
+                                <label className="label">날짜</label>
+                                <input
+                                    type="date"
+                                    className="input input-bordered"
+                                    value={newItem.date}
+                                    onChange={e => setNewItem({ ...newItem, date: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control mb-2">
+                                <label className="label">분류</label>
+                                <input
+                                    type="text"
+                                    className="input input-bordered"
+                                    placeholder="예: 매장, 배달"
+                                    value={newItem.category}
+                                    onChange={e => setNewItem({ ...newItem, category: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control mb-2">
+                                <label className="label">상품명</label>
+                                <input
+                                    type="text"
+                                    className="input input-bordered"
+                                    placeholder="예: 아메리카노"
+                                    value={newItem.itemName}
+                                    onChange={e => setNewItem({ ...newItem, itemName: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control mb-2">
+                                <label className="label">금액</label>
+                                <input
+                                    type="number"
+                                    className="input input-bordered"
+                                    placeholder="숫자만 입력"
+                                    value={newItem.amount}
+                                    onChange={e => setNewItem({ ...newItem, amount: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control mb-2">
+                                <label className="label">결제수단</label>
+                                <input
+                                    type="text"
+                                    className="input input-bordered"
+                                    placeholder="예: 카드, 현금"
+                                    value={newItem.paymentMethod}
+                                    onChange={e => setNewItem({ ...newItem, paymentMethod: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-control mb-4">
+                                <label className="label">비고</label>
+                                <input
+                                    type="text"
+                                    className="input input-bordered"
+                                    value={newItem.note}
+                                    onChange={e => setNewItem({ ...newItem, note: e.target.value })}
+                                />
+                            </div>
+                            <div className="modal-action">
+                                <button className="btn" onClick={() => setIsAddModalOpen(false)}>취소</button>
+                                <button className="btn btn-primary" onClick={handleCreate}>추가</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     );
 }

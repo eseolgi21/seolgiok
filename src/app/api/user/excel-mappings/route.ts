@@ -14,6 +14,8 @@ const CreateSchema = z.object({
     colCategory: z.string().optional(),
     colNote: z.string().optional(),
     colPayment: z.string().optional(),
+    filterExclude: z.string().optional(),
+    filterInclude: z.string().optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -61,6 +63,8 @@ export async function POST(req: NextRequest) {
                 colCategory: data.colCategory,
                 colNote: data.colNote,
                 colPayment: data.colPayment,
+                filterExclude: data.filterExclude,
+                filterInclude: data.filterInclude,
             },
         });
 

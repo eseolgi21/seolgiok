@@ -1,8 +1,9 @@
-
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
+import officeCrypto from "officecrypto-tool";
+import { toHalfWidth } from "@/lib/string-utils";
 
 // Helper to find column index by fuzzy matching
 function findColumn(headers: string[], keywords: string[]): string | undefined {
@@ -46,8 +47,37 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
         }
 
-        const buffer = await file.arrayBuffer();
-        const wb = XLSX.read(buffer, { type: "buffer" });
+        // Get Custom Mappings from FormData
+        const mapDate = formData.get("mapDate") as string;
+        const mapItem = formData.get("mapItem") as string;
+        const mapAmount = formData.get("mapAmount") as string;
+        const mapCategory = formData.get("mapCategory") as string;
+        const mapNote = formData.get("mapNote") as string;
+        const password = formData.get("password") as string;
+
+        const arrayBuffer = await file.arrayBuffer();
+        let bufferToRead: ArrayBuffer | Uint8Array = arrayBuffer;
+
+        if (password && password.trim()) {
+            try {
+                // officecrypto-tool expects generic buffer
+                const fileBuffer = Buffer.from(arrayBuffer);
+                const decrypted = await officeCrypto.decrypt(fileBuffer, { password: password.trim() });
+                bufferToRead = decrypted;
+            } catch (e: unknown) {
+                console.error("Decryption failed:", e);
+                return NextResponse.json({ error: "비밀번호가 올바르지 않거나 복호화에 실패했습니다." }, { status: 400 });
+            }
+        }
+
+        let wb;
+        try {
+            // No password needed here as it is already decrypted
+            wb = XLSX.read(bufferToRead, { type: "array" });
+        } catch (e: unknown) {
+            console.error("XLSX Read Error:", e);
+            return NextResponse.json({ error: "엑셀 파일을 읽을 수 없습니다. 형식을 확인해주세요." }, { status: 400 });
+        }
         const wsName = wb.SheetNames[0];
         const ws = wb.Sheets[wsName];
 
@@ -56,56 +86,82 @@ export async function POST(req: NextRequest) {
         const rawData = XLSX.utils.sheet_to_json(ws, { header: 1 }) as unknown[][];
         if (rawData.length === 0) return NextResponse.json({ error: "Empty file" }, { status: 400 });
 
-
-        // Get Custom Mappings from FormData
-        const mapDate = formData.get("mapDate") as string;
-        const mapItem = formData.get("mapItem") as string;
-        const mapAmount = formData.get("mapAmount") as string;
-        const mapCategory = formData.get("mapCategory") as string;
-        const mapNote = formData.get("mapNote") as string;
-
         // Search for header row
+        // Search for header row using a scoring system
         let headerIndex = 0;
         let headers: string[] = [];
-        const dateKeywords = mapDate ? [mapDate] : ["date", "일자", "날짜", "시간", "거래일시"];
+        let maxScore = 0;
 
-        for (let i = 0; i < Math.min(rawData.length, 20); i++) {
+        const defaultDateKeywords = ["date", "일자", "날짜", "시간", "거래일시"];
+        const defaultItemKeywords = ["item", "name", "품목", "상품", "내역", "적요", "보낸분/받는분", "가맹점명", "기재내용", "상호명"];
+        const defaultAmountKeywords = ["amount", "price", "cost", "금액", "가격", "출금액", "이용금액", "결제금액"];
+
+        const targetKeywords = new Set<string>();
+        if (mapDate) targetKeywords.add(mapDate);
+        if (mapItem) targetKeywords.add(mapItem);
+        if (mapAmount) targetKeywords.add(mapAmount);
+
+        // Add defaults to target keywords for row detection to be robust
+        defaultDateKeywords.forEach(k => targetKeywords.add(k));
+        defaultItemKeywords.forEach(k => targetKeywords.add(k));
+        defaultAmountKeywords.forEach(k => targetKeywords.add(k));
+
+        for (let i = 0; i < Math.min(rawData.length, 100); i++) {
             const row = rawData[i].map(c => String(c).trim());
-            if (findColumn(row, dateKeywords)) {
+            let score = 0;
+
+            // Check overlaps
+            row.forEach(cell => {
+                if (cell && Array.from(targetKeywords).some(k => cell.toLowerCase().includes(k.toLowerCase()))) {
+                    score++;
+                }
+            });
+
+            // Boost score if it contains specific user mappings
+            if (mapDate && findColumn(row, [mapDate])) score += 3;
+            if (mapItem && findColumn(row, [mapItem])) score += 3;
+
+            if (score > maxScore) {
+                maxScore = score;
                 headerIndex = i;
                 headers = row;
-                break;
             }
         }
 
-        if (headers.length === 0) {
-            console.log("No valid header row found in first 20 rows. Using first row.");
+        if (maxScore === 0) {
             headers = rawData[0].map(h => String(h).trim());
             headerIndex = 0;
-        } else {
-            console.log(`Found header row at index ${headerIndex}:`, headers);
         }
 
         const rows = rawData.slice(headerIndex + 1);
 
-        // 2. Find Column Mappings (User input > Defaults)
-        console.log("Using mappings:", { mapDate, mapItem, mapAmount, mapCategory, mapNote });
+        // 2. Find Column Mappings (User input > Defaults Fallback)
 
-        const colDate = findColumn(headers, dateKeywords);
-        const colItem = findColumn(headers, mapItem ? [mapItem] : ["item", "name", "품목", "상품", "내역", "적요", "보낸분/받는분", "가맹점명"]);
-        const colAmount = findColumn(headers, mapAmount ? [mapAmount] : ["amount", "price", "cost", "금액", "가격", "출금액", "이용금액"]);
-        const colCategory = findColumn(headers, mapCategory ? [mapCategory] : ["category", "type", "분류", "구분", "분야"]);
-        const colNote = findColumn(headers, mapNote ? [mapNote] : ["note", "memo", "비고", "메모", "송금메모", "카드명"]);
+        // Helper to resolve column with fallback
+        const resolveColumn = (userMap: string | null, defaults: string[]) => {
+            // Priority 1: User Mapping
+            if (userMap) {
+                const found = findColumn(headers, [userMap]);
+                if (found) return found;
+            }
+            // Priority 2: Defaults
+            return findColumn(headers, defaults);
+        };
 
-        console.log("Resolved Columns:", { colDate, colItem, colAmount, colCategory, colNote });
+        const colDate = resolveColumn(mapDate, defaultDateKeywords);
+        const colItem = resolveColumn(mapItem, defaultItemKeywords);
+        const colAmount = resolveColumn(mapAmount, defaultAmountKeywords);
+        const colCategory = resolveColumn(mapCategory, ["category", "type", "분류", "구분", "분야"]);
+        const colNote = resolveColumn(mapNote, ["note", "memo", "비고", "메모", "송금메모", "카드명"]);
 
+        // Validate required columns
         if (!colDate || !colItem || !colAmount) {
             const missing = [];
-            if (!colDate) missing.push(`Date (keywords: ${dateKeywords.join(', ')})`);
-            if (!colItem) missing.push(`Item (keywords: ${mapItem || 'default'})`);
-            if (!colAmount) missing.push(`Amount (keywords: ${mapAmount || 'default'})`);
+            if (!colDate) missing.push(`Date (User: ${mapDate}, Defaults: ${defaultDateKeywords.join(', ')})`);
+            if (!colItem) missing.push(`Item (User: ${mapItem}, Defaults: ${defaultItemKeywords.join(', ')})`);
+            if (!colAmount) missing.push(`Amount (User: ${mapAmount}, Defaults: ${defaultAmountKeywords.join(', ')})`);
 
-            const errorMsg = `Missing required columns: ${missing.join(', ')}. Found headers in row ${headerIndex + 1}: ${headers.join(", ")}`;
+            const errorMsg = `Missing required columns: ${missing.join(' / ')}. Found headers in row ${headerIndex + 1}: ${headers.join(", ")}`;
             console.error("Upload Failed:", errorMsg);
 
             return NextResponse.json({
@@ -120,57 +176,118 @@ export async function POST(req: NextRequest) {
         const idxCategory = colCategory ? headers.indexOf(colCategory) : -1;
         const idxNote = colNote ? headers.indexOf(colNote) : -1;
 
-        const createInput = [];
-        let debugRows = 0;
+        // Fetch classifications
+        const classifications = await prisma.itemClassification.findMany({
+            where: { type: "PURCHASE" }
+        });
+        const classMap = new Map<string, string>();
+        classifications.forEach((c) => classMap.set(c.itemName, c.category));
 
-        for (const row of rows) {
+        // Fetch Global Filters
+        const filters = await prisma.excelFilter.findMany({
+            where: { type: "PURCHASE" }
+        });
+        const globalExclude = filters.filter((f) => !f.isInclude).map((f) => toHalfWidth(f.keyword).toLowerCase());
+        const globalInclude = filters.filter((f) => f.isInclude).map((f) => toHalfWidth(f.keyword).toLowerCase());
+
+        const createInput = [];
+
+        const filterExcludeStr = formData.get("filterExclude") as string;
+        const filterIncludeStr = formData.get("filterInclude") as string;
+        const filterMode = (formData.get("filterMode") as string) || "EXCLUDE";
+
+        const runtimeExclude = filterExcludeStr ? filterExcludeStr.split(',').map(s => s.trim().toLowerCase()).filter(s => s) : [];
+        const runtimeInclude = filterIncludeStr ? filterIncludeStr.split(',').map(s => s.trim().toLowerCase()).filter(s => s) : [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i] as (string | number | undefined)[];
+            if (!row || row.length === 0) continue;
+
             // Debug first 5 rows
-            if (debugRows < 5) {
-                console.log(`Processing Row ${debugRows}:`, {
-                    rawItem: row[idxItem],
-                    rawAmount: row[idxAmount],
-                    rawDate: row[idxDate]
-                });
-            }
 
             if (!row[idxItem] && !row[idxAmount]) {
-                if (debugRows < 5) console.log("-> Skipped: No item/amount");
-                debugRows++;
                 continue;
+            }
+
+            const itemName = String(row[idxItem]).trim();
+            const normalizedItemName = toHalfWidth(itemName).toLowerCase();
+
+            // Get other fields for filtering
+            const rawCategory = idxCategory > -1 ? String(row[idxCategory]).trim() : "";
+            const normalizedCategory = toHalfWidth(rawCategory).toLowerCase();
+
+            const rawNote = idxNote > -1 ? String(row[idxNote]).trim() : "";
+            const normalizedNote = toHalfWidth(rawNote).toLowerCase();
+
+            const rowContent = (normalizedItemName + " " + normalizedCategory + " " + normalizedNote);
+            const contentToCheck = (normalizedItemName + normalizedCategory + normalizedNote);
+
+            // Filter Logic based on Mode
+            if (filterMode === "ALL") {
+                // No filters applied
+            } else if (filterMode === "EXCLUDE") {
+                // 1. Runtime Exclude
+                if (runtimeExclude.some((k: string) => rowContent.includes(k))) {
+                    continue;
+                }
+                // 2. Global Exclude
+                if (globalExclude.some((k: string) => contentToCheck.includes(k))) {
+                    continue;
+                }
+            } else if (filterMode === "INCLUDE") {
+                const allIncludes = [...runtimeInclude, ...globalInclude];
+                // If there are ANY include filters defined, we must match at least one.
+                // If NO include filters are defined, and mode is INCLUDE, we usually shouldn't upload anything (or everything? safer to say nothing).
+                // User Requirement: "Only data matching keywords in Include Filter should appear."
+
+                if (allIncludes.length > 0) {
+                    // Must match at least one
+                    if (!allIncludes.some((k: string) => rowContent.includes(k))) {
+                        continue;
+                    }
+                } else {
+                    // No include keywords ==> Skip everything? Or upload everything?
+                    // Usually "Whitelist Mode" with empty whitelist = Block All.
+                    // Usually "Whitelist Mode" with empty whitelist = Block All.
+                    continue;
+                }
             }
 
             const dateVal = parseDateSafe(row[idxDate]);
             if (!dateVal) {
-                if (debugRows < 5) console.log("-> Skipped: Invalid Date", row[idxDate]);
-                debugRows++;
                 continue;
             }
 
-            // Fix: Remove commas before parsing number
-            const rawAmount = String(row[idxAmount]).replace(/,/g, "");
+            // Fix: Remove non-numeric characters (including commas, +/- signs) to store absolute value
+            const rawAmount = String(row[idxAmount]).replace(/[^0-9.-]/g, "");
             const amount = Number(rawAmount) || 0;
 
             if (amount === 0) {
-                if (debugRows < 5) console.log("-> Skipped: Zero Amount", row[idxAmount]);
-                debugRows++;
                 continue;
             }
 
+            const finalCategory = classMap.has(itemName)
+                ? classMap.get(itemName)!
+                : (idxCategory > -1 ? String(row[idxCategory]) : "기타");
+
             createInput.push({
                 date: dateVal,
-                itemName: String(row[idxItem]),
+                itemName: itemName,
                 amount: amount,
-                category: idxCategory > -1 ? String(row[idxCategory]) : "기타",
+                category: finalCategory,
                 note: idxNote > -1 ? String(row[idxNote]) : "",
             });
-            debugRows++;
         }
 
-        console.log(`Total valid rows created: ${createInput.length}`);
 
         if (createInput.length === 0) {
             return NextResponse.json({ message: "No valid rows found. Check server logs for details." }, { status: 400 });
         }
+
+        // Delete existing unconfirmed items before uploading new ones
+        await prisma.purchaseItem.deleteMany({
+            where: { confirmed: false }
+        });
 
         const { count } = await prisma.purchaseItem.createMany({
             data: createInput,

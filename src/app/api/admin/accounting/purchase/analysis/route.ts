@@ -27,8 +27,36 @@ export async function GET(req: NextRequest) {
             };
         }
 
+        const category = searchParams.get("category");
+        if (category !== null && category !== undefined) {
+            where.category = category;
+        }
+
+        const keywords = searchParams.get("keywords");
+        if (keywords) {
+            const keys = keywords.split(",").map(k => k.trim()).filter(k => k);
+            if (keys.length > 0) {
+                where.itemName = {
+                    in: undefined, // Clear potential conflicts
+                };
+                where.OR = keys.map(k => ({ itemName: { contains: k } }));
+            }
+        }
+
+        const page = Number(searchParams.get("page") || "1");
+        const limit = Number(searchParams.get("limit") || "20");
+        const skip = (page - 1) * limit;
+
+        // Get total count of distinct items for pagination
+        const distinctItems = await prisma.purchaseItem.groupBy({
+            by: ['itemName', 'category'],
+            where,
+            orderBy: { _sum: { amount: 'desc' } }
+        });
+        const totalItems = distinctItems.length;
+
         const items = await prisma.purchaseItem.groupBy({
-            by: ['itemName'],
+            by: ['itemName', 'category'],
             where,
             _sum: {
                 amount: true
@@ -40,27 +68,88 @@ export async function GET(req: NextRequest) {
                 _sum: {
                     amount: 'desc'
                 }
-            }
+            },
+            skip,
+            take: limit
         });
 
         const analysis = items.map(item => ({
             itemName: item.itemName,
+            category: item.category || "기타",
             totalAmount: item._sum.amount || 0,
             count: item._count._all,
             averageAmount: Math.round((item._sum.amount || 0) / item._count._all)
         }));
 
-        const totalSpending = analysis.reduce((sum, item) => sum + item.totalAmount, 0);
+        // Calculate total spending for the WHOLE period (not just this page)
+        const allStats = await prisma.purchaseItem.aggregate({
+            _sum: { amount: true },
+            _count: { _all: true },
+            where
+        });
 
         return NextResponse.json({
             items: analysis,
             metadata: {
-                totalSpending,
-                totalCount: analysis.reduce((sum, item) => sum + item.count, 0)
+                totalSpending: allStats._sum.amount || 0,
+                totalCount: allStats._count._all || 0,
+                totalItems,
+                page,
+                limit
             }
         });
     } catch (e) {
         console.error(e);
         return NextResponse.json({ error: "Failed to fetch analysis" }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    const session = await auth();
+    if (!session || (session.user.level ?? 0) < 21) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    try {
+        const body = await req.json();
+        const { action, startDate, endDate, itemNames } = body;
+
+        let where: Prisma.PurchaseItemWhereInput = {};
+
+        if (action === "DELETE_ALL_IN_PERIOD") {
+            if (!startDate || !endDate) {
+                return NextResponse.json({ error: "Start and End dates are required" }, { status: 400 });
+            }
+            where = {
+                date: {
+                    gte: startOfDay(parseISO(startDate)),
+                    lte: endOfDay(parseISO(endDate))
+                },
+                confirmed: true
+            };
+        } else {
+            // Default: Delete by itemNames (and optionally date range)
+            if (!Array.isArray(itemNames) || itemNames.length === 0) {
+                return NextResponse.json({ error: "No item names provided" }, { status: 400 });
+            }
+            where = {
+                itemName: { in: itemNames },
+                confirmed: true
+            };
+
+            if (startDate && endDate) {
+                where.date = {
+                    gte: startOfDay(parseISO(startDate)),
+                    lte: endOfDay(parseISO(endDate))
+                };
+            }
+        }
+
+        const res = await prisma.purchaseItem.deleteMany({ where });
+
+        return NextResponse.json({ count: res.count });
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ error: "Failed to delete items" }, { status: 500 });
     }
 }

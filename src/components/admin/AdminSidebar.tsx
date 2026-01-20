@@ -25,6 +25,14 @@ const navTree: NavNode[] = [
   },
 
   {
+    label: "품목 관리",
+    children: [
+      { label: "품목 분류 설정", href: "/admin/items" },
+      { label: "엑셀 필터 설정", href: "/admin/items/filters" },
+    ],
+  },
+
+  {
     label: "매입 관리",
     children: [
       { label: "매입 내역 (엑셀)", href: "/admin/purchase" },
@@ -41,7 +49,8 @@ const navTree: NavNode[] = [
   {
     label: "순수익 관리",
     children: [
-      { label: "순수익 분석", href: "/admin/profit/analysis" },
+      { label: "순수익 분석 (월별)", href: "/admin/profit/analysis" },
+      { label: "순수익 분석 (기간별)", href: "/admin/profit/period" },
     ],
   },
 

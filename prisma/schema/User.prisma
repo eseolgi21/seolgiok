@@ -82,6 +82,8 @@ model ExcelMapping {
   colCategory String?
   colNote     String?
   colPayment  String? // For Sales
+  filterExclude String? // 제외 필터
+  filterInclude String? // 포함 필터
 
   createdAt   DateTime @default(now())
   
