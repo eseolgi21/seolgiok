@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import type { ApiError, ApiSuccess, ApiUser } from "@/types/auth/types";
 import type { SignupError, SignupResponse } from "@/types/auth/signup/types";
 import { EdgeType, Prisma } from "@/generated/prisma";
-import { UserModelSchema } from "@/generated/zod/schemas";
+// import { UserModelSchema } from "@/generated/zod/schemas";
 import { randomBytes } from "crypto";
 import { z } from "zod";
 
@@ -92,14 +92,16 @@ const SignupBodySchema = z.object({
 type SignupBody = z.infer<typeof SignupBodySchema>;
 
 /** ---------------- 출력 스키마 (DB → 계약 DTO) ---------------- */
-const ApiUserOutputSchema = UserModelSchema.pick({
-  id: true,
-  username: true,
-  email: true,
-  name: true,
-  countryCode: true,
-  createdAt: true,
-}).transform((u) => {
+const UserOutputBase = z.object({
+  id: z.string(),
+  username: z.string(),
+  email: z.string(),
+  name: z.string(),
+  countryCode: z.string().nullable(),
+  createdAt: z.date(),
+});
+
+const ApiUserOutputSchema = UserOutputBase.transform((u) => {
   return {
     id: u.id,
     username: u.username,
