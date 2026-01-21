@@ -16,6 +16,7 @@ type Keyword = {
 
 type ExcelMapping = {
     id: string;
+    type: string;
     name: string;
     colDate: string;
     colItem: string;
@@ -102,7 +103,7 @@ export default function SalesListPage() {
 
     const fetchMappings = useCallback(async () => {
         try {
-            const res = await fetch("/api/user/excel-mappings?type=SALES");
+            const res = await fetch("/api/user/excel-mappings");
             if (res.ok) {
                 const data = await res.json();
                 setMappings(data.mappings || []);
@@ -521,7 +522,9 @@ export default function SalesListPage() {
                             >
                                 <option value="">-- 엑셀 설정 선택 --</option>
                                 {mappings.map(m => (
-                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                    <option key={m.id} value={m.id}>
+                                        [{m.type === "SALES" ? "매출" : "매입"}] {m.name}
+                                    </option>
                                 ))}
                             </select>
                             {selectedMappingId && (
