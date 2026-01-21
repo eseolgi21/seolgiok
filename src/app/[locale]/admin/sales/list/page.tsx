@@ -89,6 +89,7 @@ export default function SalesListPage() {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
 
+
     // 1. Load Saved Keywords & Mappings
     const fetchKeywords = useCallback(async () => {
         try {
@@ -101,7 +102,7 @@ export default function SalesListPage() {
 
     const fetchMappings = useCallback(async () => {
         try {
-            const res = await fetch("/api/user/excel-mappings");
+            const res = await fetch("/api/user/excel-mappings?type=SALES");
             if (res.ok) {
                 const data = await res.json();
                 setMappings(data.mappings || []);
@@ -115,6 +116,30 @@ export default function SalesListPage() {
         fetchKeywords();
         fetchMappings();
     }, [fetchKeywords, fetchMappings]);
+
+    // Auto-select last used mapping
+    useEffect(() => {
+        if (mappings.length > 0 && !selectedMappingId) {
+            const lastId = localStorage.getItem("lastSalesMappingId");
+            if (lastId) {
+                const found = mappings.find(m => m.id === lastId);
+                if (found) {
+                    setSelectedMappingId(lastId);
+                    setMapping({
+                        date: found.colDate,
+                        item: found.colItem,
+                        amount: found.colAmount,
+                        category: found.colCategory || "",
+                        payment: found.colPayment || "",
+                        note: found.colNote || "",
+                        filterExclude: found.filterExclude || "",
+                        filterInclude: found.filterInclude || ""
+                    });
+                    setShowMapping(true);
+                }
+            }
+        }
+    }, [mappings, selectedMappingId]);
 
     const handleSaveMapping = async () => {
         const name = prompt("이 설정의 이름을 입력하세요 (예: 배달의민족)");
@@ -155,6 +180,7 @@ export default function SalesListPage() {
             if (res.ok) {
                 alert("삭제되었습니다.");
                 setSelectedMappingId("");
+                localStorage.removeItem("lastSalesMappingId");
                 fetchMappings();
             }
         } catch (e) {
@@ -166,6 +192,7 @@ export default function SalesListPage() {
         const id = e.target.value;
         setSelectedMappingId(id);
         if (id) {
+            localStorage.setItem("lastSalesMappingId", id);
             const m = mappings.find(x => x.id === id);
             if (m) {
                 setMapping({
@@ -179,6 +206,8 @@ export default function SalesListPage() {
                     filterInclude: m.filterInclude || ""
                 });
             }
+        } else {
+            localStorage.removeItem("lastSalesMappingId");
         }
     };
 

@@ -88,6 +88,7 @@ export default function PurchasePage() {
 
 
 
+
     // 1. Load Saved Keywords & Mappings
     const fetchKeywords = useCallback(async () => {
         try {
@@ -100,7 +101,7 @@ export default function PurchasePage() {
 
     const fetchMappings = useCallback(async () => {
         try {
-            const res = await fetch("/api/user/excel-mappings");
+            const res = await fetch("/api/user/excel-mappings?type=PURCHASE");
             if (res.ok) {
                 const data = await res.json();
                 setMappings(data.mappings || []);
@@ -114,6 +115,30 @@ export default function PurchasePage() {
         fetchKeywords();
         fetchMappings();
     }, [fetchKeywords, fetchMappings]);
+
+    // Auto-select last used mapping
+    useEffect(() => {
+        if (mappings.length > 0 && !selectedMappingId) {
+            const lastId = localStorage.getItem("lastPurchaseMappingId");
+            if (lastId) {
+                const found = mappings.find(m => m.id === lastId);
+                if (found) {
+                    setSelectedMappingId(lastId);
+                    setMapping({
+                        date: found.colDate,
+                        item: found.colItem,
+                        amount: found.colAmount,
+                        category: found.colCategory || "",
+                        note: found.colNote || "",
+                        filterExclude: found.filterExclude || "",
+                        filterInclude: found.filterInclude || ""
+                    });
+                    setShowMapping(true);
+                }
+            }
+        }
+    }, [mappings, selectedMappingId]);
+
 
     const handleSaveMapping = async () => {
         const name = prompt("이 설정의 이름을 입력하세요 (예: KB국민카드)");
@@ -153,6 +178,7 @@ export default function PurchasePage() {
             if (res.ok) {
                 alert("삭제되었습니다.");
                 setSelectedMappingId("");
+                localStorage.removeItem("lastPurchaseMappingId");
                 fetchMappings();
             }
         } catch (e) {
@@ -164,6 +190,7 @@ export default function PurchasePage() {
         const id = e.target.value;
         setSelectedMappingId(id);
         if (id) {
+            localStorage.setItem("lastPurchaseMappingId", id);
             const m = mappings.find(x => x.id === id);
             if (m) {
                 setMapping({
@@ -176,6 +203,8 @@ export default function PurchasePage() {
                     filterInclude: m.filterInclude || ""
                 });
             }
+        } else {
+            localStorage.removeItem("lastPurchaseMappingId");
         }
     };
 

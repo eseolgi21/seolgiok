@@ -27,6 +27,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type") as KeywordType | null;
 
+    console.log(`[GET /api/user/excel-mappings] User: ${session.user.id}, Type: ${type}`);
+
     try {
         const mappings = await prisma.excelMapping.findMany({
             where: {
@@ -36,8 +38,11 @@ export async function GET(req: NextRequest) {
             orderBy: { createdAt: "desc" },
         });
 
+        console.log(`[GET /api/user/excel-mappings] Found ${mappings.length} mappings`);
+
         return NextResponse.json({ mappings });
-    } catch {
+    } catch (e) {
+        console.error("[GET /api/user/excel-mappings] Error:", e);
         return NextResponse.json({ error: "Failed to fetch mappings" }, { status: 500 });
     }
 }
