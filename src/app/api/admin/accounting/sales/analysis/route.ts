@@ -40,6 +40,18 @@ export async function GET(req: NextRequest) {
             }
         }
 
+        const page = Number(searchParams.get("page") || "1");
+        const limit = Number(searchParams.get("limit") || "20");
+        const skip = (page - 1) * limit;
+
+        // Get total count of distinct items for pagination
+        const distinctItems = await prisma.saleItem.groupBy({
+            by: ['itemName', 'category'],
+            where,
+            orderBy: { _sum: { amount: 'desc' } }
+        });
+        const totalItems = distinctItems.length;
+
         const items = await prisma.saleItem.groupBy({
             by: ['itemName', 'category'],
             where,
@@ -53,7 +65,9 @@ export async function GET(req: NextRequest) {
                 _sum: {
                     amount: 'desc'
                 }
-            }
+            },
+            skip,
+            take: limit
         });
 
         const analysis = items.map(item => ({
@@ -64,13 +78,21 @@ export async function GET(req: NextRequest) {
             averageAmount: Math.round((item._sum.amount || 0) / item._count._all)
         }));
 
-        const totalSpending = analysis.reduce((sum, item) => sum + item.totalAmount, 0);
+        // Calculate total spending for the WHOLE period (not just this page)
+        const allStats = await prisma.saleItem.aggregate({
+            _sum: { amount: true },
+            _count: { _all: true },
+            where
+        });
 
         return NextResponse.json({
             items: analysis,
             metadata: {
-                totalSpending,
-                totalCount: analysis.reduce((sum, item) => sum + item.count, 0)
+                totalSpending: allStats._sum.amount || 0,
+                totalCount: allStats._count._all || 0,
+                totalItems,
+                page,
+                limit
             }
         });
     } catch (e) {

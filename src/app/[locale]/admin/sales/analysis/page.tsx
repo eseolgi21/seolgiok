@@ -15,6 +15,7 @@ type AnalysisItem = {
 type Metadata = {
     totalSpending: number;
     totalCount: number;
+    totalItems?: number;
 };
 
 export default function SalesAnalysisPage() {
@@ -24,6 +25,13 @@ export default function SalesAnalysisPage() {
 
     const [items, setItems] = useState<AnalysisItem[]>([]);
     const [metadata, setMetadata] = useState<Metadata>({ totalSpending: 0, totalCount: 0 });
+
+    // Pagination
+    const [page, setPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+
+    // Selection
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
     // Filter
     const [categories, setCategories] = useState<{ id: string, name: string }[]>([]);
@@ -45,7 +53,7 @@ export default function SalesAnalysisPage() {
     const fetchAnalysis = useCallback(async () => {
         setLoading(true);
         try {
-            let url = `/api/admin/accounting/sales/analysis?startDate=${startDate}&endDate=${endDate}`;
+            let url = `/api/admin/accounting/sales/analysis?startDate=${startDate}&endDate=${endDate}&page=${page}&limit=100`;
             if (categoryFilter !== null) {
                 url += `&category=${encodeURIComponent(categoryFilter)}`;
             }
@@ -57,13 +65,15 @@ export default function SalesAnalysisPage() {
                 const data = await res.json();
                 setItems(data.items);
                 setMetadata(data.metadata);
+                setTotalItems(data.metadata.totalItems || 0);
             }
         } catch (e) {
             console.error(e);
         } finally {
             setLoading(false);
+            setSelectedItems([]);
         }
-    }, [startDate, endDate, categoryFilter, keywords]);
+    }, [startDate, endDate, page, categoryFilter, keywords]);
 
     useEffect(() => {
         fetchCategories();
@@ -72,6 +82,43 @@ export default function SalesAnalysisPage() {
     useEffect(() => {
         fetchAnalysis();
     }, [fetchAnalysis]);
+
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedItems(items.map(i => i.itemName));
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleCheckboxChange = (itemName: string) => {
+        setSelectedItems(prev =>
+            prev.includes(itemName) ? prev.filter(x => x !== itemName) : [...prev, itemName]
+        );
+    };
+
+    const handleDeleteSelected = async () => {
+        if (selectedItems.length === 0) return;
+        if (!confirm(`선택한 ${selectedItems.length}개 품목의 매출 내역을 모두 삭제하시겠습니까?\n(해당 기간 내의 모든 기록이 삭제됩니다)`)) return;
+
+        try {
+            const res = await fetch("/api/admin/accounting/sales/analysis", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ itemNames: selectedItems, startDate, endDate })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                alert(`${data.count}건의 세부 내역이 삭제되었습니다.`);
+                fetchAnalysis();
+            } else {
+                alert("삭제 실패");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     // Load saved dates on mount
     useEffect(() => {
@@ -89,6 +136,11 @@ export default function SalesAnalysisPage() {
             setEndDate(value);
             localStorage.setItem("salesAnalysisEnd", value);
         }
+    };
+
+    const handleSearch = () => {
+        setPage(1);
+        fetchAnalysis();
     };
 
     const handleDeleteAllInPeriod = async () => {
@@ -124,6 +176,11 @@ export default function SalesAnalysisPage() {
                     </p>
                 </div>
                 <div className="flex gap-2">
+                    {selectedItems.length > 0 && (
+                        <button className="btn btn-error text-white btn-sm" onClick={handleDeleteSelected}>
+                            선택 삭제 ({selectedItems.length})
+                        </button>
+                    )}
                     <button className="btn btn-error btn-outline btn-sm" onClick={handleDeleteAllInPeriod}>
                         기간 내 전체 삭제
                     </button>
@@ -161,6 +218,7 @@ export default function SalesAnalysisPage() {
                                 onChange={(e) => {
                                     const val = e.target.value;
                                     setCategoryFilter(val === "ALL" ? null : val);
+                                    setPage(1);
                                 }}
                             >
                                 <option value="ALL">전체 분류</option>
@@ -177,11 +235,11 @@ export default function SalesAnalysisPage() {
                                 onChange={(e) => setKeywords(e.target.value)}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
-                                        fetchAnalysis();
+                                        handleSearch();
                                     }
                                 }}
                             />
-                            <button className="btn btn-primary btn-sm" onClick={fetchAnalysis}>조회</button>
+                            <button className="btn btn-primary btn-sm" onClick={handleSearch}>조회</button>
                         </div>
                     </div>
                 </div>
@@ -200,6 +258,16 @@ export default function SalesAnalysisPage() {
                     <table className="table table-zebra w-full">
                         <thead>
                             <tr className="bg-base-200">
+                                <th className="w-10">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox checkbox-sm"
+                                            onChange={handleSelectAll}
+                                            checked={items.length > 0 && selectedItems.length === items.length}
+                                        />
+                                    </label>
+                                </th>
                                 <th className="w-16">순위</th>
                                 <th>품목명</th>
                                 <th>분류</th>
@@ -212,13 +280,13 @@ export default function SalesAnalysisPage() {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="text-center py-10">
+                                    <td colSpan={8} className="text-center py-10">
                                         <span className="loading loading-spinner"></span>
                                     </td>
                                 </tr>
                             ) : items.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="text-center py-10 text-gray-500">
+                                    <td colSpan={8} className="text-center py-10 text-gray-500">
                                         데이터가 없습니다.
                                     </td>
                                 </tr>
@@ -228,9 +296,21 @@ export default function SalesAnalysisPage() {
                                         ? (item.totalAmount / metadata.totalSpending) * 100
                                         : 0;
 
+                                    const rank = (page - 1) * 20 + (index + 1);
+
                                     return (
                                         <tr key={`${item.itemName}-${item.category}`}>
-                                            <td className="font-mono text-center">{index + 1}</td>
+                                            <th>
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        className="checkbox checkbox-sm"
+                                                        checked={selectedItems.includes(item.itemName)}
+                                                        onChange={() => handleCheckboxChange(item.itemName)}
+                                                    />
+                                                </label>
+                                            </th>
+                                            <td className="font-mono text-center">{rank}</td>
                                             <td className="font-bold">{item.itemName}</td>
                                             <td><span className="badge badge-ghost badge-sm">{item.category}</span></td>
                                             <td className="text-right font-mono">{item.count}회</td>
@@ -256,6 +336,29 @@ export default function SalesAnalysisPage() {
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Pagination */}
+                <div className="flex justify-center p-4 border-t border-base-200">
+                    <div className="join">
+                        <button
+                            className="join-item btn btn-sm"
+                            disabled={page === 1}
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                        >
+                            «
+                        </button>
+                        <button className="join-item btn btn-sm">
+                            {page} / {Math.max(1, Math.ceil(totalItems / 20))}
+                        </button>
+                        <button
+                            className="join-item btn btn-sm"
+                            disabled={page * 20 >= totalItems}
+                            onClick={() => setPage(p => p + 1)}
+                        >
+                            »
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
