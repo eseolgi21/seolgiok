@@ -12,9 +12,15 @@ function findColumn(headers: string[], keywords: string[]): string | undefined {
 
 function parseDateSafe(value: unknown): Date | null {
     if (!value) return null;
-    if (value instanceof Date) return value;
+    if (value instanceof Date) {
+        const d = new Date(value);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
+    }
     if (typeof value === "number") {
-        return new Date((value - 25569) * 86400000);
+        const d = new Date((value - 25569) * 86400000);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
     }
 
     const strVal = String(value).trim();
@@ -26,12 +32,16 @@ function parseDateSafe(value: unknown): Date | null {
         const month = parseInt(koreanDateMatch[2]) - 1;
         const day = parseInt(koreanDateMatch[3]);
         const d = new Date(year, month, day);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
         if (!isNaN(d.getTime())) return d;
     }
 
     const d = new Date(value as string | number | Date);
-    if (isNaN(d.getTime())) return null;
-    return d;
+    if (!isNaN(d.getTime())) {
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
+    }
+    return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -72,7 +82,7 @@ export async function POST(req: NextRequest) {
 
         let wb;
         try {
-            wb = XLSX.read(bufferToRead, { type: "array" });
+            wb = XLSX.read(bufferToRead, { type: "array", cellDates: true });
         } catch (e: unknown) {
             console.error("XLSX Read Error:", e);
             return NextResponse.json({ error: "엑셀 파일을 읽을 수 없습니다. 형식을 확인해주세요." }, { status: 400 });

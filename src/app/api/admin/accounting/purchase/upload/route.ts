@@ -12,9 +12,15 @@ function findColumn(headers: string[], keywords: string[]): string | undefined {
 
 function parseDateSafe(value: unknown): Date | null {
     if (!value) return null;
-    if (value instanceof Date) return value;
+    if (value instanceof Date) {
+        const d = new Date(value);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
+    }
     if (typeof value === "number") {
-        return new Date((value - 25569) * 86400000);
+        const d = new Date((value - 25569) * 86400000);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
     }
 
     const strVal = String(value).trim();
@@ -26,12 +32,16 @@ function parseDateSafe(value: unknown): Date | null {
         const month = parseInt(koreanDateMatch[2]) - 1; // Month is 0-indexed
         const day = parseInt(koreanDateMatch[3]);
         const d = new Date(year, month, day);
+        d.setHours(12, 0, 0, 0); // Normalize to noon
         if (!isNaN(d.getTime())) return d;
     }
 
     const d = new Date(value as string | number | Date);
-    if (isNaN(d.getTime())) return null;
-    return d;
+    if (!isNaN(d.getTime())) {
+        d.setHours(12, 0, 0, 0); // Normalize to noon
+        return d;
+    }
+    return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -73,7 +83,7 @@ export async function POST(req: NextRequest) {
         let wb;
         try {
             // No password needed here as it is already decrypted
-            wb = XLSX.read(bufferToRead, { type: "array" });
+            wb = XLSX.read(bufferToRead, { type: "array", cellDates: true });
         } catch (e: unknown) {
             console.error("XLSX Read Error:", e);
             return NextResponse.json({ error: "엑셀 파일을 읽을 수 없습니다. 형식을 확인해주세요." }, { status: 400 });
@@ -180,8 +190,8 @@ export async function POST(req: NextRequest) {
         const classifications = await prisma.itemClassification.findMany({
             where: { type: "PURCHASE" }
         });
-        const classMap = new Map<string, string>();
-        classifications.forEach((c) => classMap.set(c.itemName, c.category));
+        // Sort by length desc to prioritize longer (more specific) keywords
+        classifications.sort((a, b) => b.itemName.length - a.itemName.length);
 
         // Fetch Global Filters
         const filters = await prisma.excelFilter.findMany({
@@ -266,9 +276,18 @@ export async function POST(req: NextRequest) {
                 continue;
             }
 
-            const finalCategory = classMap.has(itemName)
-                ? classMap.get(itemName)!
-                : (idxCategory > -1 ? String(row[idxCategory]) : "기타");
+            let finalCategory = idxCategory > -1 ? String(row[idxCategory]) : "기타";
+
+            // Keyword Classification Logic (Substring Match)
+            // Iterate through rules and find the first matching keyword in Item Name or Category
+            for (const cls of classifications) {
+                const keyword = toHalfWidth(cls.itemName).trim().toLowerCase();
+                // Check if keyword exists in Item Name or the uploaded Category value
+                if (normalizedItemName.includes(keyword) || normalizedCategory.includes(keyword)) {
+                    finalCategory = cls.category;
+                    break; // Use the first match
+                }
+            }
 
             createInput.push({
                 date: dateVal,

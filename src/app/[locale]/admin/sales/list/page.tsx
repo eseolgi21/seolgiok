@@ -84,7 +84,8 @@ export default function SalesListPage() {
 
     // Inline Edit State
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [editAmount, setEditAmount] = useState<string>("");
+    const [editingField, setEditingField] = useState<"AMOUNT" | "CATEGORY" | null>(null);
+    const [editValue, setEditValue] = useState<string>("");
 
     // Selection
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -426,32 +427,39 @@ export default function SalesListPage() {
         }
     };
 
-    const startEditing = (item: Item) => {
+    const startEditing = (item: Item, field: "AMOUNT" | "CATEGORY") => {
         setEditingId(item.id);
-        setEditAmount(item.amount.toString());
+        setEditingField(field);
+        if (field === "AMOUNT") setEditValue(item.amount.toString());
+        if (field === "CATEGORY") setEditValue(item.category);
     };
 
     const cancelEditing = () => {
         setEditingId(null);
-        setEditAmount("");
+        setEditingField(null);
+        setEditValue("");
     };
 
     const saveEditing = async () => {
-        if (!editingId) return;
+        if (!editingId || !editingField) return;
+
+        const payload: Partial<Item> & { id: string } = { id: editingId };
+        if (editingField === "AMOUNT") payload.amount = Number(editValue);
+        if (editingField === "CATEGORY") payload.category = editValue;
 
         try {
             const res = await fetch("/api/admin/accounting/sales/list", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: editingId, amount: Number(editAmount) })
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {
                 // Update local state directly or refetch
                 setItems(prev => prev.map(item =>
-                    item.id === editingId ? { ...item, amount: Number(editAmount) } : item
+                    item.id === editingId ? { ...item, ...payload } : item
                 ));
-                setEditingId(null);
+                cancelEditing();
             } else {
                 alert("수정 실패");
             }
@@ -749,16 +757,36 @@ export default function SalesListPage() {
                                         </td>
                                         <td className="whitespace-nowrap">{format(new Date(item.date), "yyyy-MM-dd")}</td>
                                         <td>
-                                            <span className="badge badge-sm badge-ghost">{item.category}</span>
+                                            {editingId === item.id && editingField === "CATEGORY" ? (
+                                                <input
+                                                    type="text"
+                                                    className="input input-xs input-bordered w-24"
+                                                    value={editValue}
+                                                    onChange={e => setEditValue(e.target.value)}
+                                                    onBlur={saveEditing}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter') saveEditing();
+                                                        if (e.key === 'Escape') cancelEditing();
+                                                    }}
+                                                    autoFocus
+                                                />
+                                            ) : (
+                                                <span
+                                                    className="badge badge-sm badge-ghost cursor-pointer hover:bg-base-300"
+                                                    onClick={() => startEditing(item, "CATEGORY")}
+                                                >
+                                                    {item.category}
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="font-medium">{item.itemName}</td>
                                         <td className="text-right font-mono text-success">
-                                            {editingId === item.id ? (
+                                            {editingId === item.id && editingField === "AMOUNT" ? (
                                                 <input
                                                     type="number"
                                                     className="input input-xs input-bordered w-24 text-right"
-                                                    value={editAmount}
-                                                    onChange={e => setEditAmount(e.target.value)}
+                                                    value={editValue}
+                                                    onChange={e => setEditValue(e.target.value)}
                                                     onBlur={saveEditing}
                                                     onKeyDown={e => {
                                                         if (e.key === 'Enter') saveEditing();
@@ -769,7 +797,7 @@ export default function SalesListPage() {
                                             ) : (
                                                 <span
                                                     className="cursor-pointer hover:underline decoration-dashed"
-                                                    onClick={() => startEditing(item)}
+                                                    onClick={() => startEditing(item, "AMOUNT")}
                                                 >
                                                     {item.amount > 0 ? '+' : ''}{item.amount.toLocaleString()}
                                                 </span>

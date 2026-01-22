@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { XMarkIcon, ArrowPathIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, ArrowPathIcon, PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 type ItemRule = {
     id: string;
@@ -12,6 +12,12 @@ type ItemRule = {
 export default function ItemManagementPage() {
     const [type, setType] = useState<"PURCHASE" | "SALES">("PURCHASE");
     const [items, setItems] = useState<ItemRule[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredItems = items.filter(item =>
+        item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     // Category management
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -157,11 +163,26 @@ export default function ItemManagementPage() {
                     <div className="card bg-base-100 shadow-sm border border-base-200">
                         <div className="card-body">
                             <h2 className="card-title text-lg flex justify-between">
-                                등록된 규칙 ({items.length})
+                                등록된 규칙 ({filteredItems.length} / {items.length})
                                 <button className="btn btn-ghost btn-sm btn-circle" onClick={fetchItems}>
                                     <ArrowPathIcon className="w-5 h-5" />
                                 </button>
                             </h2>
+
+                            {/* Search Input */}
+                            <div className="mb-2">
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="품목명 또는 분류 검색..."
+                                        className="input input-bordered input-sm w-full pl-9"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                    <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-2 text-gray-400" />
+                                </div>
+                            </div>
+
                             <div className="overflow-y-auto max-h-[600px]">
                                 <table className="table table-sm table-pin-rows">
                                     <thead>
@@ -172,9 +193,11 @@ export default function ItemManagementPage() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {items.length === 0 ? (
-                                            <tr><td colSpan={3} className="text-center text-gray-500 py-4">등록된 규칙이 없습니다.</td></tr>
-                                        ) : items.map(item => (
+                                        {filteredItems.length === 0 ? (
+                                            <tr><td colSpan={3} className="text-center text-gray-500 py-4">
+                                                {searchTerm ? "검색 결과가 없습니다." : "등록된 규칙이 없습니다."}
+                                            </td></tr>
+                                        ) : filteredItems.map(item => (
                                             <tr key={item.id} className="hover">
                                                 <td className="font-medium">{item.itemName}</td>
                                                 <td><span className="badge badge-ghost badge-sm">{item.category}</span></td>
