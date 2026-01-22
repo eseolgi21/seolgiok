@@ -35,7 +35,7 @@ const navTree: NavNode[] = [
   {
     label: "매입 관리",
     children: [
-      { label: "매입 내역 (엑셀)", href: "/admin/purchase" },
+      { label: "매입 내역 (엑셀)", href: "/admin/purchase/list" },
       { label: "매입 분석", href: "/admin/purchase/analysis" },
     ],
   },
