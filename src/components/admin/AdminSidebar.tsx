@@ -51,6 +51,7 @@ const navTree: NavNode[] = [
     children: [
       { label: "순수익 분석 (월별)", href: "/admin/profit/analysis" },
       { label: "순수익 분석 (기간별)", href: "/admin/profit/period" },
+      { label: "순수익 정산", href: "/admin/profit/settlement" },
     ],
   },
 

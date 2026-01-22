@@ -1,0 +1,13 @@
+model Settlement {
+  id        String   @id @default(cuid())
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  
+  reportedCashSales Int @default(0) // 현금매출 신고액
+  managerRentSupport Int @default(0) // 점장 월세 지원
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([startDate, endDate])
+}
