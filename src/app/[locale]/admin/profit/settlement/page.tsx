@@ -10,7 +10,6 @@ type SettlementData = {
     endDate: string;
     settlement: {
         reportedCashSales: number;
-        managerRentSupport: number;
     };
     data: {
         cardSales: number;
@@ -41,7 +40,6 @@ export default function ProfitSettlementPage() {
 
     // Form inputs
     const [reportedCashSales, setReportedCashSales] = useState<string>("");
-    const [managerRentSupport, setManagerRentSupport] = useState<string>("");
 
     const fetchData = useCallback(async (startOverride?: string, endOverride?: string) => {
         const queryStart = startOverride || startDate;
@@ -55,7 +53,6 @@ export default function ProfitSettlementPage() {
                 const json = await res.json();
                 setData(json);
                 setReportedCashSales(json.settlement.reportedCashSales.toString());
-                setManagerRentSupport(json.settlement.managerRentSupport.toString());
             } else {
                 setData(null);
             }
@@ -95,8 +92,7 @@ export default function ProfitSettlementPage() {
                 body: JSON.stringify({
                     startDate,
                     endDate,
-                    reportedCashSales: Number(reportedCashSales),
-                    managerRentSupport: Number(managerRentSupport),
+                    reportedCashSales: Number(reportedCashSales)
                 }),
             });
 
@@ -178,22 +174,6 @@ export default function ProfitSettlementPage() {
                                 </div>
                             </div>
 
-                            <div className="form-control mt-4">
-                                <label className="label">
-                                    <span className="label-text font-semibold">점장 월세 지원</span>
-                                    <span className="label-text-alt text-gray-500">최종 순수익에서 차감됩니다.</span>
-                                </label>
-                                <div className="join">
-                                    <input
-                                        type="number"
-                                        className="input input-bordered join-item w-full"
-                                        value={managerRentSupport}
-                                        onChange={(e) => setManagerRentSupport(e.target.value)}
-                                    />
-                                    <span className="btn btn-disabled join-item">원</span>
-                                </div>
-                            </div>
-
                             <div className="card-actions justify-end mt-6">
                                 <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
                                     {saving ? <span className="loading loading-spinner"></span> : "저장 및 재계산"}
@@ -208,7 +188,7 @@ export default function ProfitSettlementPage() {
                         <div className="card bg-base-100 shadow border border-base-200">
                             <div className="card-body p-5">
                                 <div className="flex justify-between items-center mb-2">
-                                    <h3 className="font-bold text-gray-600">1. 매출 총이익 (가정)</h3>
+                                    <h3 className="font-bold text-gray-600">1. 기간 총 매출</h3>
                                     <span className="text-xl font-bold">{data.calculated.grossProfit.toLocaleString()} 원</span>
                                 </div>
                                 <div className="text-xs text-gray-500 flex flex-col gap-1 bg-gray-50 p-3 rounded">
@@ -216,9 +196,8 @@ export default function ProfitSettlementPage() {
                                         <span>총 실제 매출 (카드+현금):</span>
                                         <span>+{data.data.totalSales.toLocaleString()}</span>
                                     </div>
-                                    <div className="flex justify-between text-red-500">
-                                        <span>총 매입:</span>
-                                        <span>-{data.data.totalPurchase.toLocaleString()}</span>
+                                    <div className="pl-2 text-gray-400">
+                                        (매출 분석 페이지의 총 금액과 동일)
                                     </div>
                                 </div>
                             </div>
@@ -229,23 +208,26 @@ export default function ProfitSettlementPage() {
                             <div className="card-body p-5">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-bold text-gray-600">2. 실제 신고 부가세</h3>
-                                    <span className="text-xl font-bold text-red-600">-{data.calculated.vat.actualVAT.toLocaleString()} 원</span>
+                                    <span className={`text-xl font-bold ${data.calculated.vat.actualVAT > 0 ? "text-red-600" : "text-blue-600"}`}>
+                                        {data.calculated.vat.actualVAT > 0 ? "-" : "+"}
+                                        {Math.abs(data.calculated.vat.actualVAT).toLocaleString()} 원
+                                    </span>
                                 </div>
                                 <div className="text-xs text-gray-500 flex flex-col gap-1 bg-gray-50 p-3 rounded">
                                     <div className="flex justify-between border-b pb-1 mb-1">
-                                        <span>매출 세액 (카드 + 현금신고 * 10%):</span>
+                                        <span>매출 세액 ((카드 + 현금신고) * 10%):</span>
                                         <span className="font-semibold">{data.calculated.vat.salesVAT.toLocaleString()}</span>
                                     </div>
                                     <div className="pl-2 text-gray-400">
-                                        ㄴ 카드 sales: {data.data.cardSales.toLocaleString()} / 현금 report: {data.settlement.reportedCashSales.toLocaleString()}
+                                        ㄴ 카드 매출: {data.data.cardSales.toLocaleString()} / 현금 매출: {data.settlement.reportedCashSales.toLocaleString()}
                                     </div>
 
                                     <div className="flex justify-between border-b pb-1 mb-1 mt-1">
-                                        <span>매입 세액 ((매입 - 인건비) * 10%):</span>
+                                        <span>매입 세액 ((매입 - 세금/프리/사대) * 10%):</span>
                                         <span className="font-semibold">{data.calculated.vat.purchaseVAT.toLocaleString()}</span>
                                     </div>
                                     <div className="pl-2 text-gray-400">
-                                        ㄴ Total Purchase: {data.data.totalPurchase.toLocaleString()} / Labor: {data.data.laborCost.toLocaleString()}
+                                        ㄴ 총 매입: {data.data.totalPurchase.toLocaleString()} / 제외: {data.data.laborCost.toLocaleString()}
                                     </div>
                                 </div>
                             </div>
@@ -264,12 +246,15 @@ export default function ProfitSettlementPage() {
                                         <span>{data.calculated.grossProfit.toLocaleString()}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span>실제 신고 부가세</span>
-                                        <span>-{data.calculated.vat.actualVAT.toLocaleString()}</span>
+                                        <span>총 매입</span>
+                                        <span>-{data.data.totalPurchase.toLocaleString()}</span>
                                     </div>
                                     <div className="flex justify-between">
-                                        <span>점장 월세 지원</span>
-                                        <span>-{data.settlement.managerRentSupport.toLocaleString()}</span>
+                                        <span>실제 신고 부가세</span>
+                                        <span>
+                                            {data.calculated.vat.actualVAT > 0 ? "-" : "+"}
+                                            {Math.abs(data.calculated.vat.actualVAT).toLocaleString()}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

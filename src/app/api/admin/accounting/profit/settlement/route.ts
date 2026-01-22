@@ -35,29 +35,30 @@ export async function GET(req: NextRequest) {
             }
         });
 
-        // 2. Fetch Total Sales SPLIT by Payment Method
-        // We identify "Cash Sales" in DB by 'paymentMethod' containing '현금'.
-        const allSales = await prisma.saleItem.findMany({
+        // 2. Fetch Total Sales (Consistent with Sales Analysis)
+        // We use aggregate to ensure the numbers match exactly with Sales Analysis page.
+        const salesAgg = await prisma.saleItem.aggregate({
             where: {
                 confirmed: true,
                 date: { gte: startRange, lte: endRange }
             },
-            select: { amount: true, paymentMethod: true }
+            _sum: { amount: true }
         });
+        const totalRealSales = salesAgg._sum.amount || 0;
 
-        let dbCardSales = 0;
-        let dbCashSales = 0;
-
-        allSales.forEach(item => {
-            const isCash = item.paymentMethod && item.paymentMethod.includes("현금");
-            if (isCash) {
-                dbCashSales += item.amount;
-            } else {
-                dbCardSales += item.amount;
-            }
+        // Fetch Cash Sales (PaymentMethod contains '현금')
+        const cashSalesAgg = await prisma.saleItem.aggregate({
+            where: {
+                confirmed: true,
+                date: { gte: startRange, lte: endRange },
+                paymentMethod: { contains: "현금" }
+            },
+            _sum: { amount: true }
         });
+        const dbCashSales = cashSalesAgg._sum.amount || 0;
 
-        const totalRealSales = dbCardSales + dbCashSales;
+        // Card Sales = Total - Cash
+        const dbCardSales = totalRealSales - dbCashSales;
 
         // 3. Fetch Total Purchase
         const purchaseAgg = await prisma.purchaseItem.aggregate({
@@ -69,85 +70,63 @@ export async function GET(req: NextRequest) {
         });
         const totalPurchase = purchaseAgg._sum.amount || 0;
 
-        // 4. Fetch Labor Costs (Total vs Urgent)
-        // User Request: Exclude "Labor Cost" from VAT Base, BUT KEEP "Labor Cost(Urgent)" in VAT Base.
-        // So we need to find Total Labor ("인건비") and subtract Urgent Labor ("인건비(급구)") from it.
-        // The result (Pure Labor) will be subtracted from Purchase.
+        // 4. Fetch Excluded Items for Purchase VAT
+        // User Request: Exclude "Tax" (세금), "Labor(Freelance)" (인건비(프리)), "Labor(4-Ins)" (인건비(사대)).
+        // Everything else should be included in VAT Base.
 
-        const laborAgg = await prisma.purchaseItem.aggregate({
+        const excludedAgg = await prisma.purchaseItem.aggregate({
             where: {
                 confirmed: true,
                 date: { gte: startRange, lte: endRange },
-                category: { contains: "인건비" }
+                OR: [
+                    { category: { contains: "세금" } },
+                    { category: { contains: "인건비(프리)" } },
+                    { category: { contains: "인건비(사대)" } }
+                ]
             },
             _sum: { amount: true }
         });
-        const totalLabor = laborAgg._sum.amount || 0;
-
-        const urgentLaborAgg = await prisma.purchaseItem.aggregate({
-            where: {
-                confirmed: true,
-                date: { gte: startRange, lte: endRange },
-                category: { contains: "인건비(급구)" }
-            },
-            _sum: { amount: true }
-        });
-        const urgentLabor = urgentLaborAgg._sum.amount || 0;
-
-        // Labor Cost to Exclude from VAT Base
-        const laborCost = totalLabor - urgentLabor;
+        const excludedAmount = excludedAgg._sum.amount || 0;
 
         // --- CALCULATION LOGIC ---
 
         // Manual Inputs
         const reportedCashSales = settlement?.reportedCashSales || 0;
-        const managerRentSupport = settlement?.managerRentSupport || 0;
 
         // Gross Profit (매출 총이익)
-        // Correct Logic: Real Sales (Card + Cash) - Total Purchase
-        const grossProfit = totalRealSales - totalPurchase;
+        // User Request: This amount must match the "Sales Analysis" Total Amount.
+        // So Gross Profit = Total Real Sales.
+        const grossProfit = totalRealSales;
 
         // Actual VAT (실제 신고 부가세)
-        // User request: VAT should be 10% of amount (Supply Value logic).
         // Formula: Sales VAT = (Card Sales + Reported Cash Sales) * 0.1
-        //          Purchase VAT = (Total Purchase - Labor Cost) * 0.1
+        //          Purchase VAT = (Total Purchase - Excluded Items) * 0.1
 
         const vatSalesBase = dbCardSales + reportedCashSales;
-        const vatPurchaseBase = totalPurchase - laborCost;
-
-        console.log(`[Settlement Debug] Range: ${startDateStr}~${endDateStr}`);
-        console.log(`[Settlement Debug] Labor Breakdown:`);
-        console.log(`- Total Labor (인건비): ${totalLabor}`);
-        console.log(`- Urgent Labor (인건비(급구)): ${urgentLabor}`);
-        console.log(`- Excluded Labor (Total - Urgent): ${laborCost}`);
-        console.log(`[Settlement Debug] VAT Calculation:`);
-        console.log(`- Sales Base (Card ${dbCardSales} + CashReport ${reportedCashSales}): ${vatSalesBase}`);
-        console.log(`- Purchase Base (Total ${totalPurchase} - ExcludedLabor ${laborCost}): ${vatPurchaseBase}`);
+        const vatPurchaseBase = totalPurchase - excludedAmount;
 
         const salesVAT = Math.round(vatSalesBase * 0.1);
         const purchaseVAT = Math.round(vatPurchaseBase * 0.1);
 
-        console.log(`- Sales VAT (*0.1): ${salesVAT}`);
-        console.log(`- Purchase VAT (*0.1): ${purchaseVAT}`);
-
         const actualVAT = salesVAT - purchaseVAT;
 
         // Net Profit (순수익)
-        const netProfit = grossProfit - actualVAT - managerRentSupport;
+        // Formula: Gross Profit - Total Purchase - Actual VAT
+        // Note: grossProfit is now Total Sales.
+        const netProfit = grossProfit - totalPurchase - actualVAT;
 
         return NextResponse.json({
             startDate: startDateStr,
             endDate: endDateStr,
             settlement: {
-                reportedCashSales,
-                managerRentSupport
+                reportedCashSales
             },
             data: {
                 cardSales: dbCardSales,
                 dbCashSales: dbCashSales,
-                totalSales: totalRealSales, // Real Total Sales for Gross Profit display
+                totalSales: totalRealSales,
                 totalPurchase,
-                laborCost
+                laborCost: excludedAmount // field name is laborCost for compatibility, but represents excludedAmount
             },
             calculated: {
                 grossProfit,
@@ -174,7 +153,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { startDate, endDate, reportedCashSales, managerRentSupport } = body;
+        const { startDate, endDate, reportedCashSales } = body;
 
         if (!startDate || !endDate) {
             return NextResponse.json({ error: "Start Date and End Date required" }, { status: 400 });
@@ -191,14 +170,12 @@ export async function POST(req: NextRequest) {
                 }
             },
             update: {
-                reportedCashSales: Number(reportedCashSales || 0),
-                managerRentSupport: Number(managerRentSupport || 0)
+                reportedCashSales: Number(reportedCashSales || 0)
             },
             create: {
                 startDate: settlementStart,
                 endDate: settlementEnd,
-                reportedCashSales: Number(reportedCashSales || 0),
-                managerRentSupport: Number(managerRentSupport || 0)
+                reportedCashSales: Number(reportedCashSales || 0)
             }
         });
 
