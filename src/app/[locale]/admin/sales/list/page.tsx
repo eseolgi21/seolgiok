@@ -53,7 +53,7 @@ export default function SalesListPage() {
 
     // Pagination
     const [page, setPage] = useState(1);
-    // const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(0);
 
     // Header Mapping State
     const [showMapping, setShowMapping] = useState(false);
@@ -230,7 +230,7 @@ export default function SalesListPage() {
             if (res.ok) {
                 const data = await res.json();
                 setItems(data.items);
-                // setTotal(data.metadata.total);
+                setTotal(data.metadata.total);
             }
         } finally {
             setLoading(false);
@@ -822,10 +822,12 @@ export default function SalesListPage() {
                         >
                             «
                         </button>
-                        <button className="join-item btn btn-sm">{page} 페이지</button>
+                        <button className="join-item btn btn-sm">
+                            {page} / {Math.max(1, Math.ceil(total / 100))}
+                        </button>
                         <button
                             className="join-item btn btn-sm"
-                            disabled={items.length < 20}
+                            disabled={page * 100 >= total}
                             onClick={() => setPage(p => p + 1)}
                         >
                             »

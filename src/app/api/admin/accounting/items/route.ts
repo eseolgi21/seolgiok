@@ -110,12 +110,28 @@ export async function DELETE(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
+    const category = searchParams.get("category");
+    const type = searchParams.get("type");
 
-    if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    if (id) {
+        await prisma.itemClassification.delete({
+            where: { id }
+        });
+        return NextResponse.json({ success: true });
+    }
 
-    await prisma.itemClassification.delete({
-        where: { id }
-    });
+    if (category && type) {
+        const { count } = await prisma.itemClassification.deleteMany({
+            where: {
+                category: category,
+                type: type as KeywordType
+            }
+        });
+        return NextResponse.json({ success: true, count });
+    }
+
+    return NextResponse.json({ error: "ID or Category+Type required" }, { status: 400 });
+
 
     return NextResponse.json({ success: true });
 }

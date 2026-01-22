@@ -60,26 +60,67 @@ export default function ItemManagementPage() {
     }, [fetchItems, fetchCategories]);
 
     const allCategories = useMemo(() => {
-        // Union of specific Saved Categories AND Used Categories in Items
-        const usedCats = new Set(items.map(i => i.category));
-        const savedCats = new Set(dbCategories.map(c => c.name));
+        const result: { name: string; id?: string }[] = [];
+        const seen = new Set<string>();
 
-        const merged = new Set([...Array.from(usedCats), ...Array.from(savedCats)]);
-        return Array.from(merged).sort();
+        // Priority 1: DB Categories
+        dbCategories.forEach(c => {
+            result.push({ name: c.name, id: c.id });
+            seen.add(c.name);
+        });
+
+        // Priority 2: Used Categories
+        items.forEach(i => {
+            if (!seen.has(i.category)) {
+                result.push({ name: i.category });
+                seen.add(i.category);
+            }
+        });
+
+        return result.sort((a, b) => a.name.localeCompare(b.name));
     }, [items, dbCategories]);
+
+    const handleDeleteCategory = async (name: string, id: string | undefined, e: React.MouseEvent) => {
+        e.stopPropagation();
+
+        if (id) {
+            // Explicit Category (Saved in DB)
+            if (!confirm(`이 분류를 삭제하시겠습니까? (이 분류를 사용하는 자동 분류 규칙은 유지되지만, 저장된 분류 목록에서는 사라집니다.)`)) return;
+            try {
+                await fetch(`/api/admin/accounting/categories?id=${id}`, { method: "DELETE" });
+                fetchCategories();
+            } catch (err) {
+                console.error(err);
+                alert("삭제 실패");
+            }
+        } else {
+            // Implicit Category (Derived from Rules)
+            const count = items.filter(i => i.category === name).length;
+            if (!confirm(`'${name}' 분류는 현재 ${count}개의 품목 규칙에서 사용되고 있습니다.\n이 분류를 삭제하면, 해당 ${count}개의 품목 규칙도 함께 삭제됩니다.\n계속하시겠습니까?`)) return;
+
+            try {
+                const res = await fetch(`/api/admin/accounting/items?category=${encodeURIComponent(name)}&type=${type}`, { method: "DELETE" });
+                if (res.ok) {
+                    fetchItems(); // Rules changed, so refresh items to update implicit categories
+                }
+            } catch (err) {
+                console.error(err);
+                alert("삭제 실패");
+            }
+        }
+    };
 
     const handleAddCategory = async () => {
         if (!newCategoryInput.trim()) return;
         const cat = newCategoryInput.trim();
 
-        // Optimistic UI update? No, let's just save.
         try {
             await fetch("/api/admin/accounting/categories", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ type, name: cat })
             });
-            fetchCategories(); // Refresh list
+            fetchCategories();
         } catch (e) {
             console.error(e);
         }
@@ -238,13 +279,19 @@ export default function ItemManagementPage() {
                                 <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg bg-base-50">
                                     {allCategories.length === 0 && <span className="text-gray-400 text-sm p-2">등록된 분류가 없습니다.</span>}
                                     {allCategories.map(cat => (
-                                        <button
-                                            key={cat}
-                                            className={`btn btn-sm ${selectedCategory === cat ? 'btn-primary' : 'btn-outline'}`}
-                                            onClick={() => setSelectedCategory(cat)}
+                                        <div
+                                            key={cat.name}
+                                            className={`badge badge-lg gap-2 cursor-pointer pr-1 py-4 ${selectedCategory === cat.name ? 'badge-primary' : 'badge-ghost border-base-300'}`}
+                                            onClick={() => setSelectedCategory(cat.name)}
                                         >
-                                            {cat}
-                                        </button>
+                                            {cat.name}
+                                            <button
+                                                className="btn btn-ghost btn-xs btn-circle w-5 h-5 min-h-0 text-gray-500 hover:bg-white/20"
+                                                onClick={(e) => handleDeleteCategory(cat.name, cat.id, e)}
+                                            >
+                                                <XMarkIcon className="w-3 h-3" />
+                                            </button>
+                                        </div>
                                     ))}
                                 </div>
                             </div>

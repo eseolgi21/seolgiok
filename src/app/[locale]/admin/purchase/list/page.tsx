@@ -820,11 +820,11 @@ export default function PurchasePage() {
                             «
                         </button>
                         <button className="join-item btn btn-sm">
-                            {page} / {Math.max(1, Math.ceil(total / 20))}
+                            {page} / {Math.max(1, Math.ceil(total / 100))}
                         </button>
                         <button
                             className="join-item btn btn-sm"
-                            disabled={page * 20 >= total}
+                            disabled={page * 100 >= total}
                             onClick={() => setPage(p => p + 1)}
                         >
                             »
