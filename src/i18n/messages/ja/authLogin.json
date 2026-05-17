@@ -1,5 +1,5 @@
 {
-  "GlobX": {
+  "Seolgiok": {
     "title": "ログイン",
     "subtitle": "サービスのご利用にはログインが必要です。",
     "fields": {
@@ -25,36 +25,11 @@
       "failTitle": "ログイン失敗",
       "serverErrorTitle": "サーバーエラー",
       "networkErrorTitle": "ネットワークエラー",
-      "networkErrorDesc": "サーバーと通信できません。"
-    }
-  },
-  "Quanty": {
-    "title": "Quanty ログイン",
-    "subtitle": "データ基盤AI投資、Quantyへようこそ。",
-    "fields": {
-      "idLabel": "アカウントID",
-      "idPlaceholder": "Quanty IDを入力",
-      "idError": "IDの形式が正しくありません。",
-      "pwLabel": "パスワード",
-      "pwPlaceholder": "パスワードを入力してください",
-      "pwError": "パスワードを入力してください。"
+      "networkErrorDesc": "サーバーと通信できません。",
+      "userNotFound": "アカウントが見つかりません。",
+      "invalidPassword": "パスワードが正しくありません。"
     },
-    "buttons": {
-      "submit": "ログイン",
-      "findId": "IDを探す",
-      "findPw": "パスワードを探す",
-      "signup": "会員登録"
-    },
-    "messages": {
-      "successTitle": "接続成功",
-      "successDesc": "{username}様、Quanty AIの準備が整いました。",
-      "invalidCredentials": "アカウント情報が一致しません。",
-      "validationError": "入力情報を再度確認してください。",
-      "generalError": "システムエラーが発生しました。",
-      "failTitle": "接続失敗",
-      "serverErrorTitle": "システムエラー",
-      "networkErrorTitle": "接続失敗",
-      "networkErrorDesc": "サーバーの接続状態を確認してください。"
-    }
+    "heading": "ログイン",
+    "membershipLabel": "ソルギオクメンバーシップ"
   }
 }

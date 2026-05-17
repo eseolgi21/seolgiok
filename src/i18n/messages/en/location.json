@@ -1,0 +1,30 @@
+{
+  "title": "Location",
+  "subtitle": "Seolgiok Main Branch",
+  "address": "104, 104-1, 9, Teheran-ro 63-gil, Gangnam-gu, Seoul",
+  "phone": "0507-1376-9086",
+  "copyAddress": "Copy Address",
+  "copied": "Copied!",
+  "naverMap": "View on Naver Maps",
+  "hours": {
+    "title": "Business Hours",
+    "weekday": "Mon – Fri",
+    "weekdayTime": "09:00 – Next Day 09:00",
+    "weekdayNote": "Break 16:00 – 17:00",
+    "weekend": "Sat · Sun · Holidays",
+    "weekendTime": "09:00 – 23:00",
+    "allYear": "Open 365 Days a Year"
+  },
+  "parking": {
+    "title": "Parking",
+    "desc": "In-building parking available",
+    "free": "2 hours free with dining"
+  },
+  "opening": {
+    "banner": "Seolgiok Main Branch Opening Soon",
+    "desc": "Seolgiok Main Branch opens on June 1, 2026.",
+    "dDay": "Days to Open",
+    "days": "days",
+    "today": "Open Today!"
+  }
+}

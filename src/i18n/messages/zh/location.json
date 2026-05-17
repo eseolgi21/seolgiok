@@ -1,0 +1,30 @@
+{
+  "title": "位置",
+  "subtitle": "雪其屋本店",
+  "address": "首尔市江南区德黑兰路63街9号1层104室、104-1室",
+  "phone": "0507-1376-9086",
+  "copyAddress": "复制地址",
+  "copied": "已复制！",
+  "naverMap": "在Naver地图中查看",
+  "hours": {
+    "title": "营业时间",
+    "weekday": "周一 – 周五",
+    "weekdayTime": "09:00 – 次日 09:00",
+    "weekdayNote": "休息时间 16:00 – 17:00",
+    "weekend": "周六 · 周日 · 节假日",
+    "weekendTime": "09:00 – 23:00",
+    "allYear": "全年365天营业"
+  },
+  "parking": {
+    "title": "停车信息",
+    "desc": "可使用楼内停车场",
+    "free": "用餐时提供2小时免费停车"
+  },
+  "opening": {
+    "banner": "雪其屋本店即将开业",
+    "desc": "2026年6月1日，雪其屋本店将盛大开业。",
+    "dDay": "距开业",
+    "days": "天",
+    "today": "今日开业！"
+  }
+}

@@ -1,44 +1,18 @@
 {
-  "Globx": {
-    "metaTitle": "Thông báo - GlobX",
-    "metaDescription": "Kiểm tra tin tức và cập nhật mới nhất từ GlobX.",
+  "Seolgiok": {
+    "metaTitle": "Thông báo - Seolgiok",
+    "metaDescription": "Xem tin tức và cập nhật mới nhất từ Seolgiok.",
     "header": {
       "title": "Thông báo",
-      "subtitle": "Kiểm tra tin tức và cập nhật mới nhất từ GlobX."
-    },
-    "actions": {
-      "searchPlaceholder": "Nhập từ khóa...",
-      "refresh": "Làm mới"
+      "subtitle": "Xem tin tức mới nhất từ Seolgiok"
     },
     "list": {
-      "title": "Tất cả bài viết",
-      "totalPosts": "Tổng {count} bài"
+      "empty": "Không có thông báo nào."
     },
-    "messages": {
-      "errorPrefix": "Đã xảy ra lỗi:",
-      "emptyList": "Không có thông báo nào.",
-      "contentNotAvailable": "Không thể tải nội dung."
-    }
-  },
-  "Quanty": {
-    "metaTitle": "Thông báo - Quanty",
-    "metaDescription": "Kiểm tra tin tức và cập nhật mới nhất từ Quanty.",
-    "header": {
-      "title": "Thông báo",
-      "subtitle": "Kiểm tra tin tức và cập nhật mới nhất từ Quanty."
-    },
-    "actions": {
-      "searchPlaceholder": "Nhập từ khóa...",
-      "refresh": "Làm mới"
-    },
-    "list": {
-      "title": "Tất cả bài viết",
-      "totalPosts": "Tổng {count} bài"
-    },
-    "messages": {
-      "errorPrefix": "Đã xảy ra lỗi:",
-      "emptyList": "Không có thông báo nào.",
-      "contentNotAvailable": "Không thể tải nội dung."
+    "detail": {
+      "back": "Quay lại danh sách",
+      "publishedAt": "Ngày đăng",
+      "notFound": "Không tìm thấy thông báo."
     }
   }
 }

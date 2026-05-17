@@ -1,44 +1,18 @@
 {
-  "Globx": {
-    "metaTitle": "Announcements - GlobX",
-    "metaDescription": "Check out the latest news and updates from GlobX.",
+  "Seolgiok": {
+    "metaTitle": "Announcements - Seolgiok",
+    "metaDescription": "Check the latest news and updates from Seolgiok.",
     "header": {
       "title": "Announcements",
-      "subtitle": "Check out the latest news and updates from GlobX."
-    },
-    "actions": {
-      "searchPlaceholder": "Search...",
-      "refresh": "Refresh"
+      "subtitle": "Check the latest news from Seolgiok"
     },
     "list": {
-      "title": "All Posts",
-      "totalPosts": "Total {count} items"
+      "empty": "No announcements available."
     },
-    "messages": {
-      "errorPrefix": "Error occurred:",
-      "emptyList": "No announcements found.",
-      "contentNotAvailable": "Content not available."
-    }
-  },
-  "Quanty": {
-    "metaTitle": "Announcements - Quanty",
-    "metaDescription": "Check out the latest news and updates from Quanty.",
-    "header": {
-      "title": "Announcements",
-      "subtitle": "Check out the latest news and updates from Quanty."
-    },
-    "actions": {
-      "searchPlaceholder": "Search...",
-      "refresh": "Refresh"
-    },
-    "list": {
-      "title": "All Posts",
-      "totalPosts": "Total {count} items"
-    },
-    "messages": {
-      "errorPrefix": "Error occurred:",
-      "emptyList": "No announcements found.",
-      "contentNotAvailable": "Content not available."
+    "detail": {
+      "back": "Back to list",
+      "publishedAt": "Published",
+      "notFound": "Announcement not found."
     }
   }
 }

@@ -24,7 +24,7 @@ export function MiddlePart({
         <input
           id="password"
           type="password"
-          className="w-full bg-[#fdfbf7] border border-[#e5e0d4] px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400"
+          className="w-full bg-cream border border-cream-border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400"
           value={password}
           onChange={(e) => onPasswordChange(e.target.value)}
           placeholder={t("fields.passwordPlaceholder")}
@@ -37,24 +37,24 @@ export function MiddlePart({
           id="pw-help"
           className="mt-3 flex flex-wrap gap-x-4 gap-y-1"
         >
-          <li className={`text-xs flex items-center gap-1 ${checklist.len ? "text-[#d4b886] font-medium" : "text-gray-400"}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${checklist.len ? "bg-[#d4b886]" : "bg-gray-300"}`} />
+          <li className={`text-xs flex items-center gap-1 ${checklist.len ? "text-gold font-medium" : "text-gray-400"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${checklist.len ? "bg-gold" : "bg-gray-300"}`} />
             {t("checklist.len")}
           </li>
-          <li className={`text-xs flex items-center gap-1 ${checklist.letter ? "text-[#d4b886] font-medium" : "text-gray-400"}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${checklist.letter ? "bg-[#d4b886]" : "bg-gray-300"}`} />
+          <li className={`text-xs flex items-center gap-1 ${checklist.letter ? "text-gold font-medium" : "text-gray-400"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${checklist.letter ? "bg-gold" : "bg-gray-300"}`} />
             {t("checklist.letter")}
           </li>
-          <li className={`text-xs flex items-center gap-1 ${checklist.digit ? "text-[#d4b886] font-medium" : "text-gray-400"}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${checklist.digit ? "bg-[#d4b886]" : "bg-gray-300"}`} />
+          <li className={`text-xs flex items-center gap-1 ${checklist.digit ? "text-gold font-medium" : "text-gray-400"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${checklist.digit ? "bg-gold" : "bg-gray-300"}`} />
             {t("checklist.digit")}
           </li>
-          <li className={`text-xs flex items-center gap-1 ${checklist.upper ? "text-[#d4b886] font-medium" : "text-gray-400"}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${checklist.upper ? "bg-[#d4b886]" : "bg-gray-300"}`} />
+          <li className={`text-xs flex items-center gap-1 ${checklist.upper ? "text-gold font-medium" : "text-gray-400"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${checklist.upper ? "bg-gold" : "bg-gray-300"}`} />
             {t("checklist.upper")}
           </li>
-          <li className={`text-xs flex items-center gap-1 ${checklist.symbol ? "text-[#d4b886] font-medium" : "text-gray-400"}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${checklist.symbol ? "bg-[#d4b886]" : "bg-gray-300"}`} />
+          <li className={`text-xs flex items-center gap-1 ${checklist.symbol ? "text-gold font-medium" : "text-gray-400"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${checklist.symbol ? "bg-gold" : "bg-gray-300"}`} />
             {t("checklist.symbol")}
           </li>
           {checklist.confirmShown && !checklist.confirmOk && (
@@ -73,7 +73,7 @@ export function MiddlePart({
         <input
           id="password2"
           type="password"
-          className="w-full bg-[#fdfbf7] border border-[#e5e0d4] px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400"
+          className="w-full bg-cream border border-cream-border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400"
           value={password2}
           onChange={(e) => onPassword2Change(e.target.value)}
           placeholder={t("fields.confirmPasswordPlaceholder")}

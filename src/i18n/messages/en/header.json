@@ -1,10 +1,9 @@
 {
   "public": {
-    "about": "About Us",
-    "announcements": "Announcements",
-    "cases": "Success Cases",
-    "events": "Events",
-    "help": "Help Center"
+    "menu": "Menu",
+    "location": "Location",
+    "about": "About",
+    "announcements": "Announcements"
   },
   "app": {
     "botGuide": "Bot Guide",

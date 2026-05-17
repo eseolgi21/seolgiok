@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "menu": "菜单",
+    "about": "关于雪记玉",
+    "location": "交通指南",
+    "announcements": "公告"
+  },
+  "biz": {
+    "name": "商号: 설기옥",
+    "ceo": "代表: 홍길동",
+    "regNum": "营业执照号: 000-00-00000",
+    "address": "首尔市江南区德黑兰路63街9号1层104号",
+    "phone": "电话: 0507-1376-9086"
+  },
+  "copyright": "All rights reserved.",
+  "links": {
+    "terms": "服务条款",
+    "privacy": "隐私政策"
+  }
+}

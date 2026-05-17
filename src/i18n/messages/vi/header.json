@@ -1,10 +1,9 @@
 {
   "public": {
+    "menu": "Thực đơn",
+    "location": "Địa điểm",
     "about": "Giới thiệu",
-    "announcements": "Thông báo",
-    "cases": "Thành tựu",
-    "events": "Sự kiện",
-    "help": "Hỗ trợ"
+    "announcements": "Thông báo"
   },
   "app": {
     "botGuide": "Hướng dẫn Bot",

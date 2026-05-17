@@ -47,9 +47,6 @@ export type SignupBody = {
   email: string;
   password: string;
   name: string;
-  referrer: string | null;
-  sponsor: string | null;
-  countryCode: string | null;
   agreeTerms: boolean;
   agreePrivacy: boolean;
 };

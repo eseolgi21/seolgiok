@@ -45,32 +45,32 @@ export default function AdminDashboardPage() {
             value: `₩${stats.sales.toLocaleString()}`,
             change: "Sales",
             icon: CurrencyDollarIcon,
-            color: "text-blue-600",
-            bg: "bg-blue-100",
+            color: "text-info",
+            bg: "bg-info/10",
         },
         {
             label: "이번 달 매입",
             value: `₩${stats.purchase.toLocaleString()}`,
             change: "Cost",
             icon: ArrowTrendingDownIcon,
-            color: "text-red-600",
-            bg: "bg-red-100",
+            color: "text-error",
+            bg: "bg-error/10",
         },
         {
             label: "이번 달 순수익",
             value: `₩${stats.profit.toLocaleString()}`,
             change: "Profit",
             icon: ArrowTrendingUpIcon,
-            color: "text-green-600",
-            bg: "bg-green-100",
+            color: "text-success",
+            bg: "bg-success/10",
         },
         {
             label: "전체 사용자",
             value: "1,234",
             change: "+12%",
             icon: UsersIcon,
-            color: "text-purple-600",
-            bg: "bg-purple-100",
+            color: "text-secondary",
+            bg: "bg-secondary/10",
         },
     ];
 
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
                         <ul className="mt-4 space-y-4">
                             {[1, 2, 3, 4, 5].map((item) => (
                                 <li key={item} className="flex items-start gap-3">
-                                    <div className="w-2 h-2 mt-2 rounded-full bg-[#d4b886]" />
+                                    <div className="w-2 h-2 mt-2 rounded-full bg-gold" />
                                     <div>
                                         <p className="text-sm font-medium text-gray-800">새로운 유저 가입</p>
                                         <p className="text-xs text-gray-500">2분 전</p>

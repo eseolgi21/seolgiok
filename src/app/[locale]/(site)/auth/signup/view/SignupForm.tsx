@@ -2,8 +2,8 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/feedback/Toast-provider";
 import { useTranslations } from "next-intl"; // [추가] 번역 훅
 
@@ -21,7 +21,6 @@ import type {
   TopPartErrorText,
   RowPartErrorText,
 } from "@/app/[locale]/(site)/auth/signup/types/signup/form";
-import { COUNTRY_OPTIONS } from "@/app/[locale]/(site)/auth/signup/types/signup/enums";
 import type {
   SignupError,
   SignupResponse,
@@ -32,7 +31,6 @@ export function SignupForm() {
   const t = useTranslations("authSignup");
 
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const [f, setF] = useState<FormState>({
@@ -41,9 +39,6 @@ export function SignupForm() {
     password: "",
     password2: "",
     name: "",
-    referrer: "",
-    sponsor: "",
-    countryCode: "",
     agreeTerms: false,
     agreePrivacy: false,
   });
@@ -57,21 +52,11 @@ export function SignupForm() {
   const [serverEmailError, setServerEmailError] = useState<
     string | undefined
   >();
-  const [serverRefError, setServerRefError] = useState<string | undefined>();
-  const [serverCountryError, setServerCountryError] = useState<
-    string | undefined
-  >();
   const [serverGeneralError, setServerGeneralError] = useState<
     string | undefined
   >();
 
-  useEffect(() => {
-    const fromUrl = (searchParams.get("ref") || "").trim();
-    if (!fromUrl) return;
-    setF((prev) => (prev.referrer ? prev : { ...prev, referrer: fromUrl }));
-  }, [searchParams]);
-
-  const v = useSignupValidation(f, COUNTRY_OPTIONS);
+  const v = useSignupValidation(f);
 
   const formValid =
     v.usernameOk &&
@@ -79,8 +64,7 @@ export function SignupForm() {
     v.pwAllOk &&
     v.confirmOk &&
     v.nameOk &&
-    v.agreementsOk &&
-    v.countryCodeOk;
+    v.agreementsOk;
 
   function set<K extends keyof FormState>(key: K, val: FormState[K]): void {
     setF((prev) => ({ ...prev, [key]: val }));
@@ -91,8 +75,6 @@ export function SignupForm() {
     setSubmitted(true);
     setServerUsernameError(undefined);
     setServerEmailError(undefined);
-    setServerRefError(undefined);
-    setServerCountryError(undefined);
     setServerGeneralError(undefined);
 
     if (!formValid || loading) {
@@ -113,9 +95,6 @@ export function SignupForm() {
         email: f.email.toLowerCase().trim(),
         password: f.password,
         name: f.name.trim(),
-        referrer: f.referrer || null,
-        sponsor: f.sponsor || null,
-        countryCode: f.countryCode || null,
         agreeTerms: f.agreeTerms,
         agreePrivacy: f.agreePrivacy,
       });
@@ -142,17 +121,7 @@ export function SignupForm() {
           setServerEmailError(t("errors.emailTaken"));
           break;
         case "REFERRER_NOT_FOUND":
-          setServerRefError(t("errors.referrerNotFound"));
-          break;
         case "SPONSOR_NOT_FOUND":
-          setServerGeneralError(t("errors.sponsorNotFound"));
-          break;
-        case "COUNTRY_CODE_INVALID":
-          setServerCountryError(t("errors.countryCodeInvalid"));
-          break;
-        case "COUNTRY_NOT_FOUND":
-          setServerCountryError(t("errors.countryNotFound"));
-          break;
         default:
           setServerGeneralError(t("errors.checkInput"));
       }
@@ -200,27 +169,11 @@ export function SignupForm() {
   const rowErrorText: RowPartErrorText | undefined = useMemo(() => {
     const nameErr =
       submitted && !v.nameOk ? t("errors.nicknameReq") : undefined;
-    const ccErr =
-      serverCountryError ??
-      (submitted && !v.countryCodeOk ? t("errors.countryReq") : undefined);
-    const refErr = serverRefError;
-
-    if (nameErr || ccErr || refErr) {
-      return {
-        name: nameErr ?? "",
-        countryCode: ccErr ?? "",
-        ref: refErr ?? "",
-      };
+    if (nameErr) {
+      return { name: nameErr };
     }
     return undefined;
-  }, [
-    serverCountryError,
-    serverRefError,
-    submitted,
-    v.nameOk,
-    v.countryCodeOk,
-    t, // t 함수 의존성 추가
-  ]);
+  }, [submitted, v.nameOk, t]);
 
   return (
     <section className="mx-auto max-w-screen-sm px-4 pt-4 pb-24">
@@ -269,25 +222,12 @@ export function SignupForm() {
             />
 
             <RowPart
-              value={{
-                name: f.name,
-                countryCode: f.countryCode,
-                ref: f.referrer,
-              }}
+              value={{ name: f.name }}
               onChange={(next) => {
-                setF((prev) => ({
-                  ...prev,
-                  name: next.name,
-                  countryCode: next.countryCode,
-                  referrer: next.ref,
-                }));
-                if (next.countryCode !== f.countryCode)
-                  setServerCountryError(undefined);
-                if (next.ref !== f.referrer) setServerRefError(undefined);
+                setF((prev) => ({ ...prev, name: next.name }));
               }}
               disabled={loading}
               errorText={rowErrorText}
-              options={COUNTRY_OPTIONS}
             />
 
             <Agreements

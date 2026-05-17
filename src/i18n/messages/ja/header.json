@@ -1,10 +1,9 @@
 {
   "public": {
-    "about": "プロジェクト紹介",
-    "announcements": "お知らせ",
-    "cases": "成功事例",
-    "events": "イベント",
-    "help": "サポート"
+    "menu": "メニュー",
+    "location": "アクセス",
+    "about": "紹介",
+    "announcements": "お知らせ"
   },
   "app": {
     "botGuide": "ボットガイド",

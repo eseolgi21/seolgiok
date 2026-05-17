@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "menu": "メニュー",
+    "about": "設記屋について",
+    "location": "アクセス",
+    "announcements": "お知らせ"
+  },
+  "biz": {
+    "name": "屋号: 설기옥",
+    "ceo": "代表: 홍길동",
+    "regNum": "事業者登録番号: 000-00-00000",
+    "address": "ソウル特別市江南区テヘラン路63キル9 1階104号",
+    "phone": "電話: 0507-1376-9086"
+  },
+  "copyright": "All rights reserved.",
+  "links": {
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー"
+  }
+}

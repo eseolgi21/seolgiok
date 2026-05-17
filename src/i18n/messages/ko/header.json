@@ -1,10 +1,9 @@
 {
   "public": {
-    "about": "프로젝트 소개",
-    "announcements": "공지사항",
-    "cases": "성공사례",
-    "events": "이벤트",
-    "help": "고객센터"
+    "menu": "메뉴판",
+    "location": "오시는 길",
+    "about": "소개",
+    "announcements": "공지사항"
   },
   "app": {
     "botGuide": "봇 가이드",

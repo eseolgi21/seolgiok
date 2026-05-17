@@ -18,11 +18,11 @@ export function Agreements({
 
   // 체크박스 스타일 (체크되었을 때 골드색 링/텍스트)
   const checkboxClass =
-    "h-4 w-4 rounded border-gray-300 bg-white text-[#d4b886] focus:ring-[#d4b886] focus:ring-offset-0 cursor-pointer disabled:opacity-50 checked:bg-[#d4b886] checked:border-transparent accent-[#d4b886]";
+    "h-4 w-4 rounded border-gray-300 bg-white text-gold focus:ring-gold focus:ring-offset-0 cursor-pointer disabled:opacity-50 checked:bg-gold checked:border-transparent accent-gold";
 
   // [스타일 변경] 링크 스타일: text-[#d4b886] 적용
   const linkClass =
-    "text-[#d4b886] hover:text-[#b09668] hover:underline ml-1 font-medium transition-colors";
+    "text-gold hover:text-gold-hover hover:underline ml-1 font-medium transition-colors";
 
   return (
     <div className="space-y-3 pt-2">

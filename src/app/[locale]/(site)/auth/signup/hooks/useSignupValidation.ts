@@ -3,14 +3,10 @@
 import { useMemo } from "react";
 import type {
   FormState,
-  Option,
   SignupValidation,
 } from "@/app/[locale]/(site)/auth/signup/types/signup/form";
 
-export function useSignupValidation(
-  f: FormState,
-  countryOptions: Option[]
-): SignupValidation {
+export function useSignupValidation(f: FormState): SignupValidation {
   const usernameOk = useMemo(
     () => /^[a-z0-9_]{4,16}$/.test(f.username),
     [f.username]
@@ -34,12 +30,6 @@ export function useSignupValidation(
   const nameOk = f.name.trim().length > 0;
   const agreementsOk = f.agreeTerms && f.agreePrivacy;
 
-  const trimmed = f.countryCode.trim();
-  const countryCodeOk =
-    trimmed === "" ||
-    (/^[A-Za-z]{2}$/.test(trimmed) &&
-      countryOptions.some((op) => op.value === trimmed.toUpperCase()));
-
   return {
     usernameOk,
     emailOk,
@@ -52,6 +42,5 @@ export function useSignupValidation(
     confirmOk,
     nameOk,
     agreementsOk,
-    countryCodeOk,
   };
 }

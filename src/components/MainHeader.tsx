@@ -87,25 +87,27 @@ export default function MainHeader({
         </div>
 
         {/* [2] 중앙: 메뉴 영역 (PC: xl 이상 보임 / Mobile: 숨김) */}
-        <div className="navbar-center hidden xl:flex items-center justify-center flex-1 min-w-0">
+        <div className="navbar-center hidden lg:flex items-center justify-center flex-1 min-w-0">
           <ul className="menu menu-horizontal px-1 gap-1">
-            {/* 
-                User Request: "중간 메뉴들을 모두 삭제하고 소개 메뉴만 남기고 소개메뉴는 홈으로 가게 해줘" 
-                Assuming "Introduction" maps to t("public.about") or similar. 
-                Existing public.about href was "/".
-             */}
-            <li>
-              <Link
-                href="/"
-                className={`text-sm font-medium transition-colors hover:text-[#d4b886] hover:bg-transparent hover:underline whitespace-nowrap px-3 ${isActive("/")
-                  ? "text-[#d4b886] font-bold"
-                  : "text-gray-700 [:root[data-theme=dark]_&]:text-gray-300"
+            {[
+              { href: "/about", label: t("public.about") },
+              { href: "/menu", label: t("public.menu") },
+              { href: "/location", label: t("public.location") },
+              { href: "/announcements", label: t("public.announcements") },
+            ].map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={`text-sm font-medium transition-colors hover:text-gold hover:bg-transparent whitespace-nowrap px-3 ${
+                    isActive(href)
+                      ? "text-gold font-bold"
+                      : "text-gray-700"
                   }`}
-              >
-                {/* "소개" or t("public.about") */}
-                {t("public.about")}
-              </Link>
-            </li>
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -171,17 +173,20 @@ export default function MainHeader({
                   </li>
                 )}
 
-                {/* 2. 프로젝트 소개 */}
-                <li>
-                  <Link
-                    href="/"
-                    className="text-gray-700 hover:text-[#d4b886] hover:bg-transparent rounded-none px-3 py-2 font-medium"
-                  >
-                    {t("public.about")}
-                  </Link>
-                </li>
+                {[
+                  { href: "/about", label: t("public.about") },
+                  { href: "/menu", label: t("public.menu") },
+                  { href: "/location", label: t("public.location") },
+                  { href: "/announcements", label: t("public.announcements") },
+                ].map(({ href, label }) => (
+                  <li key={href}>
+                    <Link href={href} className="text-gray-700 hover:text-gold hover:bg-transparent rounded-none px-3 py-2 font-medium">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
 
-                <div className="h-px bg-[#f0ebe0] my-1" />
+                <div className="h-px bg-cream-border my-1" />
 
                 {/* 3. 로그아웃 (맨 하단) */}
                 <li>

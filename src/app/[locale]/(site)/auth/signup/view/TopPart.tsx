@@ -28,7 +28,7 @@ export function TopPart({
         </label>
         <input
           id="username"
-          className={`w-full bg-[#fdfbf7] border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400 ${errorText?.username ? "border-red-500" : "border-[#e5e0d4]"
+          className={`w-full bg-cream border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400 ${errorText?.username ? "border-red-500" : "border-cream-border"
             }`}
           value={value.username}
           onChange={onUsername}
@@ -49,7 +49,7 @@ export function TopPart({
         <input
           id="email"
           type="email"
-          className={`w-full bg-[#fdfbf7] border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400 ${errorText?.email ? "border-red-500" : "border-[#e5e0d4]"
+          className={`w-full bg-cream border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400 ${errorText?.email ? "border-red-500" : "border-cream-border"
             }`}
           value={value.email}
           onChange={onEmail}

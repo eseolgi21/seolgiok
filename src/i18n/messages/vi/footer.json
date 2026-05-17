@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "menu": "Thực đơn",
+    "about": "Giới thiệu",
+    "location": "Địa điểm",
+    "announcements": "Thông báo"
+  },
+  "biz": {
+    "name": "Tên doanh nghiệp: 설기옥",
+    "ceo": "Đại diện: 홍길동",
+    "regNum": "MST: 000-00-00000",
+    "address": "104, 104-1, 9, Teheran-ro 63-gil, Gangnam-gu, Seoul",
+    "phone": "Điện thoại: 0507-1376-9086"
+  },
+  "copyright": "All rights reserved.",
+  "links": {
+    "terms": "Điều khoản dịch vụ",
+    "privacy": "Chính sách bảo mật"
+  }
+}

@@ -2,10 +2,18 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  /* 내장 테마 전체 사용 */
   themes: all;
-
-  /* base 스타일 중 'properties' 파트 끄기
-     (= @property --radialprogress 같은 at-rule 안 만들어지게) */
   exclude: properties;
+}
+
+@theme {
+  --color-gold: #d4b886;
+  --color-gold-hover: #c4a876;
+  --color-cream: #fdfbf7;
+  --color-cream-border: #e5e0d4;
+  --color-dark: #1a1a1a;
+  --color-dark-hover: #333333;
+  --color-crimson: #8b1a1a;
+  --color-crimson-dark: #6e1414;
+  --color-crimson-light: #a82020;
 }

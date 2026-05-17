@@ -3,6 +3,8 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import MainHeader from "@/components/MainHeader";
+import { OpeningCountdown } from "@/components/OpeningCountdown";
+import { SiteFooter } from "@/components/SiteFooter";
 import { auth } from "@/lib/auth/auth";
 import type { ReactNode } from "react";
 
@@ -19,8 +21,10 @@ export default async function SiteLayout({
     // [핵심]: <body> 태그에 있던 스타일은 이 div에 적용됩니다. (올바름)
     <div className="min-h-dvh bg-base-200 text-base-content flex flex-col">
       <MainHeader authed={authed} userLevel={userLevel} />
+      <OpeningCountdown />
 
       <main className="flex-1 w-full flex flex-col">{children}</main>
+      <SiteFooter />
     </div>
   );
 }

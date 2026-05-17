@@ -1,0 +1,30 @@
+{
+  "title": "Địa điểm",
+  "subtitle": "Chi nhánh chính Seolgiok",
+  "address": "104, 104-1, 9, Teheran-ro 63-gil, Gangnam-gu, Seoul",
+  "phone": "0507-1376-9086",
+  "copyAddress": "Sao chép địa chỉ",
+  "copied": "Đã sao chép!",
+  "naverMap": "Xem trên Naver Maps",
+  "hours": {
+    "title": "Giờ mở cửa",
+    "weekday": "Thứ 2 – Thứ 6",
+    "weekdayTime": "09:00 – 09:00 hôm sau",
+    "weekdayNote": "Nghỉ giải lao 16:00 – 17:00",
+    "weekend": "Thứ 7 · CN · Ngày lễ",
+    "weekendTime": "09:00 – 23:00",
+    "allYear": "Mở cửa 365 ngày trong năm"
+  },
+  "parking": {
+    "title": "Bãi đỗ xe",
+    "desc": "Có bãi đỗ xe trong tòa nhà",
+    "free": "Miễn phí 2 giờ khi dùng bữa"
+  },
+  "opening": {
+    "banner": "Sắp khai trương chi nhánh chính Seolgiok",
+    "desc": "Ngày 1 tháng 6 năm 2026, chi nhánh chính Seolgiok sẽ khai trương.",
+    "dDay": "Ngày khai trương",
+    "days": "ngày",
+    "today": "Khai trương hôm nay!"
+  }
+}

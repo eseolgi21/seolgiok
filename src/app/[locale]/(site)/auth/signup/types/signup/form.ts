@@ -4,9 +4,6 @@ export type FormState = {
   password: string;
   password2: string;
   name: string;
-  referrer: string;
-  sponsor: string;
-  countryCode: string;
   agreeTerms: boolean;
   agreePrivacy: boolean;
 };
@@ -28,14 +25,10 @@ export type TopPartErrorText = {
 
 export type RowPartValue = {
   name: string;
-  countryCode: string;
-  ref: string;
 };
 
 export type RowPartErrorText = {
   name: string;
-  countryCode: string;
-  ref: string;
 };
 
 export type ChecklistState = {
@@ -60,7 +53,6 @@ export type SignupValidation = {
   confirmOk: boolean;
   nameOk: boolean;
   agreementsOk: boolean;
-  countryCodeOk: boolean;
 };
 
 export type SubmitBarProps = {
@@ -87,7 +79,6 @@ export type MiddlePartProps = {
 export type RowPartProps = {
   value: RowPartValue;
   onChange: (next: RowPartValue) => void;
-  options: Option[];
   disabled: boolean;
   errorText?: RowPartErrorText;
 };

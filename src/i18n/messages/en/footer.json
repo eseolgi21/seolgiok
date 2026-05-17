@@ -1,0 +1,20 @@
+{
+  "nav": {
+    "menu": "Menu",
+    "about": "About Us",
+    "location": "Location",
+    "announcements": "Announcements"
+  },
+  "biz": {
+    "name": "Business: Seolgiok",
+    "ceo": "CEO: Hong Gil-dong",
+    "regNum": "Reg. No.: 000-00-00000",
+    "address": "104, 104-1, 9, Teheran-ro 63-gil, Gangnam-gu, Seoul",
+    "phone": "Tel: 0507-1376-9086"
+  },
+  "copyright": "All rights reserved.",
+  "links": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
+  }
+}

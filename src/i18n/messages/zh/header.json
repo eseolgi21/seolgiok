@@ -1,10 +1,9 @@
 {
   "public": {
-    "about": "项目介绍",
-    "announcements": "公告",
-    "cases": "成功案例",
-    "events": "活动",
-    "help": "客服中心"
+    "menu": "菜单",
+    "location": "位置",
+    "about": "介绍",
+    "announcements": "公告"
   },
   "app": {
     "botGuide": "机器人指南",

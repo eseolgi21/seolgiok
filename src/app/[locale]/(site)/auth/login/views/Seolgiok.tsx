@@ -11,7 +11,7 @@ import Image from "next/image";
 export function SeolgiokLogin() {
     const router = useRouter();
     const { toast } = useToast();
-    const t = useTranslations("authLogin.GlobX");
+    const t = useTranslations("authLogin.Seolgiok");
 
     const [id, setId] = useState("");
     const [pwd, setPwd] = useState("");
@@ -35,8 +35,6 @@ export function SeolgiokLogin() {
                     body: JSON.stringify({ id: id.trim(), password: pwd }),
                 });
                 const data = (await res.json()) as LoginResponse;
-                console.log("[Seolgiok] Login response:", res.status, data);
-
                 if (res.ok && data.ok) {
                     toast({
                         title: t("messages.successTitle"),
@@ -59,9 +57,9 @@ export function SeolgiokLogin() {
                     let msg = t("messages.validationError");
 
                     if (data.code === "USER_NOT_FOUND") {
-                        msg = "존재하지 않는 아이디입니다.";
+                        msg = t("messages.userNotFound");
                     } else if (data.code === "INVALID_PASSWORD") {
-                        msg = "비밀번호가 올바르지 않습니다.";
+                        msg = t("messages.invalidPassword");
                     } else if (data.code === "INVALID_CREDENTIALS") {
                         msg = t("messages.invalidCredentials");
                     }
@@ -90,11 +88,11 @@ export function SeolgiokLogin() {
     );
 
     return (
-        <div className="relative w-full min-h-[calc(100dvh-4rem)] flex items-center bg-[#fdfbf7] selection:bg-[#d4b886] selection:text-white">
+        <div className="relative w-full min-h-[calc(100dvh-4rem)] flex items-center bg-cream selection:bg-gold selection:text-white">
             {/* Left: Image Section */}
             <div className="hidden lg:block w-1/2 h-full absolute top-0 left-0 overflow-hidden">
                 <Image
-                    src="/images/seolgiok-hero.png"
+                    src="/images/seolgiok_homescreen.png"
                     alt="Seolgiok Hero"
                     fill
                     className="object-cover object-center brightness-[0.85] sepia-[0.2]"
@@ -111,11 +109,11 @@ export function SeolgiokLogin() {
 
             {/* Right: Login Form */}
             <div className="w-full lg:w-1/2 ml-auto h-full flex items-center justify-center p-8 animate-in fade-in slide-in-from-right-8 duration-700">
-                <div className="w-full max-w-[420px] bg-white p-10 shadow-xl border border-[#e5e0d4]">
+                <div className="w-full max-w-[420px] bg-white p-10 shadow-xl border border-cream-border">
                     <div className="text-center mb-10">
-                        <h1 className="text-3xl font-serif font-bold text-[#1a1a1a] mb-2">로그인</h1>
-                        <p className="text-gray-500 text-sm tracking-wide">설기옥 멤버십 서비스</p>
-                        <div className="w-10 h-px bg-[#d4b886] mx-auto mt-6" />
+                        <h1 className="text-3xl font-serif font-bold text-dark mb-2">{t("heading")}</h1>
+                        <p className="text-gray-500 text-sm tracking-wide">{t("membershipLabel")}</p>
+                        <div className="w-10 h-px bg-gold mx-auto mt-6" />
                     </div>
 
                     <Form onSubmit={onSubmit} className="space-y-6" aria-busy={loading}>
@@ -127,7 +125,7 @@ export function SeolgiokLogin() {
                                 </label>
                                 <input
                                     id="login-id"
-                                    className="w-full bg-[#fdfbf7] border border-[#e5e0d4] px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400"
+                                    className="w-full bg-cream border border-cream-border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400"
                                     value={id}
                                     onChange={(e) => setId(e.target.value)}
                                     placeholder={t("fields.idPlaceholder")}
@@ -143,7 +141,7 @@ export function SeolgiokLogin() {
                                 <input
                                     id="login-password"
                                     type="password"
-                                    className="w-full bg-[#fdfbf7] border border-[#e5e0d4] px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-[#d4b886] focus:ring-1 focus:ring-[#d4b886] transition-all placeholder:text-gray-400"
+                                    className="w-full bg-cream border border-cream-border px-4 py-3 text-gray-900 rounded-none focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-all placeholder:text-gray-400"
                                     value={pwd}
                                     onChange={(e) => setPwd(e.target.value)}
                                     placeholder={t("fields.pwPlaceholder")}
@@ -155,18 +153,18 @@ export function SeolgiokLogin() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#1a1a1a] text-[#d4b886] hover:bg-[#333] border border-[#1a1a1a] rounded-none py-4 text-sm font-bold uppercase tracking-widest transition-all mt-4"
+                            className="w-full bg-dark text-gold hover:bg-dark-hover border border-dark rounded-none py-4 text-sm font-bold uppercase tracking-widest transition-all mt-4"
                         >
-                            {loading ? <span className="loading loading-spinner text-[#d4b886]" /> : t("buttons.submit")}
+                            {loading ? <span className="loading loading-spinner text-gold" /> : t("buttons.submit")}
                         </Button>
 
-                        <div className="flex items-center justify-between text-xs text-gray-500 mt-6 pt-6 border-t border-[#f0ebe0]">
+                        <div className="flex items-center justify-between text-xs text-gray-500 mt-6 pt-6 border-t border-cream-border">
                             <div className="flex gap-4">
-                                <button type="button" onClick={() => router.push("/auth/find-id")} className="hover:text-[#d4b886] transition-colors">아이디 찾기</button>
+                                <button type="button" onClick={() => router.push("/auth/find-id")} className="hover:text-gold transition-colors">{t("buttons.findId")}</button>
                                 <span className="text-gray-300">|</span>
-                                <button type="button" onClick={() => router.push("/auth/find-password")} className="hover:text-[#d4b886] transition-colors">비밀번호 찾기</button>
+                                <button type="button" onClick={() => router.push("/auth/find-password")} className="hover:text-gold transition-colors">{t("buttons.findPw")}</button>
                             </div>
-                            <button type="button" onClick={() => router.push("/auth/signup")} className="font-bold text-[#1a1a1a] hover:text-[#d4b886] transition-colors">회원가입</button>
+                            <button type="button" onClick={() => router.push("/auth/signup")} className="font-bold text-dark hover:text-gold transition-colors">{t("buttons.signup")}</button>
                         </div>
                     </Form>
                 </div>
