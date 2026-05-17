@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+
+// 빌드 타임이 아닌 요청 시 생성 — Railway 빌드 환경에서 DB에 접근할 수 없기 때문
+export const dynamic = "force-dynamic";
 import { BoardType, PostVisibility } from "@/generated/prisma";
 
 const BASE_URL = "https://seolgiok.com";
