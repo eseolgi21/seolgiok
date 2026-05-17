@@ -12,10 +12,6 @@
     "confirmPasswordPlaceholder": "パスワードを再入力",
     "nickname": "ニックネーム",
     "nicknamePlaceholder": "ニックネームを入力",
-    "country": "国",
-    "countryPlaceholder": "国を選択（任意）",
-    "referrer": "紹介者",
-    "referrerPlaceholder": "紹介者のIDまたはメール",
     "search": "検索"
   },
   "checklist": {
@@ -36,9 +32,6 @@
     "submit": "登録する"
   },
   "messages": {
-    "validReferrer": "有効な紹介者です。",
-    "invalidReferrer": "紹介者が見つかりません。",
-    "checkRefTitle": "紹介者確認",
     "inputErrorTitle": "入力エラー",
     "inputErrorDesc": "必須項目と形式を確認してください。",
     "successTitle": "会員登録完了",
@@ -49,13 +42,8 @@
     "usernameFormat": "ユーザー名の形式を確認してください。",
     "emailFormat": "メールアドレスの形式を確認してください。",
     "nicknameReq": "ニックネームを入力してください。",
-    "countryReq": "国コードを選択してください。",
     "usernameTaken": "既に使用されているユーザー名です。",
     "emailTaken": "既に使用されているメールアドレスです。",
-    "referrerNotFound": "紹介者が見つかりません。",
-    "sponsorNotFound": "スポンサーが見つかりません。",
-    "countryCodeInvalid": "国コードは英字2文字である必要があります（例：JP, US）。",
-    "countryNotFound": "該当する国コードが見つかりません。",
     "checkInput": "入力内容をもう一度確認してください。",
     "serverError": "サーバーまたはネットワークエラーが発生しました。",
     "tempError": "一時的な問題により処理できません。"

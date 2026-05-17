@@ -2,7 +2,7 @@
 
 import { Link, usePathname as useIntlPathname } from "@/i18n/routing";
 import { useCallback } from "react";
-// import Image from "next/image";
+import Image from "next/image";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 // import MainMenuDropdown from "@/components/MainMenuDropdown";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -71,24 +71,28 @@ export default function MainHeader({
         [:root[data-theme=dark]_&]:bg-black
         [:root[data-theme=dark]_&]:border-white/10"
     >
-      <div className="navbar h-16 container mx-auto px-4">
+      <div className="navbar h-20 container mx-auto px-6">
         {/* [1] 왼쪽: 로고 영역 */}
         <div className="navbar-start shrink-0 w-auto">
           <Link
             href="/"
             aria-label={t("aria.home")}
-            className="inline-flex items-center lg:-ml-4 group"
+            className="inline-flex items-center lg:-ml-2 group"
           >
-            {/* [수정] 텍스트 로고로 변경 */}
-            <h1 className="font-serif text-3xl font-bold tracking-tight text-gray-900 [:root[data-theme=dark]_&]:text-white">
-              설기옥
-            </h1>
+            <Image
+              src="/images/logo.png"
+              alt="설기옥"
+              width={1280}
+              height={424}
+              className="h-12 w-auto object-contain"
+              priority
+            />
           </Link>
         </div>
 
-        {/* [2] 중앙: 메뉴 영역 (PC: xl 이상 보임 / Mobile: 숨김) */}
+        {/* [2] 중앙: 메뉴 영역 (PC: lg 이상 보임 / Mobile: 숨김) */}
         <div className="navbar-center hidden lg:flex items-center justify-center flex-1 min-w-0">
-          <ul className="menu menu-horizontal px-1 gap-1">
+          <ul className="menu menu-horizontal px-1 gap-2">
             {[
               { href: "/about", label: t("public.about") },
               { href: "/menu", label: t("public.menu") },
@@ -98,7 +102,7 @@ export default function MainHeader({
               <li key={href}>
                 <Link
                   href={href}
-                  className={`text-sm font-medium transition-colors hover:text-gold hover:bg-transparent whitespace-nowrap px-3 ${
+                  className={`text-base font-medium transition-colors hover:text-gold hover:bg-transparent whitespace-nowrap px-4 py-2 ${
                     isActive(href)
                       ? "text-gold font-bold"
                       : "text-gray-700"
@@ -112,14 +116,14 @@ export default function MainHeader({
         </div>
 
         {/* [3] 오른쪽: 버튼 영역 */}
-        <div className="navbar-end flex items-center gap-2 w-auto shrink-0 ml-auto">
+        <div className="navbar-end flex items-center gap-3 w-auto shrink-0 ml-auto">
           {isManager && (
             <Link
               href="/admin/dashboard"
-              className="hidden sm:inline-flex btn btn-sm btn-outline mr-2
+              className="hidden sm:inline-flex btn btn-outline mr-2
                 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black
                 [:root[data-theme=dark]_&]:border-white/30 [:root[data-theme=dark]_&]:text-gray-300 [:root[data-theme=dark]_&]:hover:bg-white/10 [:root[data-theme=dark]_&]:hover:text-white
-                whitespace-nowrap"
+                whitespace-nowrap rounded-none text-sm"
             >
               {t("auth.admin")}
             </Link>
@@ -129,33 +133,32 @@ export default function MainHeader({
             variant="icon-only"
             direction="down"
             align="right"
-            triggerClassName="btn btn-ghost btn-circle"
+            triggerClassName="btn btn-ghost btn-circle btn-md"
           />
 
           {!authed ? (
             <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/auth/signup"
-                className="btn btn-sm border border-[#d4b886] bg-transparent text-[#d4b886] hover:bg-[#d4b886] hover:text-white px-3 sm:px-4 font-normal rounded-none transition-colors text-xs sm:text-sm whitespace-nowrap uppercase tracking-wider"
+                className="btn border border-gold bg-transparent text-gold hover:bg-gold hover:text-cream px-4 sm:px-5 font-normal rounded-none transition-colors text-sm whitespace-nowrap uppercase tracking-wider"
               >
                 {t("auth.signup")}
               </Link>
               <Link
                 href="/auth/login"
-                className="btn btn-sm bg-[#1a1a1a] hover:bg-[#333] text-[#d4b886] border border-[#1a1a1a] px-3 sm:px-4 font-normal rounded-none transition-colors shadow-sm text-xs sm:text-sm whitespace-nowrap uppercase tracking-wider"
+                className="btn bg-dark hover:bg-dark-hover text-gold border border-dark px-4 sm:px-5 font-normal rounded-none transition-colors shadow-sm text-sm whitespace-nowrap uppercase tracking-wider"
               >
                 {t("auth.login")}
               </Link>
             </div>
           ) : (
-            // 💡 [수정] 모바일에서도 항상 보이도록 'hidden sm:inline-flex' -> 'inline-flex'로 변경
             <div className="dropdown dropdown-end dropdown-hover">
               <div
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost btn-circle inline-flex text-gray-700 hover:bg-gray-100 [:root[data-theme=dark]_&]:text-gray-300 [:root[data-theme=dark]_&]:hover:text-white [:root[data-theme=dark]_&]:hover:bg-white/10"
+                className="btn btn-ghost btn-circle btn-md inline-flex text-gray-700 hover:bg-gray-100 [:root[data-theme=dark]_&]:text-gray-300 [:root[data-theme=dark]_&]:hover:text-white [:root[data-theme=dark]_&]:hover:bg-white/10"
               >
-                <UserCircleIcon className="h-6 w-6" aria-hidden />
+                <UserCircleIcon className="h-7 w-7" aria-hidden />
               </div>
               <ul
                 tabIndex={0}

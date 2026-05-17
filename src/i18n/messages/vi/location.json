@@ -17,8 +17,14 @@
   },
   "parking": {
     "title": "Bãi đỗ xe",
-    "desc": "Có bãi đỗ xe trong tòa nhà",
-    "free": "Miễn phí 2 giờ khi dùng bữa"
+    "desc": "Có bãi đỗ xe ngầm trong tòa nhà",
+    "free": "2.000 KRW/giờ · Chỉ tiền mặt hoặc chuyển khoản"
+  },
+  "faq": {
+    "qAddress": "Seolgiok ở đâu?",
+    "qHours": "Giờ mở cửa là mấy giờ?",
+    "qParking": "Có bãi đỗ xe không?",
+    "qPhone": "Số điện thoại là bao nhiêu?"
   },
   "opening": {
     "banner": "Sắp khai trương chi nhánh chính Seolgiok",

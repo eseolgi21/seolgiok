@@ -1,16 +1,17 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbListJsonLd, AboutPageJsonLd } from "@/components/JsonLd";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.Seolgiok" });
-  return {
-    title: `${t("aboutPageTitle")} — 설기옥`,
-    description: t("metaDescription"),
-  };
+  const title = `${t("aboutPageTitle")} — 설기옥`;
+  const description = t("metaDescription");
+  return buildPageMetadata(locale, "/about", title, description);
 }
 
 export default async function AboutPage({ params }: Props) {
@@ -19,6 +20,15 @@ export default async function AboutPage({ params }: Props) {
   const t = await getTranslations("home.Seolgiok");
 
   return (
+    <>
+      <BreadcrumbListJsonLd items={[
+        { name: "설기옥", item: `https://seolgiok.com/${locale}` },
+        { name: t("aboutPageTitle"), item: `https://seolgiok.com/${locale}/about` },
+      ]} />
+      <AboutPageJsonLd
+        url={`https://seolgiok.com/${locale}/about`}
+        description={t("metaDescription")}
+      />
     <div className="min-h-screen bg-cream">
       {/* 헤더 */}
       <div className="bg-dark text-cream py-16 text-center relative overflow-hidden">
@@ -90,18 +100,19 @@ export default async function AboutPage({ params }: Props) {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/menu"
-            className="inline-block bg-dark text-gold border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
+            className="inline-block bg-dark text-cream border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
           >
             {t("menuButton")}
           </Link>
           <Link
             href="/location"
-            className="inline-block bg-transparent text-dark border border-dark hover:bg-dark hover:text-gold px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
+            className="inline-block bg-transparent text-dark border border-dark hover:bg-dark hover:text-cream px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
           >
             {t("locationButton")}
           </Link>
         </div>
       </section>
     </div>
+    </>
   );
 }

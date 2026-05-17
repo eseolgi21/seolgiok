@@ -12,10 +12,6 @@
     "confirmPasswordPlaceholder": "Re-enter your password",
     "nickname": "Nickname",
     "nicknamePlaceholder": "Enter nickname",
-    "country": "Country",
-    "countryPlaceholder": "Select Country (Optional)",
-    "referrer": "Referrer",
-    "referrerPlaceholder": "Referrer ID or Email",
     "search": "Search"
   },
   "checklist": {
@@ -36,9 +32,6 @@
     "submit": "Sign Up"
   },
   "messages": {
-    "validReferrer": "Valid referrer.",
-    "invalidReferrer": "Referrer not found.",
-    "checkRefTitle": "Check Referrer",
     "inputErrorTitle": "Input Error",
     "inputErrorDesc": "Please check the required fields and format.",
     "successTitle": "Sign Up Successful",
@@ -49,13 +42,8 @@
     "usernameFormat": "Please check the username format.",
     "emailFormat": "Please check the email format.",
     "nicknameReq": "Please enter a nickname.",
-    "countryReq": "Please select a country code.",
     "usernameTaken": "Username is already taken.",
     "emailTaken": "Email is already taken.",
-    "referrerNotFound": "Referrer not found.",
-    "sponsorNotFound": "Sponsor not found.",
-    "countryCodeInvalid": "Country code must be 2 letters (e.g., US, KR).",
-    "countryNotFound": "Country code not found.",
     "checkInput": "Please check your input.",
     "serverError": "A server/network error occurred.",
     "tempError": "Unable to process due to a temporary issue."

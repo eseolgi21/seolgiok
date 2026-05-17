@@ -1,21 +1,41 @@
-// src/app/[locale]/layout.tsx
-
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { ReactNode } from "react";
+import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
+import "@/styles/globals.css";
 import { locales, type AppLocale } from "@/i18n/routing";
 import { ToastProvider } from "@/components/ui";
 
-export const metadata = {
-  title: "설기옥 - 정성의 시간",
-  description: "24시간의 기다림이 빚어낸 맑고 깊은 한 그릇",
-};
+const inter = Inter({ subsets: ["latin"] });
 
 function isAppLocale(value: string): value is AppLocale {
   return (locales as readonly string[]).includes(value);
 }
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://seolgiok.com"),
+  title: {
+    default: "설기옥 선릉 본점 — 정성의 시간",
+    template: "%s",
+  },
+  openGraph: {
+    siteName: "설기옥 선릉 본점",
+    images: [{ url: "/images/seolgiok_homescreen.png", width: 1200, height: 630, alt: "설기옥 선릉 본점" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/seolgiok_homescreen.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+};
 
 export default async function LocaleLayout({
   children,
@@ -36,8 +56,17 @@ export default async function LocaleLayout({
   const messages = await getMessages({ locale: localeParam });
 
   return (
-    <NextIntlClientProvider locale={localeParam} messages={messages}>
-      <ToastProvider>{children}</ToastProvider>
-    </NextIntlClientProvider>
+    <html
+      lang={localeParam}
+      data-theme="light"
+      className={inter.className}
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
+        <NextIntlClientProvider locale={localeParam} messages={messages}>
+          <ToastProvider>{children}</ToastProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }

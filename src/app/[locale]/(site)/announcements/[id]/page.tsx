@@ -5,15 +5,32 @@ import { prisma } from "@/lib/prisma";
 import { BoardType, PostVisibility } from "@/generated/prisma";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import sanitizeHtml from "sanitize-html";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbListJsonLd, NewsArticleJsonLd } from "@/components/JsonLd";
 
 type Props = { params: Promise<{ locale: string; id: string }> };
 
+function extractDescription(bodyHtml: string): string {
+  return bodyHtml
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
+}
+
 export async function generateMetadata({ params }: Props) {
-  const { id } = await params;
+  const { locale, id } = await params;
   const post = await getPost(id);
-  return {
-    title: post ? `${post.title} — 설기옥` : "공지사항 — 설기옥",
-  };
+  const title = post ? `${post.title} — 설기옥` : "공지사항 — 설기옥";
+  const date = post?.publishedAt ?? post?.createdAt;
+  const description = post ? extractDescription(post.bodyHtml) : undefined;
+  return buildPageMetadata(
+    locale,
+    `/announcements/${id}`,
+    title,
+    description,
+    date ? { publishedTime: new Date(date).toISOString() } : undefined
+  );
 }
 
 async function getPost(id: string) {
@@ -49,7 +66,21 @@ export default async function AnnouncementDetailPage({ params }: Props) {
     day: "numeric",
   }).format(new Date(date));
 
+  const dateIso = new Date(date).toISOString();
+  const pageUrl = `https://seolgiok.com/${locale}/announcements/${id}`;
+
   return (
+    <>
+      <BreadcrumbListJsonLd items={[
+        { name: "설기옥", item: `https://seolgiok.com/${locale}` },
+        { name: "공지사항", item: `https://seolgiok.com/${locale}/announcements` },
+        { name: post.title, item: pageUrl },
+      ]} />
+      <NewsArticleJsonLd
+        url={pageUrl}
+        headline={post.title}
+        datePublished={dateIso}
+      />
     <div className="min-h-screen bg-cream">
       {/* 헤더 */}
       <div className="bg-dark text-cream py-16 text-center relative overflow-hidden">
@@ -104,5 +135,6 @@ export default async function AnnouncementDetailPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -7,7 +7,9 @@ const OPENING_DATE = new Date("2026-06-01T00:00:00+09:00");
 
 function calcDaysLeft() {
   const diff = OPENING_DATE.getTime() - Date.now();
-  return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
+  if (diff > 0) return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  if (diff > -86_400_000) return 0; // 오픈 당일
+  return -1; // 오픈 후 → 배너 숨김
 }
 
 export function OpeningCountdown() {
@@ -18,6 +20,8 @@ export function OpeningCountdown() {
     const id = setInterval(() => setDaysLeft(calcDaysLeft()), 60_000);
     return () => clearInterval(id);
   }, []);
+
+  if (daysLeft < 0) return null;
 
   return (
     <div className="w-full bg-dark text-cream border-b border-gold/30">

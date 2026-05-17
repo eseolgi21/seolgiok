@@ -17,8 +17,14 @@
   },
   "parking": {
     "title": "Parking",
-    "desc": "In-building parking available",
-    "free": "2 hours free with dining"
+    "desc": "Underground parking available in the building",
+    "free": "2,000 KRW/hr · Cash or bank transfer only"
+  },
+  "faq": {
+    "qAddress": "Where is Seolgiok located?",
+    "qHours": "What are the business hours?",
+    "qParking": "Is parking available?",
+    "qPhone": "What is the phone number?"
   },
   "opening": {
     "banner": "Seolgiok Main Branch Opening Soon",

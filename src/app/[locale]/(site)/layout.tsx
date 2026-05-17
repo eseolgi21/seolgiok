@@ -5,6 +5,7 @@ export const revalidate = 0;
 import MainHeader from "@/components/MainHeader";
 import { OpeningCountdown } from "@/components/OpeningCountdown";
 import { SiteFooter } from "@/components/SiteFooter";
+import { RestaurantJsonLd, WebSiteJsonLd, GrandOpeningEventJsonLd } from "@/components/JsonLd";
 import { auth } from "@/lib/auth/auth";
 import type { ReactNode } from "react";
 
@@ -20,6 +21,9 @@ export default async function SiteLayout({
   return (
     // [핵심]: <body> 태그에 있던 스타일은 이 div에 적용됩니다. (올바름)
     <div className="min-h-dvh bg-base-200 text-base-content flex flex-col">
+      <WebSiteJsonLd />
+      <RestaurantJsonLd />
+      <GrandOpeningEventJsonLd />
       <MainHeader authed={authed} userLevel={userLevel} />
       <OpeningCountdown />
 

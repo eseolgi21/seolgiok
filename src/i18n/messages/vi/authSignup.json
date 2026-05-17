@@ -12,10 +12,6 @@
     "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
     "nickname": "Biệt danh",
     "nicknamePlaceholder": "Nhập biệt danh",
-    "country": "Quốc gia",
-    "countryPlaceholder": "Chọn quốc gia (Tùy chọn)",
-    "referrer": "Người giới thiệu",
-    "referrerPlaceholder": "ID hoặc Email người giới thiệu",
     "search": "Tìm kiếm"
   },
   "checklist": {
@@ -36,9 +32,6 @@
     "submit": "Đăng ký"
   },
   "messages": {
-    "validReferrer": "Người giới thiệu hợp lệ.",
-    "invalidReferrer": "Không tìm thấy người giới thiệu.",
-    "checkRefTitle": "Kiểm tra người giới thiệu",
     "inputErrorTitle": "Lỗi nhập liệu",
     "inputErrorDesc": "Vui lòng kiểm tra các mục bắt buộc và định dạng.",
     "successTitle": "Đăng ký thành công",
@@ -49,13 +42,8 @@
     "usernameFormat": "Vui lòng kiểm tra định dạng tên đăng nhập.",
     "emailFormat": "Vui lòng kiểm tra định dạng email.",
     "nicknameReq": "Vui lòng nhập biệt danh.",
-    "countryReq": "Vui lòng chọn mã quốc gia.",
     "usernameTaken": "Tên đăng nhập đã được sử dụng.",
     "emailTaken": "Email đã được sử dụng.",
-    "referrerNotFound": "Không tìm thấy người giới thiệu.",
-    "sponsorNotFound": "Không tìm thấy người bảo trợ.",
-    "countryCodeInvalid": "Mã quốc gia phải là 2 chữ cái tiếng Anh (Ví dụ: VN, US).",
-    "countryNotFound": "Không tìm thấy mã quốc gia tương ứng.",
     "checkInput": "Vui lòng kiểm tra lại thông tin đầu vào.",
     "serverError": "Đã xảy ra lỗi máy chủ/mạng.",
     "tempError": "Không thể xử lý do sự cố tạm thời."

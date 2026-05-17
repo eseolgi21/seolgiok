@@ -120,8 +120,6 @@ export function SignupForm() {
         case "EMAIL_TAKEN":
           setServerEmailError(t("errors.emailTaken"));
           break;
-        case "REFERRER_NOT_FOUND":
-        case "SPONSOR_NOT_FOUND":
         default:
           setServerGeneralError(t("errors.checkInput"));
       }

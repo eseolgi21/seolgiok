@@ -15,7 +15,7 @@ export function SubmitBar({ loading, disabled }: SubmitBarProps) {
         disabled={loading || disabled}
         // [스타일 변경] 설기옥 테마 적용 (Black & Gold)
         className={`
-          h-12 w-full rounded-none text-base font-bold text-gold shadow-md transition-all border border-dark
+          h-12 w-full rounded-none text-base font-bold text-cream shadow-md transition-all border border-dark
           ${disabled
             ? "bg-[#e5e5e5] text-gray-400 border-transparent cursor-not-allowed"
             : "bg-dark hover:bg-dark-hover hover:text-white"
@@ -24,7 +24,7 @@ export function SubmitBar({ loading, disabled }: SubmitBarProps) {
         `}
       >
         {loading ? (
-          <span className="loading loading-spinner loading-sm text-gold" />
+          <span className="loading loading-spinner loading-sm text-cream" />
         ) : (
           t("buttons.submit")
         )}

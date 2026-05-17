@@ -61,7 +61,7 @@ export function SeolgiokView() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/menu"
-                className="bg-gold text-dark px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold-hover transition-colors text-center"
+                className="bg-gold text-cream px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold-hover transition-colors text-center"
               >
                 {t("heroButton")}
               </Link>
@@ -122,17 +122,27 @@ export function SeolgiokView() {
             <h2 className="font-serif text-3xl font-bold text-cream">{t("menuSectionTitle")}</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {[
-              { name: t("menu1Name"), desc: t("menu1Desc"), num: "01" },
-              { name: t("menu2Name"), desc: t("menu2Desc"), num: "02" },
-            ].map(({ name, desc, num }) => (
-              <div key={num} className="relative aspect-[4/3] bg-dark border border-gold/20 flex flex-col items-center justify-center gap-4 group hover:border-gold/50 transition-colors duration-300 px-8">
-                <p className="text-gold/30 font-serif text-5xl font-bold absolute top-5 left-6 select-none">{num}</p>
-                <div className="w-8 h-px bg-gold/50 group-hover:w-14 transition-all duration-300" />
-                <p className="font-serif text-xl font-bold text-cream text-center">{name}</p>
-                <p className="text-gold/70 text-xs tracking-widest text-center uppercase">{desc}</p>
-                <div className="w-8 h-px bg-gold/50 group-hover:w-14 transition-all duration-300" />
+              { num: "01", name: t("menu1Name"), desc: t("menu1Desc"), src: "/menu/맑은곰탕.png" },
+              { num: "02", name: t("menu2Name"), desc: t("menu2Desc"), src: "/menu/갈비탕.png" },
+              { num: "03", name: t("menu3Name"), desc: t("menu3Desc"), src: "/menu/갈비찜.png" },
+              { num: "04", name: t("menu4Name"), desc: t("menu4Desc"), src: "/menu/곱창전골.png" },
+            ].map(({ num, name, desc, src }) => (
+              <div key={num} className="relative aspect-square overflow-hidden group">
+                <Image
+                  src={src}
+                  alt={name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <p className="text-gold/60 font-mono text-xs mb-1">{num}</p>
+                  <h3 className="font-serif text-base font-bold text-cream leading-tight">{name}</h3>
+                  <p className="text-cream/50 text-xs mt-1 leading-relaxed hidden sm:block">{desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -140,7 +150,7 @@ export function SeolgiokView() {
           <div className="text-center">
             <Link
               href="/menu"
-              className="inline-block bg-transparent text-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold hover:text-dark transition-colors"
+              className="inline-block bg-transparent text-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold hover:text-cream transition-colors"
             >
               {t("menuViewAll")}
             </Link>
@@ -169,7 +179,7 @@ export function SeolgiokView() {
       </section>
 
       {/* 예약 CTA */}
-      <section className="bg-crimson text-cream py-20">
+      <section className="bg-dark text-cream py-20">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-gold text-xs tracking-[0.5em] uppercase mb-4">Reservation</p>
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">{t("reservationTitle")}</h2>
@@ -177,7 +187,7 @@ export function SeolgiokView() {
           <p className="text-cream/70 text-sm mb-10 leading-relaxed">{t("reservationDesc")}</p>
           <a
             href="tel:0507-1376-9086"
-            className="inline-flex items-center gap-3 bg-gold text-dark px-10 py-5 text-sm font-bold uppercase tracking-widest hover:bg-gold-hover transition-colors"
+            className="inline-flex items-center gap-3 bg-gold text-cream px-10 py-5 text-sm font-bold uppercase tracking-widest hover:bg-gold-hover transition-colors"
           >
             <PhoneIcon className="w-4 h-4" />
             {t("reservationCallBtn")} · 0507-1376-9086
@@ -215,7 +225,7 @@ export function SeolgiokView() {
               </div>
               <Link
                 href="/location"
-                className="inline-flex items-center gap-2 bg-transparent text-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold hover:text-dark transition-colors"
+                className="inline-flex items-center gap-2 bg-transparent text-gold border border-gold px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold hover:text-cream transition-colors"
               >
                 <MapPinIcon className="w-4 h-4" />
                 {t("viewDetail")}
@@ -268,7 +278,7 @@ export function SeolgiokView() {
             <p className="text-gray-400 text-sm">{t("faqFooterText")}</p>
             <a
               href="tel:0507-1376-9086"
-              className="inline-block bg-dark text-gold border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
+              className="inline-block bg-dark text-cream border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
             >
               {t("faqFooterButton")}
             </a>

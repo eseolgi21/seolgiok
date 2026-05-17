@@ -3,16 +3,15 @@ import { Link } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { BoardType, PostVisibility } from "@/generated/prisma";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbListJsonLd, ItemListJsonLd } from "@/components/JsonLd";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "announcement.Seolgiok" });
-  return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
-  };
+  return buildPageMetadata(locale, "/announcements", t("metaTitle"), t("metaDescription"));
 }
 
 async function getAnnouncements() {
@@ -35,6 +34,17 @@ export default async function AnnouncementsPage({ params }: Props) {
   const posts = await getAnnouncements();
 
   return (
+    <>
+      <BreadcrumbListJsonLd items={[
+        { name: "설기옥", item: `https://seolgiok.com/${locale}` },
+        { name: t("header.title"), item: `https://seolgiok.com/${locale}/announcements` },
+      ]} />
+      {posts.length > 0 && (
+        <ItemListJsonLd items={posts.map((p) => ({
+          name: p.title,
+          url: `https://seolgiok.com/${locale}/announcements/${p.id}`,
+        }))} />
+      )}
     <div className="min-h-screen bg-cream">
       {/* 헤더 */}
       <div className="bg-dark text-cream py-16 text-center relative overflow-hidden">
@@ -90,5 +100,6 @@ export default async function AnnouncementsPage({ params }: Props) {
         )}
       </div>
     </div>
+    </>
   );
 }

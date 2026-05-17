@@ -153,9 +153,9 @@ export function SeolgiokLogin() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-dark text-gold hover:bg-dark-hover border border-dark rounded-none py-4 text-sm font-bold uppercase tracking-widest transition-all mt-4"
+                            className="w-full bg-dark text-cream hover:bg-dark-hover border border-dark rounded-none py-4 text-sm font-bold uppercase tracking-widest transition-all mt-4"
                         >
-                            {loading ? <span className="loading loading-spinner text-gold" /> : t("buttons.submit")}
+                            {loading ? <span className="loading loading-spinner text-cream" /> : t("buttons.submit")}
                         </Button>
 
                         <div className="flex items-center justify-between text-xs text-gray-500 mt-6 pt-6 border-t border-cream-border">

@@ -31,10 +31,6 @@ export type ResolveUserResponse =
 export type SignupError =
   | "USERNAME_TAKEN"
   | "EMAIL_TAKEN"
-  | "REFERRER_NOT_FOUND"
-  | "SPONSOR_NOT_FOUND"
-  | "COUNTRY_CODE_INVALID"
-  | "COUNTRY_NOT_FOUND"
   | "VALIDATION_ERROR"
   | "UNKNOWN";
 

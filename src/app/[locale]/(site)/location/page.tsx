@@ -1,16 +1,15 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MapPinIcon, PhoneIcon, ClockIcon, TruckIcon } from "@heroicons/react/24/outline";
 import { CopyAddressButton } from "./CopyAddressButton";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbListJsonLd, FaqPageJsonLd } from "@/components/JsonLd";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "location" });
-  return {
-    title: `${t("title")} — 설기옥`,
-    description: t("subtitle"),
-  };
+  return buildPageMetadata(locale, "/location", `${t("title")} — 설기옥`, t("subtitle"));
 }
 
 export default async function LocationPage({ params }: Props) {
@@ -19,6 +18,17 @@ export default async function LocationPage({ params }: Props) {
   const t = await getTranslations("location");
 
   return (
+    <>
+      <BreadcrumbListJsonLd items={[
+        { name: "설기옥", item: `https://seolgiok.com/${locale}` },
+        { name: t("title"), item: `https://seolgiok.com/${locale}/location` },
+      ]} />
+      <FaqPageJsonLd items={[
+        { q: t("faq.qAddress"), a: t("address") },
+        { q: t("faq.qHours"), a: `${t("hours.weekday")}: ${t("hours.weekdayTime")} (${t("hours.weekdayNote")}) / ${t("hours.weekend")}: ${t("hours.weekendTime")} / ${t("hours.allYear")}` },
+        { q: t("faq.qParking"), a: `${t("parking.desc")} — ${t("parking.free")}` },
+        { q: t("faq.qPhone"), a: t("phone") },
+      ]} />
     <div className="min-h-screen bg-cream">
 
       {/* 헤더 */}
@@ -123,7 +133,7 @@ export default async function LocationPage({ params }: Props) {
             href="https://naver.me/xX7us7A8"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-dark text-gold border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
+            className="inline-flex items-center gap-2 bg-dark text-cream border border-dark hover:bg-dark-hover px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors"
           >
             <MapPinIcon className="w-4 h-4" />
             {t("naverMap")}
@@ -131,5 +141,6 @@ export default async function LocationPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   );
 }

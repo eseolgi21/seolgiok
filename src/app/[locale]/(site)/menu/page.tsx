@@ -2,16 +2,15 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { MenuGallery } from "./MenuGallery";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbListJsonLd, MenuJsonLd } from "@/components/JsonLd";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "menu" });
-  return {
-    title: `${t("title")} — 설기옥`,
-    description: t("subtitle"),
-  };
+  return buildPageMetadata(locale, "/menu", `${t("title")} — 설기옥`, t("subtitle"));
 }
 
 async function getMenuImages(): Promise<string[]> {
@@ -34,6 +33,12 @@ export default async function MenuPage({ params }: Props) {
   const images = await getMenuImages();
 
   return (
+    <>
+      <BreadcrumbListJsonLd items={[
+        { name: "설기옥", item: `https://seolgiok.com/${locale}` },
+        { name: t("title"), item: `https://seolgiok.com/${locale}/menu` },
+      ]} />
+      <MenuJsonLd url={`https://seolgiok.com/${locale}/menu`} />
     <div className="min-h-screen bg-cream">
       {/* 헤더 */}
       <div className="bg-dark text-cream py-16 text-center relative overflow-hidden">
@@ -60,5 +65,6 @@ export default async function MenuPage({ params }: Props) {
         )}
       </div>
     </div>
+    </>
   );
 }

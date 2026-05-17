@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { locales, type AppLocale } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo";
+import { FaqPageJsonLd } from "@/components/JsonLd";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -24,14 +26,11 @@ export async function generateMetadata({ params }: Props) {
 
   // Seolgiok
   const t = await getTranslations({ locale, namespace: "home.Seolgiok" });
-
-  return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
-  };
+  return buildPageMetadata(locale, "", t("metaTitle"), t("metaDescription"));
 }
 
 import { SeolgiokView } from "./views/Seolgiok";
+import { GrandOpeningPopup } from "@/components/GrandOpeningPopup";
 
 // ... (existing code)
 
@@ -45,10 +44,21 @@ export default async function HomePage({ params }: Props) {
 
   setRequestLocale(locale);
 
-  // 강제로 설기옥 뷰 보여주거나 BRAND_NAME 로직에 추가
-  // User asked to make introduction page, assuming it replaces the default or is conditioned.
-  // Given the explicit request "make introduction page", I will set it as default or use it directly.
-  // But to be safe and clear, I'll just render it directly for now as requested.
-  // Or simpler:
-  return <SeolgiokView />;
+  const t = await getTranslations({ locale, namespace: "home.Seolgiok" });
+  const faqItems = [
+    { q: t("faqQ1"), a: t("faqA1") },
+    { q: t("faqQ2"), a: t("faqA2") },
+    { q: t("faqQ3"), a: t("faqA3") },
+    { q: t("faqQ4"), a: t("faqA4") },
+    { q: t("faqQ5"), a: t("faqA5") },
+    { q: t("faqQ6"), a: t("faqA6") },
+  ];
+
+  return (
+    <>
+      <FaqPageJsonLd items={faqItems} />
+      <GrandOpeningPopup />
+      <SeolgiokView />
+    </>
+  );
 }
