@@ -25,6 +25,12 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
   },
+  verification: {
+    google: "dgO1zrI88ajwshkH888H9s5u_YecITQ-1MJp-tW7v94",
+    other: {
+      "naver-site-verification": ["78c73984e6e5294169803b1f14a384f3a243afe1"],
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
