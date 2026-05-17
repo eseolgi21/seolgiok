@@ -8,6 +8,7 @@ export const defaultLocale: AppLocale = "ko";
 export const routing = {
   locales,
   defaultLocale,
+  localeDetection: false, // Accept-Language 헤더 무시 (쿠키는 proxy.ts에서 직접 처리)
 };
 
 export const { Link, useRouter, usePathname, redirect } = createNavigation(routing);

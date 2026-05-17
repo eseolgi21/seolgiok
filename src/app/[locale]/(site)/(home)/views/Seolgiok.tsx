@@ -28,7 +28,7 @@ export function SeolgiokView() {
     <div className="min-h-screen bg-cream text-dark font-sans selection:bg-gold selection:text-white">
 
       {/* Hero */}
-      <section className="relative w-full min-h-[100dvh] bg-dark flex flex-col lg:flex-row">
+      <section className="relative w-full min-h-[100svh] bg-dark flex flex-col lg:flex-row">
 
         {/* 텍스트 패널 — 모바일: 하단 전체 / 데스크탑: 좌측 절반 */}
         <div className="order-2 lg:order-1 lg:w-1/2 flex items-center justify-center px-8 py-16 lg:py-0 lg:px-16 xl:px-24">
@@ -76,7 +76,7 @@ export function SeolgiokView() {
         </div>
 
         {/* 이미지 패널 — 모바일: 상단 55vw 고정 / 데스크탑: 우측 절반 전체 높이 */}
-        <div className="order-1 lg:order-2 lg:w-1/2 relative h-[55vw] max-h-[480px] lg:max-h-none lg:h-auto lg:min-h-[100dvh]">
+        <div className="order-1 lg:order-2 lg:w-1/2 relative h-[55vw] max-h-[480px] lg:max-h-none lg:h-auto lg:min-h-[100svh]">
           <Image
             src="/images/seolgiok_homescreen.png"
             alt="설기옥 — 한우 곰탕 장인"

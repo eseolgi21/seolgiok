@@ -1,18 +1,41 @@
 import { auth } from "./lib/auth/auth";
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
+import { routing, locales, defaultLocale, type AppLocale } from "./i18n/routing";
+import { NextRequest, NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware(routing);
 
-export default auth((req) => {
-  // 1. NextAuth Authentication (handled by auth wrapper)
-  // req.auth is available here if needed
+function getSavedLocale(req: NextRequest): AppLocale | null {
+  const cookie = req.cookies.get("NEXT_LOCALE")?.value;
+  if (cookie && (locales as readonly string[]).includes(cookie)) {
+    return cookie as AppLocale;
+  }
+  return null;
+}
 
-  // 2. Internationalization
+function getUrlLocale(req: NextRequest): AppLocale | null {
+  const segments = req.nextUrl.pathname.split("/");
+  const first = segments[1] ?? "";
+  if ((locales as readonly string[]).includes(first)) {
+    return first as AppLocale;
+  }
+  return null;
+}
+
+export default auth((req) => {
+  const urlLocale = getUrlLocale(req);
+  const savedLocale = getSavedLocale(req);
+
+  // URL에 로케일이 없고 저장된 쿠키가 기본값과 다를 때만 리다이렉트
+  if (!urlLocale && savedLocale && savedLocale !== defaultLocale) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${savedLocale}${req.nextUrl.pathname}`;
+    return NextResponse.redirect(url);
+  }
+
   return intlMiddleware(req);
 });
 
 export const config = {
-  // Skip next internal files, static assets, and API routes
   matcher: ["/((?!api|_next|.*\\..*).*)"],
 };

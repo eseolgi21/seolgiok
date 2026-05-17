@@ -88,7 +88,7 @@ export function SeolgiokLogin() {
     );
 
     return (
-        <div className="relative w-full min-h-[calc(100dvh-4rem)] flex items-center bg-cream selection:bg-gold selection:text-white">
+        <div className="relative w-full min-h-[calc(100svh-4rem)] flex items-center bg-cream selection:bg-gold selection:text-white">
             {/* Left: Image Section */}
             <div className="hidden lg:block w-1/2 h-full absolute top-0 left-0 overflow-hidden">
                 <Image

@@ -12,7 +12,7 @@ export default function SignupPage() {
 
   return (
     // [1] 전체 컨테이너
-    <div className="relative min-h-[calc(100dvh-4rem)] w-full flex items-center justify-center bg-cream selection:bg-gold selection:text-white pb-20">
+    <div className="relative min-h-[calc(100svh-4rem)] w-full flex items-center justify-center bg-cream selection:bg-gold selection:text-white pb-20">
 
       <div className="absolute top-0 left-0 w-full h-[300px] bg-dark z-0" />
 
