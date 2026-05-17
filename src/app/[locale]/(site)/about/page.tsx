@@ -55,10 +55,10 @@ export default async function AboutPage({ params }: Props) {
           </div>
           <div className="space-y-8">
             <div>
-              <p className="text-crimson text-xs tracking-[0.3em] uppercase mb-4">Our Story</p>
+              <p className="text-gold text-xs tracking-[0.3em] uppercase mb-4">Our Story</p>
               <h2 className="font-serif text-3xl font-bold text-dark leading-tight">
                 {t("featuresMainTitleStart")}
-                <span className="text-crimson">{t("featuresMainTitleHighlight")}</span>
+                <span className="text-gold">{t("featuresMainTitleHighlight")}</span>
               </h2>
             </div>
             <div className="space-y-4 text-gray-600 leading-relaxed">
@@ -66,7 +66,7 @@ export default async function AboutPage({ params }: Props) {
               <p>{t("featuresMainDescLine2")}</p>
               <p>{t("featuresMainDescLine3")}</p>
             </div>
-            <div className="w-12 h-px bg-crimson" />
+            <div className="w-12 h-px bg-gold" />
           </div>
         </div>
       </section>

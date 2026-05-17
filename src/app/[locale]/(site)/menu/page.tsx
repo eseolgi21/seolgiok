@@ -17,8 +17,9 @@ async function getMenuImages(): Promise<string[]> {
   try {
     const dir = path.join(process.cwd(), "public", "menu");
     const files = await fs.readdir(dir);
+    const EXCLUDE = new Set(["갈비찜.png", "갈비탕.png", "곱창전골.png", "맑은곰탕.png"]);
     return files
-      .filter((f) => /\.(jpe?g|png|webp|avif)$/i.test(f))
+      .filter((f) => /\.(jpe?g|png|webp|avif)$/i.test(f) && !EXCLUDE.has(f))
       .sort()
       .map((f) => `/menu/${encodeURIComponent(f)}`);
   } catch {

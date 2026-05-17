@@ -46,7 +46,7 @@ const ToastItem = ({ id, title, description, variant = "default", onClose }: Toa
     else alertClass += " alert-info";
 
     return (
-        <div className={`${alertClass} shadow-lg flex flex-row items-start gap-3 min-w-[320px] animate-in slide-in-from-right-full duration-300`}>
+        <div className={`${alertClass} shadow-lg flex flex-row items-start gap-3 min-w-[320px] animate-in slide-in-from-right-full duration-300 pointer-events-auto`}>
             <div className="flex-shrink-0 pt-1">
                 <ToastIcon variant={variant} />
             </div>
@@ -90,7 +90,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             {children}
 
             {/* DaisyUI Toast Container */}
-            <div className="toast toast-top toast-end z-[9999] gap-2 p-4">
+            <div className="toast toast-top toast-end z-[9999] gap-2 p-4 pointer-events-none">
                 {toasts.map((t) => (
                     <ToastItem key={t.id} {...t} onClose={removeToast} />
                 ))}

@@ -235,13 +235,21 @@ export function SeolgiokView() {
             <div className="relative h-72 lg:h-96 overflow-hidden border border-white/10">
               <iframe
                 src="https://map.naver.com/p/entry/place/1614979428?lang=ko"
-                width="100%"
-                height="100%"
-                style={{ border: 0, display: "block" }}
+                allow="accelerometer; gyroscope; geolocation"
                 allowFullScreen
                 loading="lazy"
                 title="설기옥 위치"
-                className="absolute inset-0 w-full h-full"
+                style={{
+                  border: 0,
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "200%",
+                  height: "200%",
+                  transform: "scale(0.5)",
+                  transformOrigin: "top left",
+                }}
               />
             </div>
           </div>

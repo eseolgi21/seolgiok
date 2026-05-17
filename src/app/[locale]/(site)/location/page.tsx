@@ -46,15 +46,24 @@ export default async function LocationPage({ params }: Props) {
       <div className="container mx-auto px-4 py-16 max-w-4xl space-y-10">
 
         {/* 지도 영역 */}
-        <div className="border border-cream-border bg-white shadow-sm overflow-hidden">
+        <div className="border border-cream-border bg-white shadow-sm overflow-hidden relative h-[260px] sm:h-[380px]">
           <iframe
             src="https://map.naver.com/p/entry/place/1614979428?lang=ko"
-            width="100%"
-            height="380"
-            style={{ border: 0, display: "block" }}
+            allow="accelerometer; gyroscope; geolocation"
             allowFullScreen
             loading="lazy"
             title="설기옥 위치"
+            style={{
+              border: 0,
+              display: "block",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "200%",
+              height: "200%",
+              transform: "scale(0.5)",
+              transformOrigin: "top left",
+            }}
           />
         </div>
 
@@ -62,7 +71,7 @@ export default async function LocationPage({ params }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* 주소 + 전화 */}
-          <div className="bg-white border border-cream-border p-8 space-y-6">
+          <div className="bg-white border border-cream-border p-5 sm:p-8 space-y-6">
             <div className="flex items-start gap-4">
               <MapPinIcon className="w-5 h-5 text-gold shrink-0 mt-0.5" />
               <div className="space-y-2">
@@ -97,7 +106,7 @@ export default async function LocationPage({ params }: Props) {
           </div>
 
           {/* 영업시간 */}
-          <div className="bg-white border border-cream-border p-8">
+          <div className="bg-white border border-cream-border p-5 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
               <ClockIcon className="w-5 h-5 text-gold" />
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">{t("hours.title")}</p>

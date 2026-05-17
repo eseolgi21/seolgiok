@@ -89,7 +89,7 @@ export default async function AnnouncementDetailPage({ params }: Props) {
         <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-gold/60" />
         <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-gold/60" />
         <p className="text-gold text-xs tracking-[0.3em] uppercase mb-3">SEOLGIOK</p>
-        <h1 className="font-serif text-2xl md:text-3xl font-bold text-cream max-w-2xl mx-auto px-8 leading-snug">
+        <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-cream max-w-2xl mx-auto px-4 sm:px-8 leading-snug">
           {post.title}
         </h1>
         <p className="text-cream/50 text-xs mt-4 tracking-wide">
@@ -100,7 +100,7 @@ export default async function AnnouncementDetailPage({ params }: Props) {
 
       {/* 본문 */}
       <div className="container mx-auto px-4 py-16 max-w-3xl">
-        <div className="bg-white border border-cream-border p-8 md:p-12">
+        <div className="bg-white border border-cream-border p-4 sm:p-8 md:p-12">
           <div
             className="prose prose-sm md:prose max-w-none
               prose-headings:font-serif prose-headings:text-dark
