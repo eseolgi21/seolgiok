@@ -38,28 +38,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }))
   );
 
-  // 동적 공지사항 페이지
-  const posts = await prisma.post.findMany({
-    where: {
-      boardType: BoardType.NOTICE,
-      isPublished: true,
-      visibility: PostVisibility.PUBLIC,
-    },
-    select: { id: true, updatedAt: true },
-    orderBy: { publishedAt: "desc" },
-  });
-
-  const postEntries: MetadataRoute.Sitemap = posts.flatMap((post) =>
-    LOCALES.map((locale) => ({
-      url: `${BASE_URL}/${locale}/announcements/${post.id}`,
-      lastModified: post.updatedAt,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-      alternates: {
-        languages: alternates(`/announcements/${post.id}`),
+  // 동적 공지사항 페이지 — DB 오류 시 정적 페이지만 반환
+  let postEntries: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        boardType: BoardType.NOTICE,
+        isPublished: true,
+        visibility: PostVisibility.PUBLIC,
       },
-    }))
-  );
+      select: { id: true, updatedAt: true },
+      orderBy: { publishedAt: "desc" },
+    });
+
+    postEntries = posts.flatMap((post) =>
+      LOCALES.map((locale) => ({
+        url: `${BASE_URL}/${locale}/announcements/${post.id}`,
+        lastModified: post.updatedAt,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+        alternates: {
+          languages: alternates(`/announcements/${post.id}`),
+        },
+      }))
+    );
+  } catch {
+    // DB 연결 실패 시 정적 페이지만 포함
+  }
 
   return [...staticEntries, ...postEntries];
 }
