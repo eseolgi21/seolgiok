@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { MapPinIcon, PhoneIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { DayNightHero } from "./DayNightHero";
 
 export function SeolgiokView() {
   const t = useTranslations("home.Seolgiok");
@@ -27,77 +28,7 @@ export function SeolgiokView() {
   return (
     <div className="min-h-screen bg-cream text-dark font-sans selection:bg-gold selection:text-white">
 
-      {/* Hero */}
-      <section className="relative w-full min-h-[100svh] bg-dark flex flex-col lg:flex-row">
-
-        {/* 텍스트 패널 — 모바일: 하단 전체 / 데스크탑: 좌측 절반 */}
-        <div className="order-2 lg:order-1 lg:w-1/2 flex items-center justify-center px-8 py-16 lg:py-0 lg:px-16 xl:px-24">
-          <div className="text-cream max-w-md w-full">
-            <p className="text-cream/60 text-xs tracking-[0.5em] uppercase mb-5">
-              {t("heroSubtitle")}
-            </p>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 leading-tight">
-              {t("heroTitle")}
-            </h1>
-            <p className="text-xs md:text-sm tracking-[0.3em] text-cream/40 mb-10">
-              KOREAN BEEF BONE SOUP
-            </p>
-
-            {/* 황금 구분선 */}
-            <div className="w-12 h-px bg-gold mb-10" />
-
-            {/* 가치관 뱃지 */}
-            <div className="flex flex-wrap gap-2 mb-12">
-              {[t("feature1Title"), t("feature2Title"), t("feature3Title")].map((v) => (
-                <span
-                  key={v}
-                  className="border border-gold/40 text-gold/80 text-xs tracking-[0.2em] px-4 py-2 uppercase"
-                >
-                  {v}
-                </span>
-              ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/menu"
-                className="bg-gold text-cream px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold-hover transition-colors text-center"
-              >
-                {t("heroButton")}
-              </Link>
-              <Link
-                href="/location"
-                className="bg-transparent text-cream border border-cream/40 px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-cream/10 transition-colors text-center"
-              >
-                {t("locationButton")}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* 이미지 패널 — 모바일: 상단 55vw 고정 / 데스크탑: 우측 절반 전체 높이 */}
-        <div className="order-1 lg:order-2 lg:w-1/2 relative h-[55vw] max-h-[480px] lg:max-h-none lg:h-auto lg:min-h-[100svh]">
-          <Image
-            src="/images/seolgiok_homescreen.png"
-            alt="설기옥 — 한우 곰탕 장인"
-            fill
-            className="object-cover object-[50%_60%] brightness-[0.85]"
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-          {/* 왼쪽 패딩 쪽으로 스며드는 그라데이션 (데스크탑) */}
-          <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-dark to-transparent" />
-          {/* 텍스트 패널 방향 아래 그라데이션 (모바일) */}
-          <div className="lg:hidden absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-dark to-transparent" />
-        </div>
-
-        {/* 스크롤 힌트 — 데스크탑 전용 */}
-        <div className="hidden lg:flex absolute bottom-8 left-1/4 -translate-x-1/2 animate-bounce opacity-40">
-          <svg className="w-5 h-5 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
-      </section>
+      <DayNightHero />
 
       {/* 철학 / Story */}
       <section className="py-24 px-6 max-w-4xl mx-auto text-center">

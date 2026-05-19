@@ -57,8 +57,7 @@ export const authConfig = {
                     { algorithms: ["HS256"] }
                 );
                 return payload;
-            } catch (error) {
-                console.error("JWT Decode Error:", error);
+            } catch {
                 return null;
             }
         },
