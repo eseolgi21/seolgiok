@@ -3,14 +3,14 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { Button, Form } from "@/components/ui";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import type { LoginResponse } from "@/types/auth/login/types";
-import { useToast } from "@/components/ui/feedback/Toast-provider";
+import { toast } from "sonner";
 import Image from "next/image";
 
 export function SeolgiokLogin() {
     const router = useRouter();
-    const { toast } = useToast();
     const t = useTranslations("authLogin.Seolgiok");
 
     const [id, setId] = useState("");
@@ -36,13 +36,8 @@ export function SeolgiokLogin() {
                 });
                 const data = (await res.json()) as LoginResponse;
                 if (res.ok && data.ok) {
-                    toast({
-                        title: t("messages.successTitle"),
-                        description: t("messages.successDesc", {
-                            username: data.user.username,
-                        }),
-                        variant: "success",
-                        position: "top-right",
+                    toast.success(t("messages.successTitle"), {
+                        description: t("messages.successDesc", { username: data.user.username }),
                         duration: 2000,
                     });
                     const params = new URLSearchParams(window.location.search);
@@ -56,35 +51,19 @@ export function SeolgiokLogin() {
                 if (!res.ok && !data.ok) {
                     let msg = t("messages.validationError");
 
-                    if (data.code === "USER_NOT_FOUND") {
-                        msg = t("messages.userNotFound");
-                    } else if (data.code === "INVALID_PASSWORD") {
-                        msg = t("messages.invalidPassword");
-                    } else if (data.code === "INVALID_CREDENTIALS") {
+                    if (data.code === "INVALID_CREDENTIALS") {
                         msg = t("messages.invalidCredentials");
                     }
 
-                    toast({
-                        title: t("messages.failTitle"),
-                        description: msg,
-                        variant: "error",
-                        position: "top-right",
-                        duration: 3500,
-                    });
+                    toast.error(t("messages.failTitle"), { description: msg, duration: 3500 });
                 }
             } catch {
-                toast({
-                    title: t("messages.networkErrorTitle"),
-                    description: t("messages.networkErrorDesc"),
-                    variant: "error",
-                    position: "top-right",
-                    duration: 3500,
-                });
+                toast.error(t("messages.networkErrorTitle"), { description: t("messages.networkErrorDesc"), duration: 3500 });
             } finally {
                 setLoading(false);
             }
         },
-        [formValid, loading, id, pwd, router, toast, t]
+        [formValid, loading, id, pwd, router, t]
     );
 
     return (
@@ -116,7 +95,7 @@ export function SeolgiokLogin() {
                         <div className="w-10 h-px bg-gold mx-auto mt-6" />
                     </div>
 
-                    <Form onSubmit={onSubmit} className="space-y-6" aria-busy={loading}>
+                    <form onSubmit={onSubmit} className="space-y-6" aria-busy={loading}>
                         <div className="space-y-5">
                             {/* ID Input */}
                             <div className="w-full">
@@ -153,9 +132,9 @@ export function SeolgiokLogin() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-dark text-cream hover:bg-dark-hover border border-dark rounded-none py-4 text-sm font-bold uppercase tracking-widest transition-all mt-4"
+                            className="w-full bg-dark text-cream hover:bg-dark-hover border border-dark rounded-none py-4 h-auto text-sm font-bold uppercase tracking-widest transition-all mt-4"
                         >
-                            {loading ? <span className="loading loading-spinner text-cream" /> : t("buttons.submit")}
+                            {loading ? <Loader2 className="animate-spin h-5 w-5 text-cream" /> : t("buttons.submit")}
                         </Button>
 
                         <div className="flex items-center justify-between text-xs text-gray-500 mt-6 pt-6 border-t border-cream-border">
@@ -166,7 +145,7 @@ export function SeolgiokLogin() {
                             </div>
                             <button type="button" onClick={() => router.push("/auth/signup")} className="font-bold text-dark hover:text-gold transition-colors">{t("buttons.signup")}</button>
                         </div>
-                    </Form>
+                    </form>
                 </div>
             </div>
         </div>

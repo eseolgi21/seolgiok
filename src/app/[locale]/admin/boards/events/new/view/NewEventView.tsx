@@ -6,6 +6,11 @@ import Link from "next/link";
 import type { AdminPostFormInput } from "../../types";
 import EventEditor from "./EventEditor";
 import { useEventCreate } from "../../hooks/useEventCreate";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 function toDatetimeLocalValue(iso: string | null | undefined): string {
   if (!iso) return "";
@@ -83,21 +88,18 @@ export default function NewEventView() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">이벤트 글쓰기</h1>
         <div className="flex gap-2">
-          <Link href="/admin/boards/events" className="btn btn-sm">
+          <Link href="/admin/boards/events" className="inline-flex items-center justify-center text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 rounded-md">
             목록
           </Link>
         </div>
       </div>
 
-      <div className="card bg-base-100 shadow">
-        <div className="card-body space-y-4">
+      <Card>
+        <CardContent className="p-5 space-y-4">
           {/* 제목 */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">제목</span>
-            </label>
-            <input
-              className="input input-bordered"
+          <div className="space-y-1">
+            <Label>제목</Label>
+            <Input
               value={form.title}
               onChange={(e) => setField("title", e.currentTarget.value)}
               placeholder="제목을 입력하세요"
@@ -106,13 +108,10 @@ export default function NewEventView() {
 
           {/* 이벤트 메타 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">이벤트 시작</span>
-              </label>
-              <input
+            <div className="space-y-1">
+              <Label>이벤트 시작</Label>
+              <Input
                 type="datetime-local"
-                className="input input-bordered"
                 value={toDatetimeLocalValue(form.eventStartAt ?? null)}
                 onChange={(e) =>
                   setField(
@@ -122,13 +121,10 @@ export default function NewEventView() {
                 }
               />
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">이벤트 종료</span>
-              </label>
-              <input
+            <div className="space-y-1">
+              <Label>이벤트 종료</Label>
+              <Input
                 type="datetime-local"
-                className="input input-bordered"
                 value={toDatetimeLocalValue(form.eventEndAt ?? null)}
                 onChange={(e) =>
                   setField(
@@ -139,24 +135,18 @@ export default function NewEventView() {
               />
             </div>
 
-            <div className="form-control md:col-span-2">
-              <label className="label">
-                <span className="label-text">배너 URL(선택)</span>
-              </label>
-              <input
-                className="input input-bordered"
+            <div className="space-y-1 md:col-span-2">
+              <Label>배너 URL(선택)</Label>
+              <Input
                 value={typeof form.bannerUrl === "string" ? form.bannerUrl : ""}
                 onChange={(e) => setField("bannerUrl", e.currentTarget.value)}
                 placeholder="https://..."
               />
             </div>
 
-            <div className="form-control md:col-span-2">
-              <label className="label">
-                <span className="label-text">CTA 링크 URL(선택)</span>
-              </label>
-              <input
-                className="input input-bordered"
+            <div className="space-y-1 md:col-span-2">
+              <Label>CTA 링크 URL(선택)</Label>
+              <Input
                 value={
                   typeof form.ctaLinkUrl === "string" ? form.ctaLinkUrl : ""
                 }
@@ -167,30 +157,24 @@ export default function NewEventView() {
           </div>
 
           {/* 본문 */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">본문(Tiptap)</span>
-            </label>
+          <div className="space-y-1">
+            <Label>본문(Tiptap)</Label>
             <EventEditor
               initialHtml={form.bodyHtml}
               onHtmlChange={onHtmlChange}
               onRawChange={onRawChange}
             />
-            <label className="label">
-              <span className="label-text-alt">
-                붙여넣기 시 이미지 data-src/srcset 정규화 적용
-              </span>
-            </label>
+            <p className="text-xs text-muted-foreground">
+              붙여넣기 시 이미지 data-src/srcset 정규화 적용
+            </p>
           </div>
 
           {/* 가시성/발행 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">가시성</span>
-              </label>
+            <div className="space-y-1">
+              <Label>가시성</Label>
               <select
-                className="select select-bordered"
+                className="border border-input bg-background rounded-md px-3 h-10 text-sm w-full focus:outline-none focus:ring-2 focus:ring-ring"
                 value={form.visibility}
                 onChange={(e) =>
                   setField(
@@ -203,33 +187,30 @@ export default function NewEventView() {
                 <option value="PRIVATE">PRIVATE</option>
               </select>
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">발행 여부</span>
-              </label>
-              <input
-                type="checkbox"
-                className="toggle"
-                checked={form.isPublished}
-                onChange={(e) =>
-                  setField("isPublished", e.currentTarget.checked)
-                }
-              />
+            <div className="space-y-1">
+              <Label>발행 여부</Label>
+              <div className="flex items-center pt-2">
+                <Switch
+                  checked={form.isPublished}
+                  onCheckedChange={(checked) =>
+                    setField("isPublished", checked)
+                  }
+                />
+              </div>
             </div>
           </div>
+        </CardContent>
 
-          {/* 액션 */}
-          <div className="card-actions justify-end mt-2">
-            <button
-              className="btn btn-primary"
-              onClick={onSubmitCreate}
-              disabled={creating}
-            >
-              {creating ? "등록 중..." : "등록하기"}
-            </button>
-          </div>
-        </div>
-      </div>
+        {/* 액션 */}
+        <CardFooter className="justify-end">
+          <Button
+            onClick={onSubmitCreate}
+            disabled={creating}
+          >
+            {creating ? "등록 중..." : "등록하기"}
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

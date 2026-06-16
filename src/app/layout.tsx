@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html data-theme="light" className={inter.className} suppressHydrationWarning>
+    <html className={inter.className} suppressHydrationWarning>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

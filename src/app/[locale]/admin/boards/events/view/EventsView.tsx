@@ -5,6 +5,11 @@ import Link from "next/link";
 import { useEventsList } from "../hooks/useEventsList";
 import { useEventDetail } from "../hooks/useEventDetail";
 import type { AdminPostListItem } from "../types";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type DeleteResult =
   | { ok: true; data: { deletedCount: number } }
@@ -106,20 +111,21 @@ export default function EventsView() {
           <p className="text-sm opacity-70 mt-1">제목 기준 목록</p>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-sm" onClick={refresh} disabled={loading}>
+          <Button variant="outline" size="sm" onClick={refresh} disabled={loading}>
             새로고침
-          </button>
-          <button
-            className="btn btn-error btn-sm"
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
             onClick={onDeleteSelected}
             disabled={!hasSelection}
             title="선택 삭제"
           >
             선택 삭제
-          </button>
+          </Button>
           <Link
             href="/admin/boards/events/new"
-            className="btn btn-primary btn-sm"
+            className="inline-flex items-center justify-center text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-8 px-3 rounded-md"
           >
             글쓰기
           </Link>
@@ -127,104 +133,102 @@ export default function EventsView() {
       </div>
 
       {error ? (
-        <div className="alert alert-error mb-4">
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       ) : null}
 
-      <div className="card bg-base-100 shadow">
-        <div className="card-body">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
-              <thead>
-                <tr>
-                  <th className="w-10">
-                    <input
-                      type="checkbox"
-                      className="checkbox checkbox-sm"
-                      aria-label="전체 선택"
-                      checked={allSelected}
-                      onChange={(e) => onToggleAll(e.currentTarget.checked)}
-                    />
-                  </th>
-                  <th>제목</th>
-                  <th>기간</th>
-                  <th>발행</th>
-                  <th>작성</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((row) => {
-                  const checked = selected.has(row.id);
-                  return (
-                    <tr key={row.id} className="hover">
-                      <td onClick={(e) => e.stopPropagation()}>
-                        <input
-                          type="checkbox"
-                          className="checkbox checkbox-sm"
-                          checked={checked}
-                          onChange={(e) =>
-                            onToggleOne(row.id, e.currentTarget.checked)
-                          }
-                        />
-                      </td>
-                      <td
-                        className="font-medium cursor-pointer"
-                        onClick={() => onRowClick(row)}
-                      >
-                        {row.title}
-                      </td>
-                      <td>
-                        {formatIso(row.eventStartAt)} ~{" "}
-                        {formatIso(row.eventEndAt)}
-                      </td>
-                      <td>{row.isPublished ? "Y" : "N"}</td>
-                      <td>{new Date(row.createdAt).toLocaleString()}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+      <Card>
+        <CardContent className="p-5">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 accent-primary"
+                    aria-label="전체 선택"
+                    checked={allSelected}
+                    onChange={(e) => onToggleAll(e.currentTarget.checked)}
+                  />
+                </TableHead>
+                <TableHead>제목</TableHead>
+                <TableHead>기간</TableHead>
+                <TableHead>발행</TableHead>
+                <TableHead>작성</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {list.map((row) => {
+                const checked = selected.has(row.id);
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 accent-primary"
+                        checked={checked}
+                        onChange={(e) =>
+                          onToggleOne(row.id, e.currentTarget.checked)
+                        }
+                      />
+                    </TableCell>
+                    <TableCell
+                      className="font-medium cursor-pointer"
+                      onClick={() => onRowClick(row)}
+                    >
+                      {row.title}
+                    </TableCell>
+                    <TableCell>
+                      {formatIso(row.eventStartAt)} ~{" "}
+                      {formatIso(row.eventEndAt)}
+                    </TableCell>
+                    <TableCell>{row.isPublished ? "Y" : "N"}</TableCell>
+                    <TableCell>{new Date(row.createdAt).toLocaleString()}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
 
-            {loading ? <div className="mt-2 text-sm">불러오는 중…</div> : null}
-            {list.length === 0 && !loading ? (
-              <div className="mt-2 text-sm opacity-70">데이터가 없습니다.</div>
-            ) : null}
-          </div>
-        </div>
-      </div>
+          {loading ? <div className="mt-2 text-sm">불러오는 중…</div> : null}
+          {list.length === 0 && !loading ? (
+            <div className="mt-2 text-sm opacity-70">데이터가 없습니다.</div>
+          ) : null}
+        </CardContent>
+      </Card>
 
       {/* 상세 */}
       <div className="mt-6">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xl font-semibold">게시글 보기</h2>
           {detail ? (
-            <button className="btn btn-ghost btn-sm" onClick={clearDetail}>
+            <Button variant="ghost" size="sm" onClick={clearDetail}>
               닫기
-            </button>
+            </Button>
           ) : null}
         </div>
 
         {loadingDetail ? (
-          <div className="alert">
-            <span>불러오는 중…</span>
-          </div>
+          <Alert>
+            <AlertDescription>불러오는 중…</AlertDescription>
+          </Alert>
         ) : null}
 
         {errorDetail ? (
-          <div className="alert alert-error">
-            <span>{errorDetail}</span>
-          </div>
+          <Alert variant="destructive">
+            <AlertDescription>{errorDetail}</AlertDescription>
+          </Alert>
         ) : null}
 
         {detail ? (
-          <div className="card bg-base-100 shadow">
-            <div className="card-body">
+          <Card>
+            <CardContent className="p-5">
               <div className="mb-2 flex flex-wrap gap-2">
-                <div className="badge">{detail.visibility}</div>
-                <div className="badge">
+                <Badge variant="secondary">{detail.visibility}</Badge>
+                <Badge variant="secondary">
                   {detail.isPublished ? "발행" : "미발행"}
-                </div>
+                </Badge>
               </div>
 
               <h3 className="text-lg font-bold mb-2">{detail.title}</h3>
@@ -284,8 +288,8 @@ export default function EventsView() {
                   </pre>
                 </details>
               ) : null}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ) : (
           <div className="text-sm opacity-70">
             행을 클릭하면 게시글이 여기에 표시됩니다.

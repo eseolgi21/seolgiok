@@ -4,7 +4,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/feedback/Toast-provider";
+import { toast } from "sonner";
 import { useTranslations } from "next-intl"; // [추가] 번역 훅
 
 import { useSignupValidation } from "@/app/[locale]/(site)/auth/signup/hooks/useSignupValidation";
@@ -31,8 +31,6 @@ export function SignupForm() {
   const t = useTranslations("authSignup");
 
   const router = useRouter();
-  const { toast } = useToast();
-
   const [f, setF] = useState<FormState>({
     username: "",
     email: "",
@@ -78,13 +76,7 @@ export function SignupForm() {
     setServerGeneralError(undefined);
 
     if (!formValid || loading) {
-      toast({
-        title: t("messages.inputErrorTitle"), // "입력값 오류"
-        description: t("messages.inputErrorDesc"), // "필수 항목과 형식을 확인해 주세요."
-        variant: "error",
-        position: "top-right",
-        duration: 2500,
-      });
+      toast.error(t("messages.inputErrorTitle"), { description: t("messages.inputErrorDesc") });
       return;
     }
 
@@ -100,13 +92,7 @@ export function SignupForm() {
       });
 
       if (res.ok) {
-        toast({
-          title: t("messages.successTitle"), // "회원가입 완료"
-          description: t("messages.successDesc"), // "이메일/아이디로 로그인해 주세요."
-          variant: "success",
-          position: "top-right",
-          duration: 2200,
-        });
+        toast.success(t("messages.successTitle"), { description: t("messages.successDesc") });
         router.push("/auth/login");
         return;
       }
@@ -124,20 +110,10 @@ export function SignupForm() {
           setServerGeneralError(t("errors.checkInput"));
       }
 
-      toast({
-        title: code ? t("messages.failTitle") : t("messages.inputErrorTitle"),
-        description: t("errors.checkInput"),
-        variant: "error",
-        position: "top-right",
-      });
+      toast.error(code ? t("messages.failTitle") : t("messages.inputErrorTitle"), { description: t("errors.checkInput") });
     } catch {
       setServerGeneralError(t("errors.serverError")); // "서버/네트워크 오류가 발생했습니다."
-      toast({
-        title: "Error",
-        description: t("errors.tempError"), // "일시적인 문제로 처리할 수 없습니다."
-        variant: "error",
-        position: "top-right",
-      });
+      toast.error("Error", { description: t("errors.tempError") });
     } finally {
       setLoading(false);
     }
@@ -176,7 +152,7 @@ export function SignupForm() {
   return (
     <section className="mx-auto max-w-screen-sm px-4 pt-4 pb-24">
       {serverGeneralError ? (
-        <div className="mb-3 text-sm text-error px-1">{serverGeneralError}</div>
+        <div className="mb-3 text-sm text-red-600 px-1">{serverGeneralError}</div>
       ) : null}
 
       {/* [수정] card 스타일 제거 (부모 컨테이너가 이미 스타일을 가지고 있음) */}

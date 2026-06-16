@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import type { SubmitBarProps } from "@/app/[locale]/(site)/auth/signup/types/signup/form";
 import { useTranslations } from "next-intl"; // [추가] 번역 훅 import
 
@@ -24,7 +25,7 @@ export function SubmitBar({ loading, disabled }: SubmitBarProps) {
         `}
       >
         {loading ? (
-          <span className="loading loading-spinner loading-sm text-cream" />
+          <Loader2 className="animate-spin h-4 w-4 text-cream" />
         ) : (
           t("buttons.submit")
         )}

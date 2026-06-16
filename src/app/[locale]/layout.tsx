@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { locales, type AppLocale } from "@/i18n/routing";
-import { ToastProvider } from "@/components/ui";
+import { Toaster } from "@/components/ui/sonner";
 import { HtmlLang } from "@/components/HtmlLang";
 
 function isAppLocale(value: string): value is AppLocale {
@@ -32,7 +32,8 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={localeParam} messages={messages}>
       <HtmlLang lang={localeParam} />
-      <ToastProvider>{children}</ToastProvider>
+      {children}
+      <Toaster position="top-right" richColors />
     </NextIntlClientProvider>
   );
 }

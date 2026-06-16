@@ -47,10 +47,10 @@ export default function MainHeader({
   return (
     <>
     <header className="sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-300 bg-white/90 border-gray-200">
-      <div className="navbar h-20 container mx-auto px-3 sm:px-6">
+      <div className="flex items-center h-20 container mx-auto px-3 sm:px-6">
 
         {/* 로고 */}
-        <div className="navbar-start shrink-0 w-auto">
+        <div className="shrink-0 flex items-center">
           <Link href="/" aria-label={t("aria.home")} className="inline-flex items-center lg:-ml-2">
             <Image
               src="/images/logo.png"
@@ -64,8 +64,8 @@ export default function MainHeader({
         </div>
 
         {/* PC 중앙 메뉴 */}
-        <div className="navbar-center hidden lg:flex items-center justify-center flex-1 min-w-0">
-          <ul className="menu menu-horizontal px-1 gap-2">
+        <div className="hidden lg:flex items-center justify-center flex-1 min-w-0">
+          <ul className="flex flex-row list-none px-1 gap-2">
             {navItems.map(({ href, label }) => (
               <li key={href}>
                 <Link
@@ -82,11 +82,11 @@ export default function MainHeader({
         </div>
 
         {/* 오른쪽 버튼 영역 */}
-        <div className="navbar-end flex items-center gap-2 w-auto shrink-0 ml-auto">
+        <div className="flex items-center gap-2 w-auto shrink-0 ml-auto">
           {isManager && (
             <Link
               href="/admin/dashboard"
-              className="hidden sm:inline-flex btn btn-outline mr-2 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black whitespace-nowrap rounded-none text-sm"
+              className="hidden sm:inline-flex items-center mr-2 border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black whitespace-nowrap rounded-none text-sm px-3 h-9 transition-colors"
             >
               {t("auth.admin")}
             </Link>
@@ -96,7 +96,7 @@ export default function MainHeader({
             variant="icon-only"
             direction="down"
             align="right"
-            triggerClassName="btn btn-ghost btn-circle btn-md"
+            triggerClassName="inline-flex items-center justify-center rounded-full h-10 w-10 hover:bg-gray-100 transition-colors text-gray-700"
           />
 
           {/* PC 전용: 로그인/회원가입 or UserCircle */}
@@ -104,23 +104,23 @@ export default function MainHeader({
             <div className="hidden lg:flex items-center gap-3">
               <Link
                 href="/auth/signup"
-                className="btn border border-gold bg-transparent text-gold hover:bg-gold hover:text-cream px-5 font-normal rounded-none transition-colors text-sm whitespace-nowrap uppercase tracking-wider"
+                className="inline-flex items-center justify-center border border-gold bg-transparent text-gold hover:bg-gold hover:text-cream px-5 h-9 font-normal rounded-none transition-colors text-sm whitespace-nowrap uppercase tracking-wider"
               >
                 {t("auth.signup")}
               </Link>
               <Link
                 href="/auth/login"
-                className="btn bg-dark hover:bg-dark-hover text-gold border border-dark px-5 font-normal rounded-none transition-colors shadow-sm text-sm whitespace-nowrap uppercase tracking-wider"
+                className="inline-flex items-center justify-center bg-dark hover:bg-dark-hover text-gold border border-dark px-5 h-9 font-normal rounded-none transition-colors shadow-sm text-sm whitespace-nowrap uppercase tracking-wider"
               >
                 {t("auth.login")}
               </Link>
             </div>
           ) : (
-            <div className="hidden lg:flex dropdown dropdown-end dropdown-hover">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle btn-md text-gray-700 hover:bg-gray-100">
+            <div className="hidden lg:flex relative group">
+              <div tabIndex={0} role="button" className="inline-flex items-center justify-center rounded-full h-10 w-10 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors">
                 <UserCircleIcon className="h-7 w-7" aria-hidden />
               </div>
-              <ul tabIndex={0} className="dropdown-content menu bg-white rounded-none z-[1] w-52 p-2 shadow-lg border border-[#e5e0d4]">
+              <ul className="absolute top-full right-0 hidden group-hover:block bg-white w-52 p-2 shadow-lg border border-[#e5e0d4] z-10">
                 {isManager && (
                   <li>
                     <Link href="/admin" className="text-gray-700 hover:text-gold hover:bg-transparent rounded-none px-3 py-2 font-medium">
@@ -155,7 +155,7 @@ export default function MainHeader({
 
           {/* 모바일 전용: 햄버거 버튼 */}
           <button
-            className="flex lg:hidden btn btn-ghost btn-circle btn-md text-gray-700 hover:bg-gray-100"
+            className="flex lg:hidden items-center justify-center rounded-full h-10 w-10 text-gray-700 hover:bg-gray-100 transition-colors"
             onClick={() => setMobileMenuOpen(v => !v)}
             aria-expanded={mobileMenuOpen}
             aria-label="메뉴 열기"
@@ -188,7 +188,7 @@ export default function MainHeader({
             <p className="text-gold text-xs tracking-[0.3em] uppercase">SEOLGIOK</p>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="btn btn-ghost btn-circle btn-sm text-cream hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-full h-8 w-8 text-cream hover:bg-white/10 transition-colors"
               aria-label="메뉴 닫기"
             >
               <XMarkIcon className="h-5 w-5" />

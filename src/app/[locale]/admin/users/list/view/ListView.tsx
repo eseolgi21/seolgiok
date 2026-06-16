@@ -2,6 +2,12 @@
 "use client";
 
 import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function formatDate(iso: string): string {
   try {
@@ -59,72 +65,79 @@ function UsersTable(props: {
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>username</th>
-              <th>email</th>
-              <th>name</th>
-              <th>country</th>
-              <th>created</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((u, idx) => (
-              <tr key={u.id}>
-                <td>{(page - 1) * pageSize + idx + 1}</td>
-                <td>{u.username}</td>
-                <td>{u.email}</td>
-                <td>{u.name}</td>
-                <td>{u.countryCode ?? "-"}</td>
-                <td>{formatDate(u.createdAt)}</td>
-                <td>
-                  <button className="btn btn-sm" onClick={() => onDetail(u.id)}>
-                    상세보기
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {rows.length === 0 && (
-              <tr>
-                <td colSpan={7} className="text-center">
-                  데이터가 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>#</TableHead>
+            <TableHead>username</TableHead>
+            <TableHead>email</TableHead>
+            <TableHead>name</TableHead>
+            <TableHead>country</TableHead>
+            <TableHead>created</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((u, idx) => (
+            <TableRow key={u.id}>
+              <TableCell>{(page - 1) * pageSize + idx + 1}</TableCell>
+              <TableCell>{u.username}</TableCell>
+              <TableCell>{u.email}</TableCell>
+              <TableCell>{u.name}</TableCell>
+              <TableCell>{u.countryCode ?? "-"}</TableCell>
+              <TableCell>{formatDate(u.createdAt)}</TableCell>
+              <TableCell>
+                <Button variant="outline" size="sm" onClick={() => onDetail(u.id)}>
+                  상세보기
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+          {rows.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center">
+                데이터가 없습니다.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
       {/* ✅ 페이지네이션 바 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="text-sm text-base-content/70">
+        <div className="text-sm text-muted-foreground">
           총 {total}명 · {startIdx}~{endIdx} 표시중 (페이지 {page}/{totalPages})
         </div>
 
-        <div className="join">
-          <button
-            className={`join-item btn btn-sm ${isFirstPage ? "btn-disabled" : ""}`}
+        <div className="flex">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-r-none"
             disabled={isFirstPage}
             onClick={goPrev}
           >
             이전
-          </button>
+          </Button>
 
-          <button className="join-item btn btn-sm btn-ghost no-animation cursor-default">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-none border-x-0 cursor-default hover:bg-background"
+            disabled
+          >
             {page} / {totalPages}
-          </button>
+          </Button>
 
-          <button
-            className={`join-item btn btn-sm ${isLastPage ? "btn-disabled" : ""}`}
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-l-none"
             disabled={isLastPage}
             onClick={goNext}
           >
             다음
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -156,98 +169,89 @@ function DetailPanel(props: {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-base-100/60 backdrop-blur z-50 flex items-center justify-center">
-      <div className="card w-full max-w-xl shadow-xl bg-base-100">
-        <div className="card-body">
-          <div className="flex items-center justify-between">
-            <h2 className="card-title">UserInfo 상세</h2>
-            <button className="btn btn-ghost btn-sm" onClick={onClose}>
+    <div className="fixed inset-0 bg-background/60 backdrop-blur z-50 flex items-center justify-center">
+      <Card className="w-full max-w-xl shadow-xl">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold">UserInfo 상세</h2>
+            <Button variant="ghost" size="sm" onClick={onClose}>
               닫기
-            </button>
+            </Button>
           </div>
 
-          {loading && <div className="loading loading-spinner loading-md" />}
+          {loading && <Loader2 className="animate-spin h-6 w-6 mx-auto" />}
 
           {!loading && (
             <>
               {detail ? (
                 <div className="space-y-4">
-                  <div className="overflow-x-auto">
-                    <table className="table">
-                      <tbody>
-                        <tr>
-                          <th>userId</th>
-                          <td>{detail.userId}</td>
-                        </tr>
-                        <tr>
-                          <th>referralCode</th>
-                          <td>{detail.referralCode}</td>
-                        </tr>
-                        <tr>
-                          <th>level</th>
-                          <td>
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="number"
-                                min={1}
-                                className="input input-bordered input-sm w-32"
-                                value={editLevel ?? ""}
-                                onChange={(e) => {
-                                  const v = Number(e.target.value);
-                                  if (Number.isFinite(v)) {
-                                    setEditLevel(v);
-                                  }
-                                }}
-                              />
-                              <button
-                                className={`btn btn-sm ${
-                                  savingLevel ? "btn-disabled" : "btn-primary"
-                                }`}
-                                onClick={onSaveLevel}
-                                disabled={
-                                  savingLevel || !editLevel || editLevel < 1
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableHead>userId</TableHead>
+                        <TableCell>{detail.userId}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead>referralCode</TableHead>
+                        <TableCell>{detail.referralCode}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead>level</TableHead>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="number"
+                              min={1}
+                              className="h-8 text-sm w-32"
+                              value={editLevel ?? ""}
+                              onChange={(e) => {
+                                const v = Number(e.target.value);
+                                if (Number.isFinite(v)) {
+                                  setEditLevel(v);
                                 }
-                              >
-                                {savingLevel ? "저장 중..." : "레벨 저장"}
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>googleOtpEnabled</th>
-                          <td>{detail.googleOtpEnabled ? "true" : "false"}</td>
-                        </tr>
-                        <tr>
-                          <th>googleOtpSecret</th>
-                          <td>{detail.googleOtpSecret ?? "-"}</td>
-                        </tr>
-                        <tr>
-                          <th>createdAt</th>
-                          <td>{formatDate(detail.createdAt)}</td>
-                        </tr>
-                        <tr>
-                          <th>updatedAt</th>
-                          <td>{formatDate(detail.updatedAt)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                              }}
+                            />
+                            <Button
+                              size="sm"
+                              onClick={onSaveLevel}
+                              disabled={
+                                savingLevel || !editLevel || editLevel < 1
+                              }
+                            >
+                              {savingLevel ? "저장 중..." : "레벨 저장"}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead>googleOtpEnabled</TableHead>
+                        <TableCell>{detail.googleOtpEnabled ? "true" : "false"}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead>createdAt</TableHead>
+                        <TableCell>{formatDate(detail.createdAt)}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead>updatedAt</TableHead>
+                        <TableCell>{formatDate(detail.updatedAt)}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                 </div>
               ) : (
-                <div className="alert">
-                  <span>해당 사용자의 UserInfo 가 없습니다.</span>
-                </div>
+                <Alert>
+                  <AlertDescription>해당 사용자의 UserInfo 가 없습니다.</AlertDescription>
+                </Alert>
               )}
             </>
           )}
-
-          <div className="card-actions justify-end">
-            <button className="btn" onClick={onClose}>
-              확인
-            </button>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button variant="outline" onClick={onClose}>
+            확인
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
@@ -278,20 +282,20 @@ export default function ListView(props: UseUsersListReturn) {
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">어드민 · 유저 리스트</h1>
-        <button className="btn btn-primary" onClick={refresh}>
+        <Button onClick={refresh}>
           새로고침
-        </button>
+        </Button>
       </div>
 
       {error && (
-        <div className="alert alert-error">
-          <span>{error}</span>
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {loading ? (
         <div className="flex items-center gap-2">
-          <span className="loading loading-spinner loading-md" />
+          <Loader2 className="animate-spin h-6 w-6" />
           <span>불러오는 중…</span>
         </div>
       ) : (

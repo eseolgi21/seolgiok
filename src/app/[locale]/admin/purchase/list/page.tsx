@@ -9,6 +9,14 @@ import {
     XMarkIcon,
     Cog6ToothIcon
 } from "@heroicons/react/24/outline";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type Keyword = {
     id: string;
@@ -264,13 +272,6 @@ export default function PurchasePage() {
         fetchData(newKeys, 1);
     };
 
-    // Optional: Save current active keywords as a "Saved Keyword"?
-    // The user asked to "add/delete item name keywords" for searching.
-    // I will add a small inline button to save a keyword to the persistent list if needed, 
-    // but the main requirement is just searching with multiple.
-
-    // Let's implement input KeyDown to add keyword
-    // Let's implement input KeyDown to add keyword or search
     const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -282,7 +283,7 @@ export default function PurchasePage() {
         // if (activeKeywords.length === 0) return;
 
         const message = activeKeywords.length > 0
-            ? `${activeKeywords.join(", ")} 키워드로 검색된 항목을 일괄 등록하시겠습니까?` // Using simplified message or dynamic
+            ? `${activeKeywords.join(", ")} 키워드로 검색된 항목을 일괄 등록하시겠습니까?`
             : `전체 미등록 항목을 일괄 등록하시겠습니까?`;
 
         if (!confirm(message)) return;
@@ -504,26 +505,25 @@ export default function PurchasePage() {
                 </div>
                 <div className="flex gap-2">
                     {selectedIds.length > 0 && (
-                        <button className="btn btn-error text-white" onClick={handleDeleteSelected}>
+                        <Button variant="destructive" onClick={handleDeleteSelected}>
                             선택 삭제 ({selectedIds.length})
-                        </button>
+                        </Button>
                     )}
-                    <button className="btn btn-secondary" onClick={() => setIsAddModalOpen(true)}>
+                    <Button variant="secondary" onClick={() => setIsAddModalOpen(true)}>
                         + 직접 추가
-                    </button>
-                    <button
-                        className={`btn gap-2 ${showMapping ? 'btn-active' : 'btn-ghost'}`}
+                    </Button>
+                    <Button
+                        variant={showMapping ? "secondary" : "ghost"}
                         onClick={() => setShowMapping(!showMapping)}
                     >
-
                         <Cog6ToothIcon className="w-5 h-5" />
                         엑셀 설정
-                    </button>
+                    </Button>
                     <div className="flex items-center gap-2">
                         {/* Mapping Dropdown Moved Here */}
                         <div className="flex gap-1 flex-shrink-0">
                             <select
-                                className="select select-sm select-bordered w-auto min-w-[160px]"
+                                className="border border-input bg-background rounded-md px-2 h-8 text-sm w-auto min-w-[160px] focus:outline-none focus:ring-1 focus:ring-ring"
                                 value={selectedMappingId}
                                 onChange={handleSelectMapping}
                             >
@@ -535,15 +535,15 @@ export default function PurchasePage() {
                                 ))}
                             </select>
                             {selectedMappingId && (
-                                <button className="btn btn-sm btn-square btn-outline btn-error" onClick={handleDeleteMapping} title="설정 삭제">
+                                <Button variant="destructive" size="sm" className="w-8 h-8 p-0" onClick={handleDeleteMapping} title="설정 삭제">
                                     <XMarkIcon className="w-4 h-4" />
-                                </button>
+                                </Button>
                             )}
                         </div>
 
                         {/* Filter Mode Selector */}
                         <select
-                            className="select select-sm select-bordered max-w-[100px]"
+                            className="border border-input bg-background rounded-md px-2 h-8 text-sm max-w-[100px] focus:outline-none focus:ring-1 focus:ring-ring"
                             value={filterMode}
                             onChange={(e) => setFilterMode(e.target.value as "ALL" | "EXCLUDE" | "INCLUDE")}
                         >
@@ -552,27 +552,16 @@ export default function PurchasePage() {
                             <option value="INCLUDE">포함</option>
                         </select>
 
-                        <input
+                        <Input
                             type="password"
                             placeholder="엑셀 비밀번호"
-                            className="input input-bordered input-sm w-32"
+                            className="w-32"
                             value={excelPassword}
                             onChange={(e) => setExcelPassword(e.target.value)}
                         />
-                        <label className={`btn btn-primary gap-2 ${uploading ? "loading" : ""}`}>
-                            {uploading ? "업로드 중..." : (
-                                <>
-                                    <ArrowUpTrayIcon className="w-5 h-5" />
-                                    엑셀 업로드
-                                </>
-                            )}
-                            <input
-                                type="file"
-                                accept=".xlsx, .xls"
-                                className="hidden"
-                                onChange={handleUpload}
-                                disabled={uploading}
-                            />
+                        <label className={`inline-flex items-center gap-2 cursor-pointer h-9 px-4 text-sm font-medium rounded-md ${uploading ? "bg-primary/70 text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"}`}>
+                            {uploading ? <><Loader2 className="animate-spin h-4 w-4" /> 업로드 중...</> : <><ArrowUpTrayIcon className="w-5 h-5" />엑셀 업로드</>}
+                            <input type="file" accept=".xlsx, .xls" className="hidden" onChange={handleUpload} disabled={uploading} />
                         </label>
                     </div>
                 </div>
@@ -581,320 +570,273 @@ export default function PurchasePage() {
 
             {/* Custom Mapping UI */}
             {showMapping && (
-                <div className="card bg-base-100 shadow-sm border border-base-200">
-                    <div className="card-body p-4">
+                <Card>
+                    <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-4">
                             <div>
                                 <h3 className="font-bold">엑셀 컬럼 매핑 설정</h3>
                                 <p className="text-xs text-gray-500">엑셀 파일의 헤더 이름이 다를 경우 아래 입력칸에 해당 컬럼명을 입력하세요.</p>
                             </div>
                             <div className="flex gap-2">
-
-                                <button className="btn btn-sm btn-outline" onClick={handleSaveMapping}>
+                                <Button size="sm" variant="outline" onClick={handleSaveMapping}>
                                     현재 설정 저장
-                                </button>
+                                </Button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            <div className="form-control">
-                                <label className="label"><span className="label-text">날짜 컬럼</span></label>
-                                <input type="text" className="input input-sm input-bordered" value={mapping.date} onChange={e => setMapping({ ...mapping, date: e.target.value })} />
+                            <div className="space-y-1">
+                                <Label>날짜 컬럼</Label>
+                                <Input className="h-8 text-sm" value={mapping.date} onChange={e => setMapping({ ...mapping, date: e.target.value })} />
                             </div>
-                            <div className="form-control">
-                                <label className="label"><span className="label-text">분류 컬럼</span></label>
-                                <input type="text" className="input input-sm input-bordered" value={mapping.category} onChange={e => setMapping({ ...mapping, category: e.target.value })} />
+                            <div className="space-y-1">
+                                <Label>분류 컬럼</Label>
+                                <Input className="h-8 text-sm" value={mapping.category} onChange={e => setMapping({ ...mapping, category: e.target.value })} />
                             </div>
-                            <div className="form-control">
-                                <label className="label"><span className="label-text">품목명 컬럼</span></label>
-                                <input type="text" className="input input-sm input-bordered" value={mapping.item} onChange={e => setMapping({ ...mapping, item: e.target.value })} />
+                            <div className="space-y-1">
+                                <Label>품목명 컬럼</Label>
+                                <Input className="h-8 text-sm" value={mapping.item} onChange={e => setMapping({ ...mapping, item: e.target.value })} />
                             </div>
-                            <div className="form-control">
-                                <label className="label"><span className="label-text">금액 컬럼</span></label>
-                                <input type="text" className="input input-sm input-bordered" value={mapping.amount} onChange={e => setMapping({ ...mapping, amount: e.target.value })} />
+                            <div className="space-y-1">
+                                <Label>금액 컬럼</Label>
+                                <Input className="h-8 text-sm" value={mapping.amount} onChange={e => setMapping({ ...mapping, amount: e.target.value })} />
                             </div>
-                            <div className="form-control">
-                                <label className="label"><span className="label-text">비고 컬럼</span></label>
-                                <input type="text" className="input input-sm input-bordered" value={mapping.note} onChange={e => setMapping({ ...mapping, note: e.target.value })} />
+                            <div className="space-y-1">
+                                <Label>비고 컬럼</Label>
+                                <Input className="h-8 text-sm" value={mapping.note} onChange={e => setMapping({ ...mapping, note: e.target.value })} />
                             </div>
                         </div>
-                    </div>
-                </div>
-            )
-            }
+                    </CardContent>
+                </Card>
+            )}
 
             {/* Keyword Search Section */}
-            <div className="card bg-base-100 shadow-sm border border-base-200">
-                <div className="card-body p-4">
+            <Card>
+                <CardContent className="p-4">
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-2">
                             <div className="relative flex-1">
-                                <input
+                                <Input
                                     type="text"
                                     placeholder="키워드 입력"
-                                    className="input input-bordered w-full max-w-xs"
+                                    className="max-w-xs"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={handleInputKeyDown}
                                 />
-                                <button className="btn btn-square" onClick={handleSearch}>
+                                <Button variant="outline" size="sm" className="ml-2" onClick={handleSearch}>
                                     <MagnifyingGlassIcon className="w-5 h-5" />
-                                </button>
+                                </Button>
                             </div>
-                            <button className="btn btn-primary" onClick={handleSearch}>검색 ({activeKeywords.length})</button>
-                            <button className="btn btn-secondary" onClick={handleConfirm}>
+                            <Button onClick={handleSearch}>검색 ({activeKeywords.length})</Button>
+                            <Button variant="secondary" onClick={handleConfirm}>
                                 {activeKeywords.length > 0 ? "검색 결과 일괄 등록" : "전체 일괄 등록"}
-                            </button>
+                            </Button>
                         </div>
 
                         {/* Active Keywords (Chips) */}
                         {activeKeywords.length > 0 && (
                             <div className="flex flex-wrap gap-2">
                                 {activeKeywords.map(k => (
-                                    <div key={k} className="badge badge-primary gap-1 pl-3 pr-1 py-3">
+                                    <Badge key={k} className="gap-1 pl-3 pr-1 py-1.5">
                                         {k}
-                                        <button className="btn btn-xs btn-circle btn-ghost text-white" onClick={() => handleRemoveKeyword(k)}>
+                                        <Button variant="ghost" size="sm" className="h-5 w-5 rounded-full p-0 text-white hover:text-white hover:bg-white/20" onClick={() => handleRemoveKeyword(k)}>
                                             <XMarkIcon className="w-3 h-3" />
-                                        </button>
-                                    </div>
+                                        </Button>
+                                    </Badge>
                                 ))}
-                                <button className="btn btn-xs btn-ghost text-gray-500" onClick={() => setActiveKeywords([])}>전체 삭제</button>
-                                <button
-                                    className="btn btn-xs btn-error btn-outline ml-auto"
-                                    onClick={handleDeleteExcept}
-                                >
+                                <Button variant="ghost" size="sm" className="h-6 text-xs px-2 text-gray-500" onClick={() => setActiveKeywords([])}>전체 삭제</Button>
+                                <Button variant="outline" size="sm" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground ml-auto" onClick={handleDeleteExcept}>
                                     검색 결과 외 모두 삭제
-                                </button>
+                                </Button>
                             </div>
                         )}
 
                         {/* Saved Keywords (Quick Add) */}
                         {savedKeywords.length > 0 && (
-                            <div className="flex flex-wrap gap-2 items-center mt-2 pt-2 border-t border-base-200">
+                            <div className="flex flex-wrap gap-2 items-center mt-2 pt-2 border-t border-border">
                                 <span className="text-xs font-semibold text-gray-500">즐겨찾기:</span>
                                 {savedKeywords.map((k) => (
-                                    <div
+                                    <Badge
                                         key={k.id}
-                                        className={`badge gap-1 cursor-pointer pr-0 hover:bg-gray-200 ${activeKeywords.includes(k.keyword) ? 'badge-neutral opacity-50' : 'badge-ghost'}`}
+                                        variant="secondary"
+                                        className={`gap-1 cursor-pointer pr-0 hover:bg-gray-200 ${activeKeywords.includes(k.keyword) ? 'opacity-50' : ''}`}
                                         onClick={() => handleAddKeyword(k.keyword)}
                                     >
                                         {k.keyword}
                                         <button
-                                            className="btn btn-ghost btn-xs btn-circle h-4 w-4 min-h-0"
+                                            className="inline-flex items-center justify-center h-4 w-4 rounded-full hover:bg-gray-300"
                                             onClick={(e) => handleDeleteKeyword(k.id, e)}
                                         >
                                             <XMarkIcon className="w-3 h-3" />
                                         </button>
-                                    </div>
+                                    </Badge>
                                 ))}
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
             {/* Data Table */}
-            <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="table table-zebra w-full">
-                        <thead>
-                            <tr className="bg-base-200">
-                                <th className="w-10">
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            className="checkbox checkbox-sm"
-                                            onChange={handleSelectAll}
-                                            checked={items.length > 0 && selectedIds.length === items.length}
-                                        />
-                                    </label>
-                                </th>
-                                <th>상태</th>
-                                <th>일자</th>
-                                <th>분류</th>
-                                <th>품목명</th>
-                                <th className="text-right">금액</th>
-                                <th>비고</th>
-                            </tr>
+            <Card className="overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-muted border-0">
+                            <TableHead className="w-10">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                        onChange={handleSelectAll}
+                                        checked={items.length > 0 && selectedIds.length === items.length}
+                                    />
+                                </label>
+                            </TableHead>
+                            <TableHead>상태</TableHead>
+                            <TableHead>일자</TableHead>
+                            <TableHead>분류</TableHead>
+                            <TableHead>품목명</TableHead>
+                            <TableHead className="text-right">금액</TableHead>
+                            <TableHead>비고</TableHead>
+                        </TableRow>
 
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={6} className="text-center py-10">
-                                        <span className="loading loading-spinner"></span>
-                                    </td>
-                                </tr>
-                            ) : items.length === 0 ? (
-                                <tr>
-                                    <td colSpan={6} className="text-center py-10 text-gray-500">
-                                        데이터가 없습니다.
-                                    </td>
-                                </tr>
-                            ) : (
-                                items.map((item) => (
-                                    <tr key={item.id} className={item.confirmed ? "bg-base-100" : "bg-base-100 opacity-60"}>
-                                        <th>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    className="checkbox checkbox-sm"
-                                                    checked={selectedIds.includes(item.id)}
-                                                    onChange={() => handleCheckboxChange(item.id)}
-                                                />
-                                            </label>
-                                        </th>
-                                        <td>
-                                            {item.confirmed ? (
-                                                <span className="badge badge-success badge-sm">등록됨</span>
-                                            ) : (
-                                                <span className="badge badge-ghost badge-sm">대기</span>
-                                            )}
-                                        </td>
-                                        <td className="whitespace-nowrap">{format(new Date(item.date), "yyyy-MM-dd")}</td>
-                                        <td>
-                                            {editingId === item.id && editingField === "CATEGORY" ? (
-                                                <input
-                                                    type="text"
-                                                    className="input input-xs input-bordered w-24"
-                                                    value={editValue}
-                                                    onChange={e => setEditValue(e.target.value)}
-                                                    onBlur={saveEditing}
-                                                    onKeyDown={e => {
-                                                        if (e.key === 'Enter') saveEditing();
-                                                        if (e.key === 'Escape') cancelEditing();
-                                                    }}
-                                                    autoFocus
-                                                />
-                                            ) : (
-                                                <span
-                                                    className="badge badge-sm badge-ghost cursor-pointer hover:bg-base-300"
-                                                    onClick={() => startEditing(item, "CATEGORY")}
-                                                >
-                                                    {item.category}
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td className="font-medium">{item.itemName}</td>
-                                        <td className="text-right font-mono text-error">
-                                            {editingId === item.id && editingField === "AMOUNT" ? (
-                                                <input
-                                                    type="number"
-                                                    className="input input-xs input-bordered w-24 text-right"
-                                                    value={editValue}
-                                                    onChange={e => setEditValue(e.target.value)}
-                                                    onBlur={saveEditing}
-                                                    onKeyDown={e => {
-                                                        if (e.key === 'Enter') saveEditing();
-                                                        if (e.key === 'Escape') cancelEditing();
-                                                    }}
-                                                    autoFocus
-                                                />
-                                            ) : (
-                                                <span
-                                                    className="cursor-pointer hover:underline decoration-dashed"
-                                                    onClick={() => startEditing(item, "AMOUNT")}
-                                                >
-                                                    {-item.amount > 0 ? '+' : ''}{(-item.amount).toLocaleString()}
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td className="text-gray-500 text-sm max-w-xs truncate" title={item.note || ""}>{item.note}</td>
+                    </TableHeader>
+                    <TableBody>
+                        {loading ? (
+                            <TableRow>
+                                <TableCell colSpan={6} className="text-center py-10">
+                                    <Loader2 className="animate-spin h-4 w-4 mx-auto" />
+                                </TableCell>
+                            </TableRow>
+                        ) : items.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={6} className="text-center py-10 text-gray-500">
+                                    데이터가 없습니다.
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            items.map((item) => (
+                                <TableRow key={item.id} className={item.confirmed ? "bg-background" : "bg-background opacity-60"}>
+                                    <TableHead>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                                checked={selectedIds.includes(item.id)}
+                                                onChange={() => handleCheckboxChange(item.id)}
+                                            />
+                                        </label>
+                                    </TableHead>
+                                    <TableCell>
+                                        {item.confirmed ? (
+                                            <Badge className="bg-green-500 text-white hover:bg-green-500 text-xs">등록됨</Badge>
+                                        ) : (
+                                            <Badge variant="secondary" className="text-xs">대기</Badge>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="whitespace-nowrap">{format(new Date(item.date), "yyyy-MM-dd")}</TableCell>
+                                    <TableCell>
+                                        {editingId === item.id && editingField === "CATEGORY" ? (
+                                            <Input
+                                                type="text"
+                                                className="h-6 text-xs px-2 w-24"
+                                                value={editValue}
+                                                onChange={e => setEditValue(e.target.value)}
+                                                onBlur={saveEditing}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') saveEditing();
+                                                    if (e.key === 'Escape') cancelEditing();
+                                                }}
+                                                autoFocus
+                                            />
+                                        ) : (
+                                            <Badge
+                                                variant="secondary"
+                                                className="text-xs cursor-pointer hover:bg-gray-200"
+                                                onClick={() => startEditing(item, "CATEGORY")}
+                                            >
+                                                {item.category}
+                                            </Badge>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="font-medium">{item.itemName}</TableCell>
+                                    <TableCell className="text-right font-mono text-red-600">
+                                        {editingId === item.id && editingField === "AMOUNT" ? (
+                                            <Input
+                                                type="number"
+                                                className="h-6 text-xs px-2 w-24 text-right"
+                                                value={editValue}
+                                                onChange={e => setEditValue(e.target.value)}
+                                                onBlur={saveEditing}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') saveEditing();
+                                                    if (e.key === 'Escape') cancelEditing();
+                                                }}
+                                                autoFocus
+                                            />
+                                        ) : (
+                                            <span
+                                                className="cursor-pointer hover:underline decoration-dashed"
+                                                onClick={() => startEditing(item, "AMOUNT")}
+                                            >
+                                                {-item.amount > 0 ? '+' : ''}{(-item.amount).toLocaleString()}
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="text-gray-500 text-sm max-w-xs truncate" title={item.note || ""}>{item.note}</TableCell>
 
-                                    </tr>
+                                </TableRow>
 
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
 
                 {/* Pagination */}
-                <div className="flex justify-center p-4 border-t border-base-200">
-                    <div className="join">
-                        <button
-                            className="join-item btn btn-sm"
-                            disabled={page === 1}
-                            onClick={() => setPage(p => Math.max(1, p - 1))}
-                        >
-                            «
-                        </button>
-                        <button className="join-item btn btn-sm">
-                            {page} / {Math.max(1, Math.ceil(total / 100))}
-                        </button>
-                        <button
-                            className="join-item btn btn-sm"
-                            disabled={page * 100 >= total}
-                            onClick={() => setPage(p => p + 1)}
-                        >
-                            »
-                        </button>
+                <div className="flex justify-center p-4 border-t border-border">
+                    <div className="flex">
+                        <Button variant="outline" size="sm" className="rounded-r-none" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>«</Button>
+                        <Button variant="outline" size="sm" className="rounded-none border-x-0 cursor-default hover:bg-background" disabled>{page} / {Math.max(1, Math.ceil(total / 100))}</Button>
+                        <Button variant="outline" size="sm" className="rounded-l-none" disabled={page * 100 >= total} onClick={() => setPage(p => p + 1)}>»</Button>
                     </div>
 
                 </div>
-            </div>
+            </Card>
             {/* Add Modal */}
-            {
-                isAddModalOpen && (
-                    <div className="modal modal-open">
-                        <div className="modal-box">
-                            <h3 className="font-bold text-lg mb-4">매입 내역 직접 추가</h3>
-                            <div className="form-control mb-2">
-                                <label className="label">날짜</label>
-                                <input
-                                    type="date"
-                                    className="input input-bordered"
-                                    value={newItem.date}
-                                    onChange={e => setNewItem({ ...newItem, date: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-control mb-2">
-                                <label className="label">분류</label>
-                                <input
-                                    type="text"
-                                    className="input input-bordered"
-                                    placeholder="예: 식자재"
-                                    value={newItem.category}
-                                    onChange={e => setNewItem({ ...newItem, category: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-control mb-2">
-                                <label className="label">품목명</label>
-                                <input
-                                    type="text"
-                                    className="input input-bordered"
-                                    placeholder="예: 쌀 20kg"
-                                    value={newItem.itemName}
-                                    onChange={e => setNewItem({ ...newItem, itemName: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-control mb-2">
-                                <label className="label">금액</label>
-                                <input
-                                    type="number"
-                                    className="input input-bordered"
-                                    placeholder="숫자만 입력"
-                                    value={newItem.amount}
-                                    onChange={e => setNewItem({ ...newItem, amount: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-control mb-4">
-                                <label className="label">비고</label>
-                                <input
-                                    type="text"
-                                    className="input input-bordered"
-                                    value={newItem.note}
-                                    onChange={e => setNewItem({ ...newItem, note: e.target.value })}
-                                />
-                            </div>
-                            <div className="modal-action">
-                                <button className="btn" onClick={() => setIsAddModalOpen(false)}>취소</button>
-                                <button className="btn btn-primary" onClick={handleCreate}>추가</button>
-                            </div>
+            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>매입 내역 직접 추가</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-3">
+                        <div className="space-y-1">
+                            <Label>날짜</Label>
+                            <Input type="date" value={newItem.date} onChange={e => setNewItem({ ...newItem, date: e.target.value })} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label>분류</Label>
+                            <Input type="text" placeholder="예: 식자재" value={newItem.category} onChange={e => setNewItem({ ...newItem, category: e.target.value })} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label>품목명</Label>
+                            <Input type="text" placeholder="예: 쌀 20kg" value={newItem.itemName} onChange={e => setNewItem({ ...newItem, itemName: e.target.value })} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label>금액</Label>
+                            <Input type="number" placeholder="숫자만 입력" value={newItem.amount} onChange={e => setNewItem({ ...newItem, amount: e.target.value })} />
+                        </div>
+                        <div className="space-y-1">
+                            <Label>비고</Label>
+                            <Input type="text" value={newItem.note} onChange={e => setNewItem({ ...newItem, note: e.target.value })} />
                         </div>
                     </div>
-                )
-            }
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>취소</Button>
+                        <Button onClick={handleCreate}>추가</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div >
     );
 }

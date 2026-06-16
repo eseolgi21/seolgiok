@@ -5,6 +5,12 @@ import { useState, useEffect, useCallback } from "react";
 import { format, addMonths, subMonths, startOfMonth, getDay } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type DailyStat = {
     date: string;
@@ -108,37 +114,43 @@ export default function ProfitAnalysisPage() {
 
             {/* Monthly Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                    <div className="stat-title">월 총 매출</div>
-                    <div className="stat-value text-blue-600">+{totalSales.toLocaleString()}</div>
-                </div>
-                <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                    <div className="stat-title">월 총 매입</div>
-                    <div className="stat-value text-red-600">-{totalPurchase.toLocaleString()}</div>
-                </div>
-                <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                    <div className="stat-title">월 순수익</div>
-                    <div className={`stat-value ${totalProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
-                        {totalProfit >= 0 ? '+' : ''}{totalProfit.toLocaleString()}
-                    </div>
-                </div>
+                <Card>
+                    <CardContent className="p-4 pt-4">
+                        <p className="text-sm text-muted-foreground">월 총 매출</p>
+                        <p className="text-3xl font-bold text-blue-600 mt-1">+{totalSales.toLocaleString()}</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-4 pt-4">
+                        <p className="text-sm text-muted-foreground">월 총 매입</p>
+                        <p className="text-3xl font-bold text-red-600 mt-1">-{totalPurchase.toLocaleString()}</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-4 pt-4">
+                        <p className="text-sm text-muted-foreground">월 순수익</p>
+                        <p className={`text-3xl font-bold mt-1 ${totalProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                            {totalProfit >= 0 ? '+' : ''}{totalProfit.toLocaleString()}
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
 
             {/* Calendar Controls */}
-            <div className="flex justify-between items-center bg-base-100 p-4 rounded-t-lg border border-base-200 border-b-0">
-                <button className="btn btn-sm btn-ghost" onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
+            <div className="flex justify-between items-center bg-background p-4 rounded-t-lg border border-border border-b-0">
+                <Button variant="ghost" size="sm" onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
                     <ChevronLeftIcon className="w-5 h-5" />
-                </button>
+                </Button>
                 <h2 className="text-xl font-bold font-mono">
                     {format(currentDate, "yyyy년 MM월", { locale: ko })}
                 </h2>
-                <button className="btn btn-sm btn-ghost" onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
                     <ChevronRightIcon className="w-5 h-5" />
-                </button>
+                </Button>
             </div>
 
             {/* Calendar Grid */}
-            <div className="bg-base-100 border border-base-200 rounded-b-lg p-4">
+            <div className="bg-background border border-border rounded-b-lg p-4">
                 {/* Week Header */}
                 <div className="grid grid-cols-7 mb-2 text-center font-bold text-gray-500">
                     <div className="text-red-500">일</div>
@@ -151,9 +163,9 @@ export default function ProfitAnalysisPage() {
                 </div>
 
                 {/* Days */}
-                <div className="grid grid-cols-7 gap-px bg-base-200 border border-base-200">
+                <div className="grid grid-cols-7 gap-px bg-muted border border-border">
                     {emptySlots.map((_, i) => (
-                        <div key={`empty-${i}`} className="bg-base-100 min-h-[120px]" />
+                        <div key={`empty-${i}`} className="bg-background min-h-[120px]" />
                     ))}
 
                     {stats.map((day) => {
@@ -164,7 +176,7 @@ export default function ProfitAnalysisPage() {
                         return (
                             <div
                                 key={day.date}
-                                className={`bg-base-100 min-h-[120px] p-2 hover:bg-base-50 cursor-pointer transition-colors relative flex flex-col justify-between group ${hasData ? 'border-indigo-50' : ''}`}
+                                className={`bg-background min-h-[120px] p-2 hover:bg-gray-50 cursor-pointer transition-colors relative flex flex-col justify-between group ${hasData ? 'border-indigo-50' : ''}`}
                                 onClick={() => handleDateClick(day.date)}
                             >
                                 <span className={`text-sm font-semibold ${getDay(new Date(day.date)) === 0 ? 'text-red-500' : getDay(new Date(day.date)) === 6 ? 'text-blue-500' : ''}`}>
@@ -193,23 +205,23 @@ export default function ProfitAnalysisPage() {
             </div>
 
             {/* Detail Modal */}
-            <dialog id="detail_modal" className="modal">
-                <div className="modal-box w-11/12 max-w-4xl h-[80vh] flex flex-col p-0">
-                    <div className="bg-base-200 p-4 flex justify-between items-center sticky top-0 z-10">
+            <dialog id="detail_modal" className="fixed inset-0 z-50 m-auto w-11/12 max-w-4xl rounded-lg bg-background shadow-xl border-0 p-0 open:flex open:flex-col backdrop:bg-black/50">
+                <div className="w-full h-[80vh] flex flex-col overflow-hidden rounded-lg">
+                    <div className="bg-muted p-4 flex justify-between items-center sticky top-0 z-10">
                         <h3 className="font-bold text-lg">
                             {selectedDate} 상세 내역
                         </h3>
                         <form method="dialog">
-                            <button className="btn btn-sm btn-circle btn-ghost">
+                            <Button variant="ghost" size="icon" className="rounded-full h-7 w-7">
                                 <XMarkIcon className="w-5 h-5" />
-                            </button>
+                            </Button>
                         </form>
                     </div>
 
                     <div className="p-4 flex-1 overflow-y-auto">
                         {detailLoading ? (
                             <div className="flex justify-center py-20">
-                                <span className="loading loading-spinner loading-lg"></span>
+                                <Loader2 className="animate-spin h-8 w-8" />
                             </div>
                         ) : detailData ? (
                             <>
@@ -232,57 +244,57 @@ export default function ProfitAnalysisPage() {
                                 </div>
 
                                 {/* Tabs */}
-                                <div className="tabs tabs-boxed mb-4">
-                                    <a className={`tab ${activeTab === 'ALL' ? 'tab-active' : ''}`} onClick={() => setActiveTab('ALL')}>전체</a>
-                                    <a className={`tab ${activeTab === 'SALES' ? 'tab-active' : ''}`} onClick={() => setActiveTab('SALES')}>매출 ({detailData.sales.length})</a>
-                                    <a className={`tab ${activeTab === 'PURCHASE' ? 'tab-active' : ''}`} onClick={() => setActiveTab('PURCHASE')}>매입 ({detailData.purchases.length})</a>
-                                </div>
+                                <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "ALL" | "SALES" | "PURCHASE")} className="mb-4">
+                                    <TabsList>
+                                        <TabsTrigger value="ALL">전체</TabsTrigger>
+                                        <TabsTrigger value="SALES">매출 ({detailData.sales.length})</TabsTrigger>
+                                        <TabsTrigger value="PURCHASE">매입 ({detailData.purchases.length})</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
 
                                 {/* Lists */}
-                                <div className="overflow-x-auto">
-                                    <table className="table table-sm table-pin-rows">
-                                        <thead>
-                                            <tr>
-                                                <th>유형</th>
-                                                <th>분류</th>
-                                                <th>품목명</th>
-                                                <th className="text-right">금액</th>
-                                                <th>비고</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(activeTab === 'ALL' || activeTab === 'SALES') && detailData.sales.map((item, idx) => (
-                                                <tr key={`sale-${idx}`} className="hover:bg-blue-50">
-                                                    <td><span className="badge badge-primary badge-outline badge-xs">매출</span></td>
-                                                    <td>{item.category}</td>
-                                                    <td className="font-semibold">{item.itemName}</td>
-                                                    <td className="text-right text-blue-600">+{item.amount.toLocaleString()}</td>
-                                                    <td className="text-xs text-gray-500">{item.note}</td>
-                                                </tr>
-                                            ))}
-                                            {(activeTab === 'ALL' || activeTab === 'PURCHASE') && detailData.purchases.map((item, idx) => (
-                                                <tr key={`purchase-${idx}`} className="hover:bg-red-50">
-                                                    <td><span className="badge badge-error badge-outline badge-xs">매입</span></td>
-                                                    <td>{item.category}</td>
-                                                    <td className="font-semibold">{item.itemName}</td>
-                                                    <td className="text-right text-red-600">-{item.amount.toLocaleString()}</td>
-                                                    <td className="text-xs text-gray-500">{item.note}</td>
-                                                </tr>
-                                            ))}
-                                            {activeTab === 'ALL' && detailData.sales.length === 0 && detailData.purchases.length === 0 && (
-                                                <tr><td colSpan={5} className="text-center py-10 text-gray-400">데이터가 없습니다.</td></tr>
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <Table className="text-sm">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>유형</TableHead>
+                                            <TableHead>분류</TableHead>
+                                            <TableHead>품목명</TableHead>
+                                            <TableHead className="text-right">금액</TableHead>
+                                            <TableHead>비고</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {(activeTab === 'ALL' || activeTab === 'SALES') && detailData.sales.map((item, idx) => (
+                                            <TableRow key={`sale-${idx}`} className="hover:bg-blue-50">
+                                                <TableCell><Badge variant="outline" className="text-xs">매출</Badge></TableCell>
+                                                <TableCell>{item.category}</TableCell>
+                                                <TableCell className="font-semibold">{item.itemName}</TableCell>
+                                                <TableCell className="text-right text-blue-600">+{item.amount.toLocaleString()}</TableCell>
+                                                <TableCell className="text-xs text-gray-500">{item.note}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        {(activeTab === 'ALL' || activeTab === 'PURCHASE') && detailData.purchases.map((item, idx) => (
+                                            <TableRow key={`purchase-${idx}`} className="hover:bg-red-50">
+                                                <TableCell><Badge variant="destructive" className="text-xs border border-destructive bg-transparent text-destructive hover:bg-transparent">매입</Badge></TableCell>
+                                                <TableCell>{item.category}</TableCell>
+                                                <TableCell className="font-semibold">{item.itemName}</TableCell>
+                                                <TableCell className="text-right text-red-600">-{item.amount.toLocaleString()}</TableCell>
+                                                <TableCell className="text-xs text-gray-500">{item.note}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        {activeTab === 'ALL' && detailData.sales.length === 0 && detailData.purchases.length === 0 && (
+                                            <TableRow><TableCell colSpan={5} className="text-center py-10 text-gray-400">데이터가 없습니다.</TableCell></TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
                             </>
                         ) : (
                             <div className="text-center py-10 text-gray-400">데이터를 불러오지 못했습니다.</div>
                         )}
                     </div>
                 </div>
-                <form method="dialog" className="modal-backdrop">
-                    <button>close</button>
+                <form method="dialog" className="fixed inset-0 -z-10 cursor-default">
+                    <button className="sr-only">close</button>
                 </form>
             </dialog>
         </div>

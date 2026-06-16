@@ -12,9 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             authorize: async (credentials) => {
-                console.log("[DEBUG] authorize called with username:", credentials?.username);
                 if (!credentials?.username || !credentials?.password) {
-                    console.log("[DEBUG] Missing credentials");
                     return null;
                 }
 
@@ -33,24 +31,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     },
                 });
 
-                if (!user) {
-                    console.log("[DEBUG] User not found:", username);
-                    return null;
-                }
-
-                if (!user.passwordHash) {
-                    console.log("[DEBUG] User has no password hash");
+                if (!user || !user.passwordHash) {
                     return null;
                 }
 
                 const isValid = await bcrypt.compare(password, user.passwordHash);
 
                 if (!isValid) {
-                    console.log("[DEBUG] Password mismatch for user:", username);
                     return null;
                 }
 
-                console.log("[DEBUG] Login successful for user:", username);
                 return {
                     id: user.id,
                     username: user.username,

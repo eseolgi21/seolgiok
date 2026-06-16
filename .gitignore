@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.bak
 
 # debug
 npm-debug.log*
@@ -47,3 +48,9 @@ next-env.d.ts
 
 /generated/
 /scripts/
+
+# Playwright
+e2e/.auth/
+playwright-report/
+test-results/
+.env.test.local

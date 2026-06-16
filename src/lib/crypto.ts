@@ -35,3 +35,12 @@ export function encryptAesGcm(plain: string, key: Buffer): AesGcmCipher {
     tagB64: tag.toString("base64"),
   };
 }
+
+export function decryptAesGcm(cipher: AesGcmCipher, key: Buffer): string {
+  const iv = Buffer.from(cipher.ivB64, "base64");
+  const tag = Buffer.from(cipher.tagB64, "base64");
+  const cipherText = Buffer.from(cipher.cipherTextB64, "base64");
+  const decipher = crypto.createDecipheriv(KEY_ALG, key, iv);
+  decipher.setAuthTag(tag);
+  return Buffer.concat([decipher.update(cipherText), decipher.final()]).toString("utf8");
+}

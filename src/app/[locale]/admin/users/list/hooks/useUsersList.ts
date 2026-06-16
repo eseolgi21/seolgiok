@@ -9,10 +9,9 @@ import {
   parseUpdateLevelResponse,
   toUpdateLevelPayload,
 } from "../guard/users";
-import { useToast } from "@/components/ui";
+import { toast } from "sonner";
 
 export function useUsersList(): UseUsersListReturn {
-  const { toast } = useToast();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,26 +50,18 @@ export function useUsersList(): UseUsersListReturn {
       const parsed = parseListResponse(json);
       if (!parsed.ok) {
         setError(parsed.error);
-        toast({
-          title: "목록 로드 실패",
-          description: parsed.error,
-          variant: "error",
-        });
+        toast.error("목록 로드 실패", { description: parsed.error });
       } else {
         setUsers(parsed.data);
         setTotal(parsed.total);
       }
     } catch {
       setError("NETWORK_ERROR");
-      toast({
-        title: "네트워크 오류",
-        description: "잠시 후 다시 시도하세요.",
-        variant: "error",
-      });
+      toast.error("네트워크 오류", { description: "잠시 후 다시 시도하세요." });
     } finally {
       setLoading(false);
     }
-  }, [toast, page, pageSize]);
+  }, [page, pageSize]);
 
   const fetchDetail = useCallback(
     async (userId: string) => {
@@ -81,11 +72,7 @@ export function useUsersList(): UseUsersListReturn {
         const json = (await res.json()) as unknown;
         const parsed = parseDetailResponse(json);
         if (!parsed.ok) {
-          toast({
-            title: "상세 로드 실패",
-            description: parsed.error,
-            variant: "error",
-          });
+          toast.error("상세 로드 실패", { description: parsed.error });
           setDetail(null);
           setEditLevelState(null);
         } else {
@@ -93,18 +80,14 @@ export function useUsersList(): UseUsersListReturn {
           setEditLevelState(parsed.data ? parsed.data.level : null);
         }
       } catch {
-        toast({
-          title: "네트워크 오류",
-          description: "상세 조회 중 오류가 발생했습니다.",
-          variant: "error",
-        });
+        toast.error("네트워크 오류", { description: "상세 조회 중 오류가 발생했습니다." });
         setDetail(null);
         setEditLevelState(null);
       } finally {
         setDetailLoading(false);
       }
     },
-    [toast]
+    []
   );
 
   const openDetail = useCallback((userId: string) => {
@@ -137,11 +120,7 @@ export function useUsersList(): UseUsersListReturn {
 
   const saveLevel = useCallback(async () => {
     if (!detailUserId || editLevel === null) {
-      toast({
-        title: "저장 불가",
-        description: "잘못된 입력입니다.",
-        variant: "error",
-      });
+      toast.error("저장 불가", { description: "잘못된 입력입니다." });
       return;
     }
     setSavingLevel(true);
@@ -155,29 +134,18 @@ export function useUsersList(): UseUsersListReturn {
       const json = (await res.json()) as unknown;
       const parsed = parseUpdateLevelResponse(json);
       if (!parsed.ok) {
-        toast({
-          title: "저장 실패",
-          description: parsed.error,
-          variant: "error",
-        });
+        toast.error("저장 실패", { description: parsed.error });
         return;
       }
-      toast({
-        title: "저장 완료",
-        description: `레벨이 ${parsed.data.level} 로 업데이트되었습니다.`,
-      });
+      toast.success("저장 완료", { description: `레벨이 ${parsed.data.level} 로 업데이트되었습니다.` });
       // 상세 재조회
       await fetchDetail(detailUserId);
     } catch {
-      toast({
-        title: "네트워크 오류",
-        description: "저장 중 오류가 발생했습니다.",
-        variant: "error",
-      });
+      toast.error("네트워크 오류", { description: "저장 중 오류가 발생했습니다." });
     } finally {
       setSavingLevel(false);
     }
-  }, [detailUserId, editLevel, toast, fetchDetail]);
+  }, [detailUserId, editLevel, fetchDetail]);
 
   const value: UseUsersListReturn = useMemo(
     () => ({

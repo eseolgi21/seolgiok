@@ -6,6 +6,7 @@ import { Editor, type JSONContent, Extension } from "@tiptap/core";
 import { EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import { Button } from "@/components/ui/button";
 
 import { Plugin } from "@tiptap/pm/state";
 import { keymap } from "@tiptap/pm/keymap";
@@ -117,31 +118,31 @@ export default function AnnouncementEditor(props: AnnouncementEditorProps) {
     <div className="space-y-2">
       {/* 툴바: 모바일에서 줄바꿈 허용 */}
       <div className="flex flex-wrap gap-2">
-        <button
-          className="btn btn-xs"
+        <Button
+          variant="outline" size="sm" className="h-6 text-xs px-2"
           onClick={() => editor?.chain().focus().toggleBold().run()}
           disabled={!editor}
         >
           Bold
-        </button>
-        <button
-          className="btn btn-xs"
+        </Button>
+        <Button
+          variant="outline" size="sm" className="h-6 text-xs px-2"
           onClick={() => editor?.chain().focus().toggleItalic().run()}
           disabled={!editor}
         >
           Italic
-        </button>
-        <button
-          className="btn btn-xs"
+        </Button>
+        <Button
+          variant="outline" size="sm" className="h-6 text-xs px-2"
           onClick={() =>
             editor?.chain().focus().toggleHeading({ level: 1 }).run()
           }
           disabled={!editor}
         >
           H1
-        </button>
-        <button
-          className="btn btn-xs"
+        </Button>
+        <Button
+          variant="outline" size="sm" className="h-6 text-xs px-2"
           onClick={() => {
             const url =
               typeof window !== "undefined"
@@ -153,7 +154,7 @@ export default function AnnouncementEditor(props: AnnouncementEditorProps) {
           disabled={!editor}
         >
           이미지
-        </button>
+        </Button>
       </div>
 
       {/* 편집 영역: 반응형 높이 + 뷰포트 상한 */}

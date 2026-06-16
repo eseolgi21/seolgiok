@@ -4,6 +4,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { format, startOfMonth } from "date-fns";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 type SettlementData = {
     startDate: string;
@@ -120,73 +125,70 @@ export default function ProfitSettlementPage() {
             </div>
 
             {/* Date Range Selector */}
-            <div className="card bg-base-100 shadow border border-base-200">
-                <div className="card-body p-4 flex-row items-end gap-4">
-                    <div className="form-control">
-                        <label className="label py-1"><span className="label-text">시작일</span></label>
-                        <input
+            <Card>
+                <CardContent className="p-4 flex-row items-end gap-4 flex">
+                    <div className="space-y-1">
+                        <Label>시작일</Label>
+                        <Input
                             type="date"
-                            className="input input-bordered"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
                     </div>
-                    <div className="form-control">
-                        <label className="label py-1"><span className="label-text">종료일</span></label>
-                        <input
+                    <div className="space-y-1">
+                        <Label>종료일</Label>
+                        <Input
                             type="date"
-                            className="input input-bordered"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <button className="btn btn-primary" onClick={handleSearch} disabled={loading}>
-                        {loading ? <span className="loading loading-spinner"></span> : <MagnifyingGlassIcon className="w-5 h-5" />}
+                    <Button onClick={handleSearch} disabled={loading}>
+                        {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <MagnifyingGlassIcon className="w-5 h-5" />}
                         조회
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </CardContent>
+            </Card>
 
             {loading ? (
                 <div className="text-center py-20">
-                    <span className="loading loading-spinner loading-lg"></span>
+                    <Loader2 className="animate-spin h-8 w-8 mx-auto" />
                 </div>
             ) : data ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Input Section */}
-                    <div className="card bg-base-100 shadow border border-base-200 h-fit">
-                        <div className="card-body">
-                            <h3 className="card-title text-base mb-4">정산 항목 입력 ({data.startDate} ~ {data.endDate})</h3>
+                    <Card className="h-fit">
+                        <CardContent className="p-5">
+                            <CardTitle className="text-base mb-4">정산 항목 입력 ({data.startDate} ~ {data.endDate})</CardTitle>
 
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text font-semibold">현금매출 신고액</span>
-                                    <span className="label-text-alt text-gray-500">부가세 계산 시 합산됩니다.</span>
-                                </label>
-                                <div className="join">
-                                    <input
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-between">
+                                    <Label className="font-semibold">현금매출 신고액</Label>
+                                    <span className="text-sm text-gray-500">부가세 계산 시 합산됩니다.</span>
+                                </div>
+                                <div className="flex">
+                                    <Input
                                         type="number"
-                                        className="input input-bordered join-item w-full"
+                                        className="rounded-r-none"
                                         value={reportedCashSales}
                                         onChange={(e) => setReportedCashSales(e.target.value)}
                                     />
-                                    <span className="btn btn-disabled join-item">원</span>
+                                    <Button variant="outline" className="rounded-l-none border-l-0 cursor-default hover:bg-background" disabled>원</Button>
                                 </div>
                             </div>
-
-                            <div className="card-actions justify-end mt-6">
-                                <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-                                    {saving ? <span className="loading loading-spinner"></span> : "저장 및 재계산"}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                        <CardFooter className="justify-end">
+                            <Button onClick={handleSave} disabled={saving}>
+                                {saving ? <Loader2 className="animate-spin h-4 w-4" /> : "저장 및 재계산"}
+                            </Button>
+                        </CardFooter>
+                    </Card>
 
                     {/* Calculation Display Section */}
                     <div className="space-y-6">
                         {/* 1. Gross Profit */}
-                        <div className="card bg-base-100 shadow border border-base-200">
-                            <div className="card-body p-5">
+                        <Card>
+                            <CardContent className="p-5">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-bold text-gray-600">1. 기간 총 매출</h3>
                                     <span className="text-xl font-bold">{data.calculated.grossProfit.toLocaleString()} 원</span>
@@ -200,12 +202,12 @@ export default function ProfitSettlementPage() {
                                         (매출 분석 페이지의 총 금액과 동일)
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
 
                         {/* 2. Actual VAT */}
-                        <div className="card bg-base-100 shadow border border-base-200">
-                            <div className="card-body p-5">
+                        <Card>
+                            <CardContent className="p-5">
                                 <div className="flex justify-between items-center mb-2">
                                     <h3 className="font-bold text-gray-600">2. 실제 신고 부가세</h3>
                                     <span className={`text-xl font-bold ${data.calculated.vat.actualVAT > 0 ? "text-red-600" : "text-blue-600"}`}>
@@ -230,32 +232,30 @@ export default function ProfitSettlementPage() {
                                         ㄴ 총 매입: {data.data.totalPurchase.toLocaleString()} / 제외: {data.data.laborCost.toLocaleString()}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
 
                         {/* 3. Final Net Profit */}
-                        <div className="card bg-primary text-primary-content shadow-lg">
-                            <div className="card-body p-6">
-                                <h3 className="card-title text-sm opacity-80">최종 순수익</h3>
-                                <div className="text-4xl font-extrabold my-2">
-                                    {data.calculated.netProfit.toLocaleString()} <span className="text-lg font-normal">원</span>
+                        <div className="rounded-xl bg-primary text-primary-foreground shadow-lg p-6">
+                            <h3 className="text-sm font-semibold opacity-80">최종 순수익</h3>
+                            <div className="text-4xl font-extrabold my-2">
+                                {data.calculated.netProfit.toLocaleString()} <span className="text-lg font-normal">원</span>
+                            </div>
+                            <div className="text-xs opacity-70 mt-2 pt-2 border-t border-primary-foreground/20 flex flex-col gap-1">
+                                <div className="flex justify-between">
+                                    <span>매출 총이익</span>
+                                    <span>{data.calculated.grossProfit.toLocaleString()}</span>
                                 </div>
-                                <div className="text-xs opacity-70 mt-2 pt-2 border-t border-primary-content/20 flex flex-col gap-1">
-                                    <div className="flex justify-between">
-                                        <span>매출 총이익</span>
-                                        <span>{data.calculated.grossProfit.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>총 매입</span>
-                                        <span>-{data.data.totalPurchase.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>실제 신고 부가세</span>
-                                        <span>
-                                            {data.calculated.vat.actualVAT > 0 ? "-" : "+"}
-                                            {Math.abs(data.calculated.vat.actualVAT).toLocaleString()}
-                                        </span>
-                                    </div>
+                                <div className="flex justify-between">
+                                    <span>총 매입</span>
+                                    <span>-{data.data.totalPurchase.toLocaleString()}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>실제 신고 부가세</span>
+                                    <span>
+                                        {data.calculated.vat.actualVAT > 0 ? "-" : "+"}
+                                        {Math.abs(data.calculated.vat.actualVAT).toLocaleString()}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +264,7 @@ export default function ProfitSettlementPage() {
             ) : (
                 <div className="text-center py-20 text-gray-400">
                     기간을 선택하고 조회하세요.
-                    {/* <button className="btn btn-link" onClick={handleSearch}><ArrowPathIcon className="w-4 h-4 mr-1"/>재시도</button> */}
+                    {/* <button onClick={handleSearch}>재시도</button> */}
                 </div>
             )}
         </div>

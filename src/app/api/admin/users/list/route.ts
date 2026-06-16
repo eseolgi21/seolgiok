@@ -14,14 +14,13 @@ const userListSelect = {
   createdAt: true,
 } as const;
 
-// 상세: UserInfo by userId
+// 상세: UserInfo by userId (googleOtpSecret 제외 — 암호화된 시크릿은 API 외부 노출 금지)
 const userInfoSelect = {
   id: true,
   userId: true,
   referralCode: true,
   level: true,
   googleOtpEnabled: true,
-  googleOtpSecret: true,
   createdAt: true,
   updatedAt: true,
 } as const;

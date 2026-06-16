@@ -16,9 +16,13 @@ export async function POST(req: Request) {
       },
     });
 
+    // Timing-safe dummy hash — prevents account enumeration via response time difference
+    const DUMMY_HASH = "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+
     if (!existingUser) {
+      await bcrypt.compare(password, DUMMY_HASH).catch(() => {});
       return NextResponse.json(
-        { ok: false, code: "USER_NOT_FOUND" },
+        { ok: false, code: "INVALID_CREDENTIALS" },
         { status: 401 }
       );
     }
@@ -28,7 +32,7 @@ export async function POST(req: Request) {
       const isValid = await bcrypt.compare(password, existingUser.passwordHash);
       if (!isValid) {
         return NextResponse.json(
-          { ok: false, code: "INVALID_PASSWORD" },
+          { ok: false, code: "INVALID_CREDENTIALS" },
           { status: 401 }
         );
       }
@@ -51,9 +55,8 @@ export async function POST(req: Request) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          // Since we already checked user existence, this must be password mismatch
           return NextResponse.json(
-            { ok: false, code: "INVALID_PASSWORD" },
+            { ok: false, code: "INVALID_CREDENTIALS" },
             { status: 401 }
           );
         default:

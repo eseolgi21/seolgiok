@@ -32,7 +32,7 @@ export default function LanguageSwitcher({
   variant = "flag-label",
   direction = "up",
   align = "left",
-  triggerClassName = "btn btn-ghost gap-2 px-3 h-10 min-h-10",
+  triggerClassName = "flex items-center gap-2 px-3 h-10 hover:bg-gray-100 rounded-full transition-colors",
   itemClassName = "flex items-center gap-2 w-full",
 }: LanguageSwitcherProps) {
   const locale = useLocale();
@@ -86,9 +86,9 @@ export default function LanguageSwitcher({
 
   if (!mounted) {
     return variant === "icon-only" ? (
-      <div className="btn btn-ghost btn-circle skeleton h-9 w-9" />
+      <div className="rounded-full h-9 w-9 bg-gray-200 animate-pulse" />
     ) : (
-      <div className="btn btn-ghost btn-square skeleton h-9 w-20" />
+      <div className="h-9 w-20 bg-gray-200 animate-pulse rounded" />
     );
   }
 
@@ -130,15 +130,15 @@ export default function LanguageSwitcher({
       {/* 드롭다운 메뉴 목록 */}
       {isOpen && (
         <div
-          className={`absolute ${positionClass} ${alignClass} w-max min-w-[160px] rounded-lg border border-base-300 bg-base-100 shadow-xl z-[100]`}
+          className={`absolute ${positionClass} ${alignClass} w-max min-w-[160px] rounded-lg border border-gray-200 bg-white shadow-xl z-[100]`}
         >
-          <ul className="menu p-1 gap-0.5" role="listbox">
+          <ul className="flex flex-col p-1 gap-0.5 list-none" role="listbox">
             {LANGS.map((op) => (
               <li key={op.code}>
                 <button
                   type="button"
                   onClick={() => apply(op.code)}
-                  className={`${itemClassName} justify-between px-3 py-2 ${op.code === locale ? "active font-bold" : ""
+                  className={`${itemClassName} justify-between px-3 py-2 rounded-md ${op.code === locale ? "bg-gray-100 font-bold" : "hover:bg-gray-50"
                     }`}
                   role="option"
                   aria-selected={op.code === locale}

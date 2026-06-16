@@ -1,6 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ExcelFilterPage() {
     const [purchaseFilters, setPurchaseFilters] = useState<{ id: string, keyword: string, isInclude: boolean }[]>([]);
@@ -48,7 +55,6 @@ export default function ExcelFilterPage() {
             if (res.ok) {
                 setNewFilterKeyword("");
                 fetchFilters();
-                // alert("필터가 추가되었습니다."); // Removing alert for smoother UX
             } else {
                 alert("추가 실패");
             }
@@ -90,30 +96,20 @@ export default function ExcelFilterPage() {
                 </div>
             </div>
 
-            <div className="card bg-base-100 shadow-sm border border-base-200">
-                <div className="card-body">
-                    <div className="tabs tabs-boxed mb-4">
-                        <a
-                            className={`tab ${activeFilterTab === "PURCHASE" ? "tab-active" : ""}`}
-                            onClick={() => setActiveFilterTab("PURCHASE")}
-                        >
-                            매입 필터 ({purchaseFilters.length})
-                        </a>
-                        <a
-                            className={`tab ${activeFilterTab === "SALES" ? "tab-active" : ""}`}
-                            onClick={() => setActiveFilterTab("SALES")}
-                        >
-                            매출 필터 ({salesFilters.length})
-                        </a>
-                    </div>
+            <Card>
+                <CardContent className="p-6">
+                    <Tabs value={activeFilterTab} onValueChange={(v) => setActiveFilterTab(v as "PURCHASE" | "SALES")}>
+                        <TabsList className="mb-4">
+                            <TabsTrigger value="PURCHASE">매입 필터 ({purchaseFilters.length})</TabsTrigger>
+                            <TabsTrigger value="SALES">매출 필터 ({salesFilters.length})</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
 
-                    <div className="form-control">
-                        <label className="label py-0 pb-1">
-                            <span className="label-text">키워드</span>
-                        </label>
-                        <input
+                    <div className="space-y-1 mb-3">
+                        <Label>키워드</Label>
+                        <Input
                             type="text"
-                            className="input input-bordered w-full max-w-xs"
+                            className="max-w-xs"
                             placeholder="키워드 입력"
                             value={newFilterKeyword}
                             onChange={(e) => setNewFilterKeyword(e.target.value)}
@@ -121,73 +117,55 @@ export default function ExcelFilterPage() {
                             disabled={loading}
                         />
                     </div>
-                    <div className="form-control">
-                        <label className="label cursor-pointer gap-2 py-0 pb-1">
-                            <span className="label-text">필터 유형</span>
-                        </label>
-                        <div className="join">
-                            <input
-                                className="join-item btn btn-sm"
-                                type="radio"
-                                name="options"
-                                aria-label="제외 필터"
-                                checked={!isIncludeMode}
-                                onChange={() => setIsIncludeMode(false)}
-                                disabled={loading}
-                            />
-                            <input
-                                className="join-item btn btn-sm"
-                                type="radio"
-                                name="options"
-                                aria-label="포함 필터"
-                                checked={isIncludeMode}
-                                onChange={() => setIsIncludeMode(true)}
-                                disabled={loading}
-                            />
+                    <div className="space-y-1 mb-3">
+                        <Label>필터 유형</Label>
+                        <div className="flex">
+                            <button type="button" onClick={() => setIsIncludeMode(false)} className={`h-8 px-3 text-sm border rounded-l-md ${!isIncludeMode ? "bg-primary text-primary-foreground border-primary" : "bg-background border-input hover:bg-muted"}`} disabled={loading}>제외 필터</button>
+                            <button type="button" onClick={() => setIsIncludeMode(true)} className={`h-8 px-3 text-sm border border-l-0 rounded-r-md ${isIncludeMode ? "bg-primary text-primary-foreground border-primary" : "bg-background border-input hover:bg-muted"}`} disabled={loading}>포함 필터</button>
                         </div>
                     </div>
-                    <button className="btn btn-primary" onClick={handleAddFilter} disabled={loading}>
-                        {loading ? <span className="loading loading-spinner loading-xs"></span> : "추가"}
-                    </button>
-                </div>
+                    <Button onClick={handleAddFilter} disabled={loading}>
+                        {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "추가"}
+                    </Button>
+                </CardContent>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Exclude List */}
-                    <div className="bg-base-200 p-4 rounded-lg">
-                        <h3 className="font-bold mb-2 flex items-center gap-2 text-error">
+                    <div className="bg-muted p-4 rounded-lg">
+                        <h3 className="font-bold mb-2 flex items-center gap-2 text-red-600">
                             ⛔ 제외 필터
-                            <span className="badge badge-sm">{excludeFilters.length}</span>
+                            <Badge className="text-xs">{excludeFilters.length}</Badge>
                         </h3>
                         <div className="flex flex-wrap gap-2 min-h-[50px]">
                             {excludeFilters.length === 0 && <span className="text-gray-400 text-sm">없음</span>}
                             {excludeFilters.map(f => (
-                                <div key={f.id} className="badge badge-error gap-2 p-3 text-white">
+                                <Badge key={f.id} variant="destructive" className="gap-2 px-3 py-1.5">
                                     {f.keyword}
-                                    <button className="btn btn-xs btn-circle btn-ghost text-white" onClick={() => handleDeleteFilter(f.id)}>✕</button>
-                                </div>
+                                    <Button variant="ghost" size="sm" className="h-5 w-5 rounded-full p-0 text-white hover:text-white hover:bg-white/20" onClick={() => handleDeleteFilter(f.id)}>✕</Button>
+                                </Badge>
                             ))}
                         </div>
                     </div>
 
                     {/* Include List */}
-                    <div className="bg-base-200 p-4 rounded-lg">
-                        <h3 className="font-bold mb-2 flex items-center gap-2 text-success">
+                    <div className="bg-muted p-4 rounded-lg">
+                        <h3 className="font-bold mb-2 flex items-center gap-2 text-green-600">
                             ✅ 포함 필터
-                            <span className="badge badge-sm">{includeFilters.length}</span>
+                            <Badge className="text-xs">{includeFilters.length}</Badge>
                         </h3>
                         <div className="flex flex-wrap gap-2 min-h-[50px]">
                             {includeFilters.length === 0 && <span className="text-gray-400 text-sm">없음</span>}
                             {includeFilters.map(f => (
-                                <div key={f.id} className="badge badge-success gap-2 p-3 text-white">
+                                <Badge key={f.id} className="gap-2 px-3 py-1.5 bg-green-500 text-white hover:bg-green-500">
                                     {f.keyword}
-                                    <button className="btn btn-xs btn-circle btn-ghost text-white" onClick={() => handleDeleteFilter(f.id)}>✕</button>
-                                </div>
+                                    <Button variant="ghost" size="sm" className="h-5 w-5 rounded-full p-0 text-white hover:text-white hover:bg-white/20" onClick={() => handleDeleteFilter(f.id)}>✕</Button>
+                                </Badge>
                             ))}
                         </div>
                     </div>
                 </div>
 
-            </div>
+            </Card>
         </div>
 
     );

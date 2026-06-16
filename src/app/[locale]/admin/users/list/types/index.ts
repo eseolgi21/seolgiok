@@ -13,7 +13,6 @@ export type UserInfoDetail = {
   referralCode: string | null;
   level: number; // int >= 1
   googleOtpEnabled: boolean;
-  googleOtpSecret: string | null;
   createdAt: string; // ISO
   updatedAt: string; // ISO
 };

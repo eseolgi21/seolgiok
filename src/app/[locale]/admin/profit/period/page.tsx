@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { format, subDays, getDay } from "date-fns";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type DailyStat = {
     date: string;
@@ -55,99 +61,101 @@ export default function PeriodProfitPage() {
             </div>
 
             {/* Controls */}
-            <div className="card bg-base-100 shadow border border-base-200">
-                <div className="card-body p-4 flex-row items-end gap-4">
-                    <div className="form-control">
-                        <label className="label py-1"><span className="label-text">시작일</span></label>
-                        <input
+            <Card>
+                <CardContent className="p-4 flex-row items-end gap-4 flex">
+                    <div className="space-y-1">
+                        <Label>시작일</Label>
+                        <Input
                             type="date"
-                            className="input input-bordered"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
                     </div>
-                    <div className="form-control">
-                        <label className="label py-1"><span className="label-text">종료일</span></label>
-                        <input
+                    <div className="space-y-1">
+                        <Label>종료일</Label>
+                        <Input
                             type="date"
-                            className="input input-bordered"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <button className="btn btn-primary" onClick={fetchPeriodStats} disabled={loading}>
-                        {loading ? <span className="loading loading-spinner"></span> : <MagnifyingGlassIcon className="w-5 h-5" />}
+                    <Button onClick={fetchPeriodStats} disabled={loading}>
+                        {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <MagnifyingGlassIcon className="w-5 h-5" />}
                         조회
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </CardContent>
+            </Card>
 
             {/* Summary */}
             {summary && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                        <div className="stat-title">기간 총 매출</div>
-                        <div className="stat-value text-blue-600">+{summary.totalSales.toLocaleString()}</div>
-                    </div>
-                    <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                        <div className="stat-title">기간 총 매입</div>
-                        <div className="stat-value text-red-600">-{summary.totalPurchase.toLocaleString()}</div>
-                    </div>
-                    <div className="stat bg-base-100 shadow border border-base-200 rounded-box">
-                        <div className="stat-title">기간 순수익</div>
-                        <div className={`stat-value ${summary.totalProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
-                            {summary.totalProfit >= 0 ? '+' : ''}{summary.totalProfit.toLocaleString()}
-                        </div>
-                    </div>
+                    <Card>
+                        <CardContent className="p-4 pt-4">
+                            <p className="text-sm text-muted-foreground">기간 총 매출</p>
+                            <p className="text-3xl font-bold text-blue-600 mt-1">+{summary.totalSales.toLocaleString()}</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardContent className="p-4 pt-4">
+                            <p className="text-sm text-muted-foreground">기간 총 매입</p>
+                            <p className="text-3xl font-bold text-red-600 mt-1">-{summary.totalPurchase.toLocaleString()}</p>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardContent className="p-4 pt-4">
+                            <p className="text-sm text-muted-foreground">기간 순수익</p>
+                            <p className={`text-3xl font-bold mt-1 ${summary.totalProfit >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                {summary.totalProfit >= 0 ? '+' : ''}{summary.totalProfit.toLocaleString()}
+                            </p>
+                        </CardContent>
+                    </Card>
                 </div>
             )}
 
             {/* Daily List */}
             {summary && (
-                <div className="card bg-base-100 shadow border border-base-200">
-                    <div className="card-body p-0 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="table table-zebra w-full text-center">
-                                <thead className="bg-base-200">
-                                    <tr>
-                                        <th>날짜</th>
-                                        <th className="text-right text-blue-600">매출 (+)</th>
-                                        <th className="text-right text-red-600">매입 (-)</th>
-                                        <th className="text-right">순수익 (=)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dailyStats.length === 0 ? (
-                                        <tr><td colSpan={4} className="py-8 text-gray-400">데이터가 없습니다.</td></tr>
-                                    ) : (
-                                        dailyStats.map((stat, idx) => {
-                                            const day = getDay(new Date(stat.date));
-                                            const isSun = day === 0;
-                                            const isSat = day === 6;
-                                            const isProfit = stat.profit >= 0;
-                                            return (
-                                                <tr key={idx}>
-                                                    <td className={`font-mono ${isSun ? 'text-red-500' : isSat ? 'text-blue-500' : ''}`}>
-                                                        {stat.date}
-                                                    </td>
-                                                    <td className="text-right text-blue-600 font-medium">
-                                                        {stat.sales.toLocaleString()}
-                                                    </td>
-                                                    <td className="text-right text-red-600 font-medium">
-                                                        {stat.purchase.toLocaleString()}
-                                                    </td>
-                                                    <td className={`text-right font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
-                                                        {stat.profit.toLocaleString()}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <Card>
+                    <CardContent className="p-0 overflow-hidden">
+                        <Table className="text-center">
+                            <TableHeader>
+                                <TableRow className="bg-muted border-0">
+                                    <TableHead>날짜</TableHead>
+                                    <TableHead className="text-right text-blue-600">매출 (+)</TableHead>
+                                    <TableHead className="text-right text-red-600">매입 (-)</TableHead>
+                                    <TableHead className="text-right">순수익 (=)</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {dailyStats.length === 0 ? (
+                                    <TableRow><TableCell colSpan={4} className="py-8 text-gray-400">데이터가 없습니다.</TableCell></TableRow>
+                                ) : (
+                                    dailyStats.map((stat, idx) => {
+                                        const day = getDay(new Date(stat.date));
+                                        const isSun = day === 0;
+                                        const isSat = day === 6;
+                                        const isProfit = stat.profit >= 0;
+                                        return (
+                                            <TableRow key={idx}>
+                                                <TableCell className={`font-mono ${isSun ? 'text-red-500' : isSat ? 'text-blue-500' : ''}`}>
+                                                    {stat.date}
+                                                </TableCell>
+                                                <TableCell className="text-right text-blue-600 font-medium">
+                                                    {stat.sales.toLocaleString()}
+                                                </TableCell>
+                                                <TableCell className="text-right text-red-600 font-medium">
+                                                    {stat.purchase.toLocaleString()}
+                                                </TableCell>
+                                                <TableCell className={`text-right font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
+                                                    {stat.profit.toLocaleString()}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
+                                )}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
             )}
         </div>
     );

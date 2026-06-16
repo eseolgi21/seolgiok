@@ -3,6 +3,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { format, startOfMonth, endOfMonth } from "date-fns";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type AnalysisItem = {
     itemName: string;
@@ -177,32 +184,32 @@ export default function SalesAnalysisPage() {
                 </div>
                 <div className="flex gap-2">
                     {selectedItems.length > 0 && (
-                        <button className="btn btn-error text-white btn-sm" onClick={handleDeleteSelected}>
+                        <Button variant="destructive" size="sm" onClick={handleDeleteSelected}>
                             선택 삭제 ({selectedItems.length})
-                        </button>
+                        </Button>
                     )}
-                    <button className="btn btn-error btn-outline btn-sm" onClick={handleDeleteAllInPeriod}>
+                    <Button variant="outline" size="sm" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={handleDeleteAllInPeriod}>
                         기간 내 전체 삭제
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Filters & Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="card bg-base-100 shadow-sm border border-base-200 p-4 md:col-span-2 space-y-4">
+                <div className="card bg-background shadow-sm border border-border p-4 md:col-span-2 space-y-4">
                     <div>
                         <h3 className="font-bold mb-2">분석 기간 설정</h3>
                         <div className="flex items-center gap-2">
-                            <input
+                            <Input
                                 type="date"
-                                className="input input-bordered input-sm"
+                                className="h-8 text-sm"
                                 value={startDate}
                                 onChange={(e) => handleDateChange('start', e.target.value)}
                             />
                             <span>~</span>
-                            <input
+                            <Input
                                 type="date"
-                                className="input input-bordered input-sm"
+                                className="h-8 text-sm"
                                 value={endDate}
                                 onChange={(e) => handleDateChange('end', e.target.value)}
                             />
@@ -213,7 +220,7 @@ export default function SalesAnalysisPage() {
                         <h3 className="font-bold mb-2">상세 조건</h3>
                         <div className="flex flex-wrap gap-2 items-center">
                             <select
-                                className="select select-bordered select-sm"
+                                className="border border-input bg-background rounded-md px-3 h-8 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
                                 value={categoryFilter === null ? "ALL" : categoryFilter}
                                 onChange={(e) => {
                                     const val = e.target.value;
@@ -227,10 +234,10 @@ export default function SalesAnalysisPage() {
                                     <option key={c.id} value={c.name}>{c.name}</option>
                                 ))}
                             </select>
-                            <input
+                            <Input
                                 type="text"
                                 placeholder="품목명 검색 (쉼표 구분)"
-                                className="input input-bordered input-sm w-48"
+                                className="h-8 text-sm w-48"
                                 value={keywords}
                                 onChange={(e) => setKeywords(e.target.value)}
                                 onKeyDown={(e) => {
@@ -239,128 +246,108 @@ export default function SalesAnalysisPage() {
                                     }
                                 }}
                             />
-                            <button className="btn btn-primary btn-sm" onClick={handleSearch}>조회</button>
+                            <Button size="sm" onClick={handleSearch}>조회</Button>
                         </div>
                     </div>
                 </div>
-                <div className="card bg-success text-success-content shadow-sm p-4">
+                <div className="card bg-green-600 text-white shadow-sm p-4">
                     <div className="stat p-0">
-                        <div className="stat-title text-success-content/80">총 매출 금액</div>
+                        <div className="stat-title text-white/80">총 매출 금액</div>
                         <div className="stat-value text-2xl">+{metadata.totalSpending.toLocaleString()}원</div>
-                        <div className="stat-desc text-success-content/80">총 {metadata.totalCount}건</div>
+                        <div className="stat-desc text-white/80">총 {metadata.totalCount}건</div>
                     </div>
                 </div>
             </div>
 
             {/* Table */}
-            <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="table table-zebra w-full">
-                        <thead>
-                            <tr className="bg-base-200">
-                                <th className="w-10">
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            className="checkbox checkbox-sm"
-                                            onChange={handleSelectAll}
-                                            checked={items.length > 0 && selectedItems.length === items.length}
-                                        />
-                                    </label>
-                                </th>
-                                <th className="w-16">순위</th>
-                                <th>품목명</th>
-                                <th>분류</th>
-                                <th className="text-right">판매 횟수</th>
-                                <th className="text-right">평균 단가</th>
-                                <th className="text-right">총 금액</th>
-                                <th className="w-1/4">비중</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={8} className="text-center py-10">
-                                        <span className="loading loading-spinner"></span>
-                                    </td>
-                                </tr>
-                            ) : items.length === 0 ? (
-                                <tr>
-                                    <td colSpan={8} className="text-center py-10 text-gray-500">
-                                        데이터가 없습니다.
-                                    </td>
-                                </tr>
-                            ) : (
-                                items.map((item, index) => {
-                                    const percentage = metadata.totalSpending > 0
-                                        ? (item.totalAmount / metadata.totalSpending) * 100
-                                        : 0;
+            <Card className="overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-muted border-0">
+                            <TableHead className="w-10">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                        onChange={handleSelectAll}
+                                        checked={items.length > 0 && selectedItems.length === items.length}
+                                    />
+                                </label>
+                            </TableHead>
+                            <TableHead className="w-16">순위</TableHead>
+                            <TableHead>품목명</TableHead>
+                            <TableHead>분류</TableHead>
+                            <TableHead className="text-right">판매 횟수</TableHead>
+                            <TableHead className="text-right">평균 단가</TableHead>
+                            <TableHead className="text-right">총 금액</TableHead>
+                            <TableHead className="w-1/4">비중</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {loading ? (
+                            <TableRow>
+                                <TableCell colSpan={8} className="text-center py-10">
+                                    <Loader2 className="animate-spin h-4 w-4 mx-auto" />
+                                </TableCell>
+                            </TableRow>
+                        ) : items.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={8} className="text-center py-10 text-gray-500">
+                                    데이터가 없습니다.
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            items.map((item, index) => {
+                                const percentage = metadata.totalSpending > 0
+                                    ? (item.totalAmount / metadata.totalSpending) * 100
+                                    : 0;
 
-                                    const rank = (page - 1) * 20 + (index + 1);
+                                const rank = (page - 1) * 20 + (index + 1);
 
-                                    return (
-                                        <tr key={`${item.itemName}-${item.category}`}>
-                                            <th>
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="checkbox checkbox-sm"
-                                                        checked={selectedItems.includes(item.itemName)}
-                                                        onChange={() => handleCheckboxChange(item.itemName)}
-                                                    />
-                                                </label>
-                                            </th>
-                                            <td className="font-mono text-center">{rank}</td>
-                                            <td className="font-bold">{item.itemName}</td>
-                                            <td><span className="badge badge-ghost badge-sm">{item.category}</span></td>
-                                            <td className="text-right font-mono">{item.count}회</td>
-                                            <td className="text-right font-mono text-gray-500">
-                                                {item.averageAmount.toLocaleString()}
-                                            </td>
-                                            <td className="text-right font-mono text-success font-bold">
-                                                +{item.totalAmount.toLocaleString()}
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-2">
-                                                    <progress
-                                                        className="progress progress-success w-full"
-                                                        value={percentage}
-                                                        max="100"
-                                                    ></progress>
-                                                    <span className="text-xs w-10 text-right">{percentage.toFixed(1)}%</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                                return (
+                                    <TableRow key={`${item.itemName}-${item.category}`}>
+                                        <TableHead>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                                    checked={selectedItems.includes(item.itemName)}
+                                                    onChange={() => handleCheckboxChange(item.itemName)}
+                                                />
+                                            </label>
+                                        </TableHead>
+                                        <TableCell className="font-mono text-center">{rank}</TableCell>
+                                        <TableCell className="font-bold">{item.itemName}</TableCell>
+                                        <TableCell><Badge variant="secondary">{item.category}</Badge></TableCell>
+                                        <TableCell className="text-right font-mono">{item.count}회</TableCell>
+                                        <TableCell className="text-right font-mono text-gray-500">
+                                            {item.averageAmount.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell className="text-right font-mono text-green-600 font-bold">
+                                            +{item.totalAmount.toLocaleString()}
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <Progress value={percentage} className="h-2 [&>div]:bg-green-500" />
+                                                <span className="text-xs w-10 text-right">{percentage.toFixed(1)}%</span>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                </Table>
 
                 {/* Pagination */}
-                <div className="flex justify-center p-4 border-t border-base-200">
-                    <div className="join">
-                        <button
-                            className="join-item btn btn-sm"
-                            disabled={page === 1}
-                            onClick={() => setPage(p => Math.max(1, p - 1))}
-                        >
-                            «
-                        </button>
-                        <button className="join-item btn btn-sm">
-                            {page} / {Math.max(1, Math.ceil(totalItems / 20))}
-                        </button>
-                        <button
-                            className="join-item btn btn-sm"
-                            disabled={page * 20 >= totalItems}
-                            onClick={() => setPage(p => p + 1)}
-                        >
-                            »
-                        </button>
+                <div className="flex justify-center p-4 border-t border-border">
+                    <div className="flex">
+                        <Button variant="outline" size="sm" className="rounded-r-none" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>«</Button>
+                        <Button variant="outline" size="sm" className="rounded-none border-x-0 cursor-default hover:bg-background" disabled>{page} / {Math.max(1, Math.ceil(totalItems / 20))}</Button>
+                        <Button variant="outline" size="sm" className="rounded-l-none" disabled={page * 20 >= totalItems} onClick={() => setPage(p => p + 1)}>»</Button>
                     </div>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

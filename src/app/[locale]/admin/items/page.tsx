@@ -2,6 +2,14 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { XMarkIcon, ArrowPathIcon, PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type ItemRule = {
     id: string;
@@ -188,35 +196,39 @@ export default function ItemManagementPage() {
                         엑셀 업로드 시 품목명에 따라 자동으로 분류를 지정하는 규칙을 관리합니다.
                     </p>
                 </div>
-                <div className="tabs tabs-boxed">
-                    <a className={`tab ${type === "PURCHASE" ? "tab-active" : ""}`} onClick={() => setType("PURCHASE")}>매입 품목</a>
-                    <a className={`tab ${type === "SALES" ? "tab-active" : ""}`} onClick={() => setType("SALES")}>(준비중) 매출 품목</a>
-                </div>
+                <Tabs value={type} onValueChange={(v) => setType(v as "PURCHASE" | "SALES")}>
+                    <TabsList>
+                        <TabsTrigger value="PURCHASE">매입 품목</TabsTrigger>
+                        <TabsTrigger value="SALES">(준비중) 매출 품목</TabsTrigger>
+                    </TabsList>
+                </Tabs>
             </div>
 
             {type === "SALES" ? (
-                <div className="alert alert-info">
-                    현재 매출 품목 자동 분류는 준비 중입니다. 매입 품목 관리만 먼저 사용해주세요.
-                </div>
+                <Alert>
+                    <AlertDescription>
+                        현재 매출 품목 자동 분류는 준비 중입니다. 매입 품목 관리만 먼저 사용해주세요.
+                    </AlertDescription>
+                </Alert>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Left: List */}
-                    <div className="card bg-base-100 shadow-sm border border-base-200">
-                        <div className="card-body">
-                            <h2 className="card-title text-lg flex justify-between">
+                    <Card>
+                        <CardContent className="p-6">
+                            <div className="flex items-center justify-between text-lg font-semibold mb-4">
                                 등록된 규칙 ({filteredItems.length} / {items.length})
-                                <button className="btn btn-ghost btn-sm btn-circle" onClick={fetchItems}>
+                                <Button variant="ghost" size="sm" className="rounded-full p-1 h-8 w-8" onClick={fetchItems}>
                                     <ArrowPathIcon className="w-5 h-5" />
-                                </button>
-                            </h2>
+                                </Button>
+                            </div>
 
                             {/* Search Input */}
                             <div className="mb-2">
                                 <div className="relative">
-                                    <input
+                                    <Input
                                         type="text"
                                         placeholder="품목명 또는 분류 검색..."
-                                        className="input input-bordered input-sm w-full pl-9"
+                                        className="h-8 text-sm pl-9"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
@@ -225,103 +237,103 @@ export default function ItemManagementPage() {
                             </div>
 
                             <div className="overflow-y-auto max-h-[600px]">
-                                <table className="table table-sm table-pin-rows">
-                                    <thead>
-                                        <tr>
-                                            <th>품목명</th>
-                                            <th>분류</th>
-                                            <th className="w-10"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <Table className="text-sm">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>품목명</TableHead>
+                                            <TableHead>분류</TableHead>
+                                            <TableHead className="w-10"></TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
                                         {filteredItems.length === 0 ? (
-                                            <tr><td colSpan={3} className="text-center text-gray-500 py-4">
+                                            <TableRow><TableCell colSpan={3} className="text-center text-gray-500 py-4">
                                                 {searchTerm ? "검색 결과가 없습니다." : "등록된 규칙이 없습니다."}
-                                            </td></tr>
+                                            </TableCell></TableRow>
                                         ) : filteredItems.map(item => (
-                                            <tr key={item.id} className="hover">
-                                                <td className="font-medium">{item.itemName}</td>
-                                                <td><span className="badge badge-ghost badge-sm">{item.category}</span></td>
-                                                <td>
-                                                    <button className="btn btn-ghost btn-xs text-error" onClick={() => handleDelete(item.id)}>
+                                            <TableRow key={item.id}>
+                                                <TableCell className="font-medium">{item.itemName}</TableCell>
+                                                <TableCell><Badge variant="secondary">{item.category}</Badge></TableCell>
+                                                <TableCell>
+                                                    <Button variant="ghost" size="sm" className="h-6 text-xs px-2 text-destructive" onClick={() => handleDelete(item.id)}>
                                                         <XMarkIcon className="w-4 h-4" />
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
                                         ))}
-                                    </tbody>
-                                </table>
+                                    </TableBody>
+                                </Table>
                             </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
 
                     {/* Right: Registration Form */}
                     <div className="space-y-6">
 
                         {/* 1. Category Manager */}
-                        <div className="card bg-base-100 shadow-sm border border-base-200">
-                            <div className="card-body">
-                                <h2 className="card-title text-lg">1. 분류 선택 / 추가</h2>
+                        <Card>
+                            <CardContent className="p-6">
+                                <h2 className="text-lg font-semibold mb-4">1. 분류 선택 / 추가</h2>
                                 <div className="flex gap-2 mb-4">
-                                    <input
+                                    <Input
                                         type="text"
-                                        className="input input-bordered w-full"
                                         placeholder="새 분류명 입력 (예: 식자재)"
                                         value={newCategoryInput}
                                         onChange={e => setNewCategoryInput(e.target.value)}
                                         onKeyDown={e => e.key === 'Enter' && handleAddCategory()}
                                     />
-                                    <button className="btn btn-secondary" onClick={handleAddCategory}>
+                                    <Button variant="secondary" onClick={handleAddCategory}>
                                         <PlusIcon className="w-5 h-5" /> 추가
-                                    </button>
+                                    </Button>
                                 </div>
 
-                                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg bg-base-50">
+                                <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto p-2 border rounded-lg bg-gray-50">
                                     {allCategories.length === 0 && <span className="text-gray-400 text-sm p-2">등록된 분류가 없습니다.</span>}
                                     {allCategories.map(cat => (
-                                        <div
+                                        <Badge
                                             key={cat.name}
-                                            className={`badge badge-lg gap-2 cursor-pointer pr-1 py-4 ${selectedCategory === cat.name ? 'badge-primary' : 'badge-ghost border-base-300'}`}
+                                            className={`gap-2 cursor-pointer pr-1 py-2 text-sm ${selectedCategory === cat.name ? '' : 'variant-outline'}`}
+                                            variant={selectedCategory === cat.name ? 'default' : 'outline'}
                                             onClick={() => setSelectedCategory(cat.name)}
                                         >
                                             {cat.name}
                                             <button
-                                                className="btn btn-ghost btn-xs btn-circle w-5 h-5 min-h-0 text-gray-500 hover:bg-white/20"
+                                                className="inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-white/20"
                                                 onClick={(e) => handleDeleteCategory(cat.name, cat.id, e)}
                                             >
                                                 <XMarkIcon className="w-3 h-3" />
                                             </button>
-                                        </div>
+                                        </Badge>
                                     ))}
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
 
                         {/* 2. Item Input */}
-                        <div className="card bg-base-100 shadow-sm border border-base-200">
-                            <div className="card-body">
-                                <h2 className="card-title text-lg">
+                        <Card>
+                            <CardContent className="p-6">
+                                <h2 className="text-lg font-semibold mb-2">
                                     2. 품목 등록
                                     {selectedCategory && <span className="text-primary text-sm font-normal ml-2"> (선택된 분류: {selectedCategory})</span>}
                                 </h2>
                                 <p className="text-sms text-gray-500 mb-2">
                                     선택한 분류에 등록할 품목명을 입력하세요. (한 줄에 하나씩)
                                 </p>
-                                <textarea
-                                    className="textarea textarea-bordered h-48 font-mono text-sm leading-relaxed"
+                                <Textarea
+                                    className="h-48 font-mono text-sm leading-relaxed"
                                     placeholder={selectedCategory ? `[${selectedCategory}] 에 등록할 품목명들을 입력하세요...` : "먼저 위에서 분류를 선택해주세요."}
                                     value={itemText}
                                     onChange={e => setItemText(e.target.value)}
                                     disabled={!selectedCategory}
-                                ></textarea>
+                                />
 
-                                <div className="card-actions justify-end mt-4">
-                                    <button className="btn btn-primary w-full" onClick={handleSave} disabled={processing || !selectedCategory}>
+                                <div className="flex justify-end mt-4">
+                                    <Button className="w-full" onClick={handleSave} disabled={processing || !selectedCategory}>
                                         {processing ? "저장 중..." : "규칙 일괄 저장"}
-                                    </button>
+                                    </Button>
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
 
                     </div>
                 </div>

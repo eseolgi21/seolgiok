@@ -20,7 +20,7 @@ export default async function SiteLayout({
 
   return (
     // [핵심]: <body> 태그에 있던 스타일은 이 div에 적용됩니다. (올바름)
-    <div className="min-h-dvh bg-base-200 text-base-content flex flex-col">
+    <div className="min-h-dvh bg-cream text-dark flex flex-col">
       <WebSiteJsonLd />
       <RestaurantJsonLd />
       <GrandOpeningEventJsonLd />
