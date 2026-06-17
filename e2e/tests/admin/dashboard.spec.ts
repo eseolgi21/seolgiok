@@ -6,11 +6,12 @@ test('대시보드 접근 및 로딩', async ({ page }) => {
   await expect(page.locator('body')).toBeVisible();
 });
 
-test('대시보드 → 사이드바 메뉴 존재', async ({ page }) => {
+test('대시보드 → shadcn 사이드바 존재', async ({ page }) => {
   await page.goto('/ko/admin/dashboard');
-  await expect(page.locator('body')).toBeVisible();
-  // 사이드바 nav 존재 확인
-  await expect(page.locator('nav, aside').first()).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  // shadcn sidebar: data-slot="sidebar-wrapper" 또는 data-slot="sidebar"
+  const sidebar = page.locator('[data-slot="sidebar-wrapper"], [data-slot="sidebar"]');
+  await expect(sidebar.first()).toBeVisible({ timeout: 8000 });
 });
 
 test('대시보드 /en/admin 로케일 접근', async ({ page }) => {
