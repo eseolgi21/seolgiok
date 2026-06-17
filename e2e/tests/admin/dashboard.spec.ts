@@ -1,7 +1,26 @@
 import { test, expect } from '@playwright/test';
 
-test('관리자 대시보드 접근 (인증 후)', async ({ page }) => {
+test('대시보드 접근 및 로딩', async ({ page }) => {
   await page.goto('/ko/admin');
+  await expect(page).not.toHaveURL(/\/auth\/login/);
+  await expect(page.locator('body')).toBeVisible();
+});
+
+test('대시보드 → 사이드바 메뉴 존재', async ({ page }) => {
+  await page.goto('/ko/admin/dashboard');
+  await expect(page.locator('body')).toBeVisible();
+  // 사이드바 nav 존재 확인
+  await expect(page.locator('nav, aside').first()).toBeVisible();
+});
+
+test('대시보드 /en/admin 로케일 접근', async ({ page }) => {
+  await page.goto('/en/admin');
+  await expect(page).not.toHaveURL(/\/auth\/login/);
+  await expect(page.locator('body')).toBeVisible();
+});
+
+test('대시보드 /ja/admin 로케일 접근', async ({ page }) => {
+  await page.goto('/ja/admin');
   await expect(page).not.toHaveURL(/\/auth\/login/);
   await expect(page.locator('body')).toBeVisible();
 });
