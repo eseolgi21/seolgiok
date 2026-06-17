@@ -1,0 +1,39 @@
+{
+  "announcements": {
+    "pageTitle": "Bảng thông báo",
+    "subtitle": "Danh sách theo tiêu đề"
+  },
+  "events": {
+    "pageTitle": "Bảng sự kiện",
+    "subtitle": "Danh sách theo tiêu đề"
+  },
+  "common": {
+    "refresh": "Làm mới",
+    "deleteSelected": "Xóa đã chọn",
+    "write": "Viết bài",
+    "loading": "Đang tải…",
+    "noData": "Không có dữ liệu.",
+    "selectAll": "Chọn tất cả",
+    "colTitle": "Tiêu đề",
+    "colPublished": "Đăng",
+    "colCreatedAt": "Ngày tạo",
+    "colPeriod": "Thời gian",
+    "published": "Đã đăng",
+    "unpublished": "Chưa đăng",
+    "postView": "Xem bài đăng",
+    "close": "Đóng",
+    "clickToView": "Nhấp vào hàng để xem bài đăng tại đây.",
+    "createdAt": "Ngày tạo",
+    "publishedAt": "Ngày đăng",
+    "period": "Thời gian",
+    "banner": "Banner",
+    "ctaLink": "Liên kết CTA",
+    "bodyRaw": "Xem nội dung gốc",
+    "deleteFailPrefix": "[Xóa thất bại] {error}",
+    "confirmTitle": "Xác nhận xóa",
+    "confirmDescAnnouncements": "Xóa {count} bài đăng? Thao tác này không thể hoàn tác.",
+    "confirmDescEvents": "Xóa {count} sự kiện? Thao tác này không thể hoàn tác.",
+    "cancel": "Hủy",
+    "delete": "Xóa"
+  }
+}

@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useTranslations } from "next-intl";
 
 function formatDate(iso: string): string {
   try {
@@ -34,6 +35,7 @@ function UsersTable(props: {
   setPage: (p: number) => void;
 }) {
   const { rows, onDetail, page, pageSize, total, setPage } = props;
+  const t = useTranslations("adminUsers");
 
   // 총 페이지 수
   const totalPagesRaw = total / pageSize;
@@ -88,7 +90,7 @@ function UsersTable(props: {
               <TableCell>{formatDate(u.createdAt)}</TableCell>
               <TableCell>
                 <Button variant="outline" size="sm" onClick={() => onDetail(u.id)}>
-                  상세보기
+                  {t("table.detail")}
                 </Button>
               </TableCell>
             </TableRow>
@@ -96,7 +98,7 @@ function UsersTable(props: {
           {rows.length === 0 && (
             <TableRow>
               <TableCell colSpan={7} className="text-center">
-                데이터가 없습니다.
+                {t("table.noData")}
               </TableCell>
             </TableRow>
           )}
@@ -106,7 +108,7 @@ function UsersTable(props: {
       {/* ✅ 페이지네이션 바 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="text-sm text-muted-foreground">
-          총 {total}명 · {startIdx}~{endIdx} 표시중 (페이지 {page}/{totalPages})
+          {t("table.totalCount", { total })} · {t("table.showing", { start: startIdx, end: endIdx, page, totalPages })}
         </div>
 
         <div className="flex">
@@ -117,7 +119,7 @@ function UsersTable(props: {
             disabled={isFirstPage}
             onClick={goPrev}
           >
-            이전
+            {t("table.prev")}
           </Button>
 
           <Button
@@ -136,7 +138,7 @@ function UsersTable(props: {
             disabled={isLastPage}
             onClick={goNext}
           >
-            다음
+            {t("table.next")}
           </Button>
         </div>
       </div>
@@ -166,6 +168,7 @@ function DetailPanel(props: {
     savingLevel,
     onSaveLevel,
   } = props;
+  const t = useTranslations("adminUsers");
   if (!open) return null;
 
   return (
@@ -173,9 +176,9 @@ function DetailPanel(props: {
       <Card className="w-full max-w-xl shadow-xl">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold">UserInfo 상세</h2>
+            <h2 className="text-lg font-bold">{t("detail.title")}</h2>
             <Button variant="ghost" size="sm" onClick={onClose}>
-              닫기
+              {t("detail.close")}
             </Button>
           </div>
 
@@ -218,7 +221,7 @@ function DetailPanel(props: {
                                 savingLevel || !editLevel || editLevel < 1
                               }
                             >
-                              {savingLevel ? "저장 중..." : "레벨 저장"}
+                              {savingLevel ? t("detail.savingLevel") : t("detail.saveLevel")}
                             </Button>
                           </div>
                         </TableCell>
@@ -240,7 +243,7 @@ function DetailPanel(props: {
                 </div>
               ) : (
                 <Alert>
-                  <AlertDescription>해당 사용자의 UserInfo 가 없습니다.</AlertDescription>
+                  <AlertDescription>{t("detail.noUserInfo")}</AlertDescription>
                 </Alert>
               )}
             </>
@@ -248,7 +251,7 @@ function DetailPanel(props: {
         </CardContent>
         <CardFooter className="justify-end">
           <Button variant="outline" onClick={onClose}>
-            확인
+            {t("detail.confirm")}
           </Button>
         </CardFooter>
       </Card>
@@ -277,13 +280,14 @@ export default function ListView(props: UseUsersListReturn) {
     total,
     setPage,
   } = props;
+  const t = useTranslations("adminUsers");
 
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">어드민 · 유저 리스트</h1>
+        <h1 className="text-2xl font-bold">{t("page.title")}</h1>
         <Button onClick={refresh}>
-          새로고침
+          {t("refresh")}
         </Button>
       </div>
 
@@ -296,7 +300,7 @@ export default function ListView(props: UseUsersListReturn) {
       {loading ? (
         <div className="flex items-center gap-2">
           <Loader2 className="animate-spin h-6 w-6" />
-          <span>불러오는 중…</span>
+          <span>{t("loading")}</span>
         </div>
       ) : (
         <UsersTable

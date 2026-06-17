@@ -1,0 +1,23 @@
+{
+  "page": {
+    "title": "어드민 · 유저 리스트"
+  },
+  "table": {
+    "detail": "상세보기",
+    "noData": "데이터가 없습니다.",
+    "totalCount": "총 {total}명",
+    "showing": "{start}~{end} 표시중 (페이지 {page}/{totalPages})",
+    "prev": "이전",
+    "next": "다음"
+  },
+  "loading": "불러오는 중…",
+  "refresh": "새로고침",
+  "detail": {
+    "title": "UserInfo 상세",
+    "close": "닫기",
+    "confirm": "확인",
+    "saveLevel": "레벨 저장",
+    "savingLevel": "저장 중...",
+    "noUserInfo": "해당 사용자의 UserInfo 가 없습니다."
+  }
+}

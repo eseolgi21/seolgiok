@@ -1,0 +1,93 @@
+{
+  "page": {
+    "title": "매출 내역",
+    "subtitle": "매장, 배달 등 매출 내역을 관리합니다."
+  },
+  "actions": {
+    "deleteSelected": "선택 삭제 ({count})",
+    "addDirect": "+ 직접 추가",
+    "excelSettings": "엑셀 설정",
+    "excelUpload": "엑셀 업로드",
+    "uploading": "업로드 중...",
+    "saveCurrentMapping": "현재 설정 저장",
+    "search": "검색 ({count})",
+    "bulkRegisterFiltered": "검색 결과 일괄 등록",
+    "bulkRegisterAll": "전체 일괄 등록",
+    "deleteAllKeywords": "전체 삭제",
+    "deleteExceptSearch": "검색 결과 외 모두 삭제"
+  },
+  "mapping": {
+    "title": "엑셀 컬럼 매핑 설정",
+    "desc": "엑셀 파일의 헤더 이름이 다를 경우 아래 입력칸에 해당 컬럼명을 입력하세요.",
+    "colDate": "날짜 컬럼",
+    "colCategory": "분류 컬럼",
+    "colItem": "상품명 컬럼",
+    "colAmount": "금액 컬럼",
+    "colPayment": "결제수단 컬럼",
+    "colNote": "비고 컬럼",
+    "selectPlaceholder": "-- 엑셀 설정 선택 --",
+    "deleteTitle": "설정 삭제",
+    "savePrompt": "이 설정의 이름을 입력하세요 (예: 배달의민족)",
+    "saveSuccess": "설정이 저장되었습니다.",
+    "saveFail": "저장 실패",
+    "typeSales": "매출",
+    "typePurchase": "매입"
+  },
+  "filter": {
+    "all": "전체",
+    "exclude": "제외",
+    "include": "포함",
+    "passwordPlaceholder": "엑셀 비밀번호"
+  },
+  "keyword": {
+    "inputPlaceholder": "키워드 입력",
+    "favorites": "즐겨찾기:",
+    "deleteConfirm": "키워드를 삭제하시겠습니까?",
+    "deleteSettingConfirm": "선택한 설정을 삭제하시겠습니까?",
+    "deleteSettingSuccess": "삭제되었습니다.",
+    "deleteSettingFail": "삭제 실패",
+    "deleteBulkConfirm": "현재 검색된 키워드({keywords})를 포함하지 않는 모든 '미확정' 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+  },
+  "table": {
+    "colStatus": "상태",
+    "colDate": "일자",
+    "colCategory": "분류",
+    "colItem": "상품명",
+    "colAmount": "금액",
+    "colPayment": "결제수단",
+    "colNote": "비고",
+    "statusConfirmed": "등록됨",
+    "statusPending": "대기",
+    "noData": "데이터가 없습니다."
+  },
+  "addModal": {
+    "title": "매출 내역 직접 추가",
+    "labelDate": "날짜",
+    "labelCategory": "분류",
+    "placeholderCategory": "예: 매장, 배달",
+    "labelItem": "상품명",
+    "placeholderItem": "예: 아메리카노",
+    "labelAmount": "금액",
+    "placeholderAmount": "숫자만 입력",
+    "labelPayment": "결제수단",
+    "placeholderPayment": "예: 카드, 현금",
+    "labelNote": "비고",
+    "cancel": "취소",
+    "add": "추가"
+  },
+  "confirm": {
+    "title": "확인",
+    "cancel": "취소",
+    "ok": "확인"
+  },
+  "alerts": {
+    "uploadError": "업로드 중 오류가 발생했습니다.",
+    "deleteSuccess": "삭제되었습니다.",
+    "deleteFail": "삭제 실패",
+    "addRequired": "필수 항목을 입력해주세요.",
+    "addSuccess": "항목이 추가되었습니다.",
+    "addFail": "추가 실패",
+    "editFail": "수정 실패",
+    "error": "오류 발생"
+  }
+}

@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 import {
     ArrowUpTrayIcon,
     MagnifyingGlassIcon,
@@ -17,6 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Keyword = {
     id: string;
@@ -47,6 +53,7 @@ type Item = {
 };
 
 export default function PurchasePage() {
+    const t = useTranslations("adminPurchase");
     const [uploading, setUploading] = useState(false);
     const [excelPassword, setExcelPassword] = useState("");
     const [filterMode, setFilterMode] = useState<"ALL" | "EXCLUDE" | "INCLUDE">("EXCLUDE");
@@ -96,6 +103,17 @@ export default function PurchasePage() {
     // Selection
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+    // AlertDialog
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmMessage, setConfirmMessage] = useState("");
+    const [confirmAction, setConfirmAction] = useState<(() => void) | null>(null);
+
+    const openConfirm = (message: string, action: () => void) => {
+        setConfirmMessage(message);
+        setConfirmAction(() => action);
+        setConfirmOpen(true);
+    };
+
 
 
 
@@ -122,8 +140,7 @@ export default function PurchasePage() {
     }, []);
 
     useEffect(() => {
-        fetchKeywords();
-        fetchMappings();
+        void Promise.all([fetchKeywords(), fetchMappings()]);
     }, [fetchKeywords, fetchMappings]);
 
     // Auto-select last used mapping
@@ -151,7 +168,7 @@ export default function PurchasePage() {
 
 
     const handleSaveMapping = async () => {
-        const name = prompt("이 설정의 이름을 입력하세요 (예: KB국민카드)");
+        const name = prompt(t("mapping.savePrompt"));
         if (!name) return;
 
         try {
@@ -171,29 +188,31 @@ export default function PurchasePage() {
                 })
             });
             if (res.ok) {
-                alert("설정이 저장되었습니다.");
+                alert(t("mapping.saveSuccess"));
                 fetchMappings();
             } else {
-                alert("저장 실패");
+                alert(t("mapping.saveFail"));
             }
         } catch (e) {
             console.error(e);
         }
     };
 
-    const handleDeleteMapping = async () => {
-        if (!selectedMappingId || !confirm("선택한 설정을 삭제하시겠습니까?")) return;
-        try {
-            const res = await fetch(`/api/user/excel-mappings?id=${selectedMappingId}`, { method: "DELETE" });
-            if (res.ok) {
-                alert("삭제되었습니다.");
-                setSelectedMappingId("");
-                localStorage.removeItem("lastPurchaseMappingId");
-                fetchMappings();
+    const handleDeleteMapping = () => {
+        if (!selectedMappingId) return;
+        openConfirm(t("keyword.deleteSettingConfirm"), async () => {
+            try {
+                const res = await fetch(`/api/user/excel-mappings?id=${selectedMappingId}`, { method: "DELETE" });
+                if (res.ok) {
+                    alert(t("keyword.deleteSettingSuccess"));
+                    setSelectedMappingId("");
+                    localStorage.removeItem("lastPurchaseMappingId");
+                    fetchMappings();
+                }
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) {
-            console.error(e);
-        }
+        });
     };
 
     const handleSelectMapping = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -279,42 +298,41 @@ export default function PurchasePage() {
         }
     };
 
-    const handleConfirm = async () => {
-        // if (activeKeywords.length === 0) return;
-
+    const handleConfirm = () => {
         const message = activeKeywords.length > 0
             ? `${activeKeywords.join(", ")} 키워드로 검색된 항목을 일괄 등록하시겠습니까?`
             : `전체 미등록 항목을 일괄 등록하시겠습니까?`;
 
-        if (!confirm(message)) return;
-
-        try {
-            const res = await fetch("/api/admin/accounting/purchase/confirm", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ keywords: activeKeywords })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                alert(`${data.count}건의 항목이 등록(확정)되었습니다.`);
-                handleSearch();
-            } else {
-                alert(`등록 실패: ${data.error}`);
+        openConfirm(message, async () => {
+            try {
+                const res = await fetch("/api/admin/accounting/purchase/confirm", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ keywords: activeKeywords })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert(`${data.count}건의 항목이 등록(확정)되었습니다.`);
+                    handleSearch();
+                } else {
+                    alert(`등록 실패: ${data.error}`);
+                }
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) {
-            console.error(e);
-        }
+        });
     };
 
-    const handleDeleteKeyword = async (id: string, e: React.MouseEvent) => {
+    const handleDeleteKeyword = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!confirm("키워드를 삭제하시겠습니까?")) return;
-        try {
-            await fetch(`/api/user/keywords?id=${id}`, { method: "DELETE" });
-            fetchKeywords();
-        } catch (err) {
-            console.error(err);
-        }
+        openConfirm(t("keyword.deleteConfirm"), async () => {
+            try {
+                await fetch(`/api/user/keywords?id=${id}`, { method: "DELETE" });
+                fetchKeywords();
+            } catch (err) {
+                console.error(err);
+            }
+        });
     };
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -352,7 +370,7 @@ export default function PurchasePage() {
             }
         } catch (err) {
             console.error(err);
-            alert("업로드 중 오류가 발생했습니다.");
+            alert(t("alerts.uploadError"));
         } finally {
             setUploading(false);
             e.target.value = "";
@@ -373,30 +391,30 @@ export default function PurchasePage() {
         );
     };
 
-    const handleDeleteSelected = async () => {
+    const handleDeleteSelected = () => {
         if (selectedIds.length === 0) return;
-        if (!confirm(`${selectedIds.length}건의 항목을 삭제하시겠습니까?`)) return;
-
-        try {
-            const res = await fetch("/api/admin/accounting/purchase/list", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ids: selectedIds })
-            });
-            if (res.ok) {
-                alert("삭제되었습니다.");
-                fetchData(activeKeywords, page);
-            } else {
-                alert("삭제 실패");
+        openConfirm(`${selectedIds.length}건의 항목을 삭제하시겠습니까?`, async () => {
+            try {
+                const res = await fetch("/api/admin/accounting/purchase/list", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ids: selectedIds })
+                });
+                if (res.ok) {
+                    alert(t("alerts.deleteSuccess"));
+                    fetchData(activeKeywords, page);
+                } else {
+                    alert(t("alerts.deleteFail"));
+                }
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) {
-            console.error(e);
-        }
+        });
     };
 
     const handleCreate = async () => {
         if (!newItem.category || !newItem.itemName || !newItem.amount) {
-            alert("필수 항목을 입력해주세요.");
+            alert(t("alerts.addRequired"));
             return;
         }
 
@@ -408,7 +426,7 @@ export default function PurchasePage() {
             });
 
             if (res.ok) {
-                alert("항목이 추가되었습니다.");
+                alert(t("alerts.addSuccess"));
                 setIsAddModalOpen(false);
                 setNewItem({
                     date: format(new Date(), "yyyy-MM-dd"),
@@ -419,7 +437,7 @@ export default function PurchasePage() {
                 });
                 fetchData(activeKeywords, page); // Refresh
             } else {
-                alert("추가 실패");
+                alert(t("alerts.addFail"));
             }
         } catch (e) {
             console.error(e);
@@ -460,64 +478,64 @@ export default function PurchasePage() {
                 ));
                 cancelEditing();
             } else {
-                alert("수정 실패");
+                alert(t("alerts.editFail"));
             }
         } catch (e) {
             console.error(e);
         }
     };
 
-    const handleDeleteExcept = async () => {
+    const handleDeleteExcept = () => {
         if (activeKeywords.length === 0) return;
-        if (!confirm(`현재 검색된 키워드(${activeKeywords.join(", ")})를 포함하지 않는\n모든 '미확정' 항목을 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) return;
+        openConfirm(t("keyword.deleteBulkConfirm", { keywords: activeKeywords.join(", ") }), async () => {
+            try {
+                const res = await fetch("/api/admin/accounting/purchase/list", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "DELETE_EXCEPT",
+                        keywords: activeKeywords
+                    })
+                });
 
-        try {
-            const res = await fetch("/api/admin/accounting/purchase/list", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    action: "DELETE_EXCEPT",
-                    keywords: activeKeywords
-                })
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                alert(`${data.count}개의 항목이 삭제되었습니다.`);
-                fetchData(activeKeywords, 1);
-            } else {
-                alert("삭제 실패");
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(`${data.count}개의 항목이 삭제되었습니다.`);
+                    fetchData(activeKeywords, 1);
+                } else {
+                    alert(t("alerts.deleteFail"));
+                }
+            } catch (e) {
+                console.error(e);
+                alert(t("alerts.error"));
             }
-        } catch (e) {
-            console.error(e);
-            alert("오류 발생");
-        }
+        });
     };
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold">매입 관리</h1>
+                    <h1 className="text-2xl font-bold">{t("page.title")}</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                        식자재, 비품 등 매입 내역을 관리합니다.
+                        {t("page.subtitle")}
                     </p>
                 </div>
                 <div className="flex gap-2">
                     {selectedIds.length > 0 && (
                         <Button variant="destructive" onClick={handleDeleteSelected}>
-                            선택 삭제 ({selectedIds.length})
+                            {t("actions.deleteSelected", { count: selectedIds.length })}
                         </Button>
                     )}
                     <Button variant="secondary" onClick={() => setIsAddModalOpen(true)}>
-                        + 직접 추가
+                        {t("actions.addDirect")}
                     </Button>
                     <Button
                         variant={showMapping ? "secondary" : "ghost"}
                         onClick={() => setShowMapping(!showMapping)}
                     >
                         <Cog6ToothIcon className="w-5 h-5" />
-                        엑셀 설정
+                        {t("actions.excelSettings")}
                     </Button>
                     <div className="flex items-center gap-2">
                         {/* Mapping Dropdown Moved Here */}
@@ -527,15 +545,15 @@ export default function PurchasePage() {
                                 value={selectedMappingId}
                                 onChange={handleSelectMapping}
                             >
-                                <option value="">-- 엑셀 설정 선택 --</option>
+                                <option value="">{t("mapping.selectPlaceholder")}</option>
                                 {mappings.map(m => (
                                     <option key={m.id} value={m.id}>
-                                        [{m.type === "SALES" ? "매출" : "매입"}] {m.name}
+                                        [{m.type === "SALES" ? t("mapping.typeSales") : t("mapping.typePurchase")}] {m.name}
                                     </option>
                                 ))}
                             </select>
                             {selectedMappingId && (
-                                <Button variant="destructive" size="sm" className="w-8 h-8 p-0" onClick={handleDeleteMapping} title="설정 삭제">
+                                <Button variant="destructive" size="sm" className="w-8 h-8 p-0" onClick={handleDeleteMapping} title={t("mapping.deleteTitle")}>
                                     <XMarkIcon className="w-4 h-4" />
                                 </Button>
                             )}
@@ -547,20 +565,20 @@ export default function PurchasePage() {
                             value={filterMode}
                             onChange={(e) => setFilterMode(e.target.value as "ALL" | "EXCLUDE" | "INCLUDE")}
                         >
-                            <option value="ALL">전체</option>
-                            <option value="EXCLUDE">제외</option>
-                            <option value="INCLUDE">포함</option>
+                            <option value="ALL">{t("filter.all")}</option>
+                            <option value="EXCLUDE">{t("filter.exclude")}</option>
+                            <option value="INCLUDE">{t("filter.include")}</option>
                         </select>
 
                         <Input
                             type="password"
-                            placeholder="엑셀 비밀번호"
+                            placeholder={t("filter.passwordPlaceholder")}
                             className="w-32"
                             value={excelPassword}
                             onChange={(e) => setExcelPassword(e.target.value)}
                         />
                         <label className={`inline-flex items-center gap-2 cursor-pointer h-9 px-4 text-sm font-medium rounded-md ${uploading ? "bg-primary/70 text-primary-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"}`}>
-                            {uploading ? <><Loader2 className="animate-spin h-4 w-4" /> 업로드 중...</> : <><ArrowUpTrayIcon className="w-5 h-5" />엑셀 업로드</>}
+                            {uploading ? <><Loader2 className="animate-spin h-4 w-4" /> {t("actions.uploading")}</> : <><ArrowUpTrayIcon className="w-5 h-5" />{t("actions.excelUpload")}</>}
                             <input type="file" accept=".xlsx, .xls" className="hidden" onChange={handleUpload} disabled={uploading} />
                         </label>
                     </div>
@@ -574,35 +592,35 @@ export default function PurchasePage() {
                     <CardContent className="p-4">
                         <div className="flex justify-between items-center mb-4">
                             <div>
-                                <h3 className="font-bold">엑셀 컬럼 매핑 설정</h3>
-                                <p className="text-xs text-gray-500">엑셀 파일의 헤더 이름이 다를 경우 아래 입력칸에 해당 컬럼명을 입력하세요.</p>
+                                <h3 className="font-bold">{t("mapping.title")}</h3>
+                                <p className="text-xs text-gray-500">{t("mapping.desc")}</p>
                             </div>
                             <div className="flex gap-2">
                                 <Button size="sm" variant="outline" onClick={handleSaveMapping}>
-                                    현재 설정 저장
+                                    {t("actions.saveCurrentMapping")}
                                 </Button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                             <div className="space-y-1">
-                                <Label>날짜 컬럼</Label>
+                                <Label>{t("mapping.colDate")}</Label>
                                 <Input className="h-8 text-sm" value={mapping.date} onChange={e => setMapping({ ...mapping, date: e.target.value })} />
                             </div>
                             <div className="space-y-1">
-                                <Label>분류 컬럼</Label>
+                                <Label>{t("mapping.colCategory")}</Label>
                                 <Input className="h-8 text-sm" value={mapping.category} onChange={e => setMapping({ ...mapping, category: e.target.value })} />
                             </div>
                             <div className="space-y-1">
-                                <Label>품목명 컬럼</Label>
+                                <Label>{t("mapping.colItem")}</Label>
                                 <Input className="h-8 text-sm" value={mapping.item} onChange={e => setMapping({ ...mapping, item: e.target.value })} />
                             </div>
                             <div className="space-y-1">
-                                <Label>금액 컬럼</Label>
+                                <Label>{t("mapping.colAmount")}</Label>
                                 <Input className="h-8 text-sm" value={mapping.amount} onChange={e => setMapping({ ...mapping, amount: e.target.value })} />
                             </div>
                             <div className="space-y-1">
-                                <Label>비고 컬럼</Label>
+                                <Label>{t("mapping.colNote")}</Label>
                                 <Input className="h-8 text-sm" value={mapping.note} onChange={e => setMapping({ ...mapping, note: e.target.value })} />
                             </div>
                         </div>
@@ -618,7 +636,7 @@ export default function PurchasePage() {
                             <div className="relative flex-1">
                                 <Input
                                     type="text"
-                                    placeholder="키워드 입력"
+                                    placeholder={t("keyword.inputPlaceholder")}
                                     className="max-w-xs"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
@@ -628,9 +646,9 @@ export default function PurchasePage() {
                                     <MagnifyingGlassIcon className="w-5 h-5" />
                                 </Button>
                             </div>
-                            <Button onClick={handleSearch}>검색 ({activeKeywords.length})</Button>
+                            <Button onClick={handleSearch}>{t("actions.search", { count: activeKeywords.length })}</Button>
                             <Button variant="secondary" onClick={handleConfirm}>
-                                {activeKeywords.length > 0 ? "검색 결과 일괄 등록" : "전체 일괄 등록"}
+                                {activeKeywords.length > 0 ? t("actions.bulkRegisterFiltered") : t("actions.bulkRegisterAll")}
                             </Button>
                         </div>
 
@@ -645,9 +663,9 @@ export default function PurchasePage() {
                                         </Button>
                                     </Badge>
                                 ))}
-                                <Button variant="ghost" size="sm" className="h-6 text-xs px-2 text-gray-500" onClick={() => setActiveKeywords([])}>전체 삭제</Button>
+                                <Button variant="ghost" size="sm" className="h-6 text-xs px-2 text-gray-500" onClick={() => setActiveKeywords([])}>{t("actions.deleteAllKeywords")}</Button>
                                 <Button variant="outline" size="sm" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground ml-auto" onClick={handleDeleteExcept}>
-                                    검색 결과 외 모두 삭제
+                                    {t("actions.deleteExceptSearch")}
                                 </Button>
                             </div>
                         )}
@@ -655,7 +673,7 @@ export default function PurchasePage() {
                         {/* Saved Keywords (Quick Add) */}
                         {savedKeywords.length > 0 && (
                             <div className="flex flex-wrap gap-2 items-center mt-2 pt-2 border-t border-border">
-                                <span className="text-xs font-semibold text-gray-500">즐겨찾기:</span>
+                                <span className="text-xs font-semibold text-gray-500">{t("keyword.favorites")}</span>
                                 {savedKeywords.map((k) => (
                                     <Badge
                                         key={k.id}
@@ -693,12 +711,12 @@ export default function PurchasePage() {
                                     />
                                 </label>
                             </TableHead>
-                            <TableHead>상태</TableHead>
-                            <TableHead>일자</TableHead>
-                            <TableHead>분류</TableHead>
-                            <TableHead>품목명</TableHead>
-                            <TableHead className="text-right">금액</TableHead>
-                            <TableHead>비고</TableHead>
+                            <TableHead>{t("table.colStatus")}</TableHead>
+                            <TableHead>{t("table.colDate")}</TableHead>
+                            <TableHead>{t("table.colCategory")}</TableHead>
+                            <TableHead>{t("table.colItem")}</TableHead>
+                            <TableHead className="text-right">{t("table.colAmount")}</TableHead>
+                            <TableHead>{t("table.colNote")}</TableHead>
                         </TableRow>
 
                     </TableHeader>
@@ -712,7 +730,7 @@ export default function PurchasePage() {
                         ) : items.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={6} className="text-center py-10 text-gray-500">
-                                    데이터가 없습니다.
+                                    {t("table.noData")}
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -730,9 +748,9 @@ export default function PurchasePage() {
                                     </TableHead>
                                     <TableCell>
                                         {item.confirmed ? (
-                                            <Badge className="bg-green-500 text-white hover:bg-green-500 text-xs">등록됨</Badge>
+                                            <Badge className="bg-green-500 text-white hover:bg-green-500 text-xs">{t("table.statusConfirmed")}</Badge>
                                         ) : (
-                                            <Badge variant="secondary" className="text-xs">대기</Badge>
+                                            <Badge variant="secondary" className="text-xs">{t("table.statusPending")}</Badge>
                                         )}
                                     </TableCell>
                                     <TableCell className="whitespace-nowrap">{format(new Date(item.date), "yyyy-MM-dd")}</TableCell>
@@ -803,37 +821,51 @@ export default function PurchasePage() {
 
                 </div>
             </Card>
+            {/* Confirm Dialog */}
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("confirm.title")}</AlertDialogTitle>
+                        <AlertDialogDescription>{confirmMessage}</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("confirm.cancel")}</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => { confirmAction?.(); setConfirmAction(null); }}>{t("confirm.ok")}</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
             {/* Add Modal */}
             <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>매입 내역 직접 추가</DialogTitle>
+                        <DialogTitle>{t("addModal.title")}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-3">
                         <div className="space-y-1">
-                            <Label>날짜</Label>
+                            <Label>{t("addModal.labelDate")}</Label>
                             <Input type="date" value={newItem.date} onChange={e => setNewItem({ ...newItem, date: e.target.value })} />
                         </div>
                         <div className="space-y-1">
-                            <Label>분류</Label>
-                            <Input type="text" placeholder="예: 식자재" value={newItem.category} onChange={e => setNewItem({ ...newItem, category: e.target.value })} />
+                            <Label>{t("addModal.labelCategory")}</Label>
+                            <Input type="text" placeholder={t("addModal.placeholderCategory")} value={newItem.category} onChange={e => setNewItem({ ...newItem, category: e.target.value })} />
                         </div>
                         <div className="space-y-1">
-                            <Label>품목명</Label>
-                            <Input type="text" placeholder="예: 쌀 20kg" value={newItem.itemName} onChange={e => setNewItem({ ...newItem, itemName: e.target.value })} />
+                            <Label>{t("addModal.labelItem")}</Label>
+                            <Input type="text" placeholder={t("addModal.placeholderItem")} value={newItem.itemName} onChange={e => setNewItem({ ...newItem, itemName: e.target.value })} />
                         </div>
                         <div className="space-y-1">
-                            <Label>금액</Label>
-                            <Input type="number" placeholder="숫자만 입력" value={newItem.amount} onChange={e => setNewItem({ ...newItem, amount: e.target.value })} />
+                            <Label>{t("addModal.labelAmount")}</Label>
+                            <Input type="number" placeholder={t("addModal.placeholderAmount")} value={newItem.amount} onChange={e => setNewItem({ ...newItem, amount: e.target.value })} />
                         </div>
                         <div className="space-y-1">
-                            <Label>비고</Label>
+                            <Label>{t("addModal.labelNote")}</Label>
                             <Input type="text" value={newItem.note} onChange={e => setNewItem({ ...newItem, note: e.target.value })} />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>취소</Button>
-                        <Button onClick={handleCreate}>추가</Button>
+                        <Button variant="outline" onClick={() => setIsAddModalOpen(false)}>{t("addModal.cancel")}</Button>
+                        <Button onClick={handleCreate}>{t("addModal.add")}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

@@ -1,0 +1,89 @@
+{
+  "page": {
+    "title": "仕入管理",
+    "subtitle": "食材、備品などの仕入履歴を管理します。"
+  },
+  "actions": {
+    "deleteSelected": "選択削除 ({count})",
+    "addDirect": "+ 直接追加",
+    "excelSettings": "Excel設定",
+    "excelUpload": "Excelアップロード",
+    "uploading": "アップロード中...",
+    "saveCurrentMapping": "現在の設定を保存",
+    "search": "検索 ({count})",
+    "bulkRegisterFiltered": "検索結果を一括登録",
+    "bulkRegisterAll": "全件一括登録",
+    "deleteAllKeywords": "全て削除",
+    "deleteExceptSearch": "検索結果以外を全て削除"
+  },
+  "mapping": {
+    "title": "Excelカラムマッピング設定",
+    "desc": "Excelのヘッダー名が異なる場合は、以下の入力欄に列名を入力してください。",
+    "colDate": "日付列",
+    "colCategory": "分類列",
+    "colItem": "品目名列",
+    "colAmount": "金額列",
+    "colNote": "備考列",
+    "selectPlaceholder": "-- Excel設定を選択 --",
+    "deleteTitle": "設定削除",
+    "savePrompt": "この設定の名前を入力してください（例：KB国民カード）",
+    "saveSuccess": "設定が保存されました。",
+    "saveFail": "保存失敗",
+    "typeSales": "売上",
+    "typePurchase": "仕入"
+  },
+  "filter": {
+    "all": "全て",
+    "exclude": "除外",
+    "include": "含む",
+    "passwordPlaceholder": "Excelパスワード"
+  },
+  "keyword": {
+    "inputPlaceholder": "キーワード入力",
+    "favorites": "お気に入り:",
+    "deleteConfirm": "このキーワードを削除しますか？",
+    "deleteSettingConfirm": "選択した設定を削除しますか？",
+    "deleteSettingSuccess": "削除されました。",
+    "deleteSettingFail": "削除失敗",
+    "deleteBulkConfirm": "現在の検索キーワード（{keywords}）を含まない全ての「未確定」項目を削除しますか？この操作は元に戻せません。"
+  },
+  "table": {
+    "colStatus": "状態",
+    "colDate": "日付",
+    "colCategory": "分類",
+    "colItem": "品目名",
+    "colAmount": "金額",
+    "colNote": "備考",
+    "statusConfirmed": "登録済み",
+    "statusPending": "保留",
+    "noData": "データがありません。"
+  },
+  "addModal": {
+    "title": "仕入履歴を直接追加",
+    "labelDate": "日付",
+    "labelCategory": "分類",
+    "placeholderCategory": "例：食材",
+    "labelItem": "品目名",
+    "placeholderItem": "例：米 20kg",
+    "labelAmount": "金額",
+    "placeholderAmount": "数字のみ入力",
+    "labelNote": "備考",
+    "cancel": "キャンセル",
+    "add": "追加"
+  },
+  "confirm": {
+    "title": "確認",
+    "cancel": "キャンセル",
+    "ok": "確認"
+  },
+  "alerts": {
+    "uploadError": "アップロード中にエラーが発生しました。",
+    "deleteSuccess": "削除されました。",
+    "deleteFail": "削除失敗",
+    "addRequired": "必須項目を入力してください。",
+    "addSuccess": "項目が追加されました。",
+    "addFail": "追加失敗",
+    "editFail": "編集失敗",
+    "error": "エラーが発生しました"
+  }
+}

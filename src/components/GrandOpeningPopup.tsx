@@ -62,6 +62,7 @@ export function GrandOpeningPopup() {
             alt="설기옥 선릉 본점 그랜드 오픈"
             width={600}
             height={400}
+            sizes="(max-width: 640px) calc(100vw - 2rem), 384px"
             className="w-full object-cover"
             priority
           />

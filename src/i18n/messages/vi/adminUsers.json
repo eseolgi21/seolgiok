@@ -1,0 +1,23 @@
+{
+  "page": {
+    "title": "Quản trị · Danh sách người dùng"
+  },
+  "table": {
+    "detail": "Xem chi tiết",
+    "noData": "Không có dữ liệu.",
+    "totalCount": "Tổng {total} người",
+    "showing": "Hiển thị {start}–{end} (Trang {page}/{totalPages})",
+    "prev": "Trước",
+    "next": "Tiếp"
+  },
+  "loading": "Đang tải…",
+  "refresh": "Làm mới",
+  "detail": {
+    "title": "Chi tiết UserInfo",
+    "close": "Đóng",
+    "confirm": "Xác nhận",
+    "saveLevel": "Lưu cấp độ",
+    "savingLevel": "Đang lưu...",
+    "noUserInfo": "Không tìm thấy UserInfo của người dùng này."
+  }
+}

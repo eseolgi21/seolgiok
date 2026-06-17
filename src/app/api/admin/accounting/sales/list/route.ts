@@ -1,15 +1,13 @@
 
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@/generated/prisma";
 import { getSearchVariants } from "@/lib/string-utils";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 export async function GET(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     // import { getSearchVariants } from "@/lib/string-utils"; // REMOVED
 
@@ -42,6 +40,16 @@ export async function GET(req: NextRequest) {
             orderBy: { date: "desc" },
             skip,
             take: limit,
+            select: {
+                id: true,
+                date: true,
+                itemName: true,
+                category: true,
+                amount: true,
+                paymentMethod: true,
+                note: true,
+                confirmed: true,
+            },
         }),
         prisma.saleItem.count({ where }),
     ]);
@@ -57,10 +65,8 @@ export async function GET(req: NextRequest) {
     });
 }
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();
@@ -90,10 +96,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();
@@ -123,10 +127,8 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();

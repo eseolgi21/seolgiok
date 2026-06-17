@@ -1,5 +1,6 @@
 // src/app/[locale]/admin/boards/events/gaurd/events.ts
 import { z } from "zod";
+import sanitizeHtml from "sanitize-html";
 
 /* -------------------------------
  * 요청 검증 스키마 (입력)
@@ -71,16 +72,17 @@ export const AdminUpdateResultSchema = z.discriminatedUnion("ok", [
 ]);
 
 /* -------------------------------
- * 간단 sanitize 유틸
+ * sanitize 유틸 — sanitize-html 라이브러리 기반
  * ----------------------------- */
 export function sanitizeHtmlAllowBasic(html: string): string {
-  const withoutScripts = html.replace(
-    /<\s*(script|style|iframe)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi,
-    ""
-  );
-  const withoutHandlers = withoutScripts.replace(
-    /\son[a-z]+\s*=\s*"[^"]*"/gi,
-    ""
-  );
-  return withoutHandlers;
+  return sanitizeHtml(html, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "h1", "h2", "h3"]),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      "img": ["src", "alt", "width", "height"],
+      "a": ["href", "name", "target", "rel"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    disallowedTagsMode: "discard",
+  });
 }

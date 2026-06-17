@@ -1,0 +1,39 @@
+{
+  "announcements": {
+    "pageTitle": "Announcements Board",
+    "subtitle": "List by title"
+  },
+  "events": {
+    "pageTitle": "Events Board",
+    "subtitle": "List by title"
+  },
+  "common": {
+    "refresh": "Refresh",
+    "deleteSelected": "Delete Selected",
+    "write": "Write",
+    "loading": "Loading…",
+    "noData": "No data available.",
+    "selectAll": "Select All",
+    "colTitle": "Title",
+    "colPublished": "Published",
+    "colCreatedAt": "Created",
+    "colPeriod": "Period",
+    "published": "Published",
+    "unpublished": "Unpublished",
+    "postView": "View Post",
+    "close": "Close",
+    "clickToView": "Click a row to view the post here.",
+    "createdAt": "Created",
+    "publishedAt": "Published",
+    "period": "Period",
+    "banner": "Banner",
+    "ctaLink": "CTA Link",
+    "bodyRaw": "View raw body",
+    "deleteFailPrefix": "[Delete Failed] {error}",
+    "confirmTitle": "Confirm Delete",
+    "confirmDescAnnouncements": "Delete {count} post(s)? This cannot be undone.",
+    "confirmDescEvents": "Delete {count} event(s)? This cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

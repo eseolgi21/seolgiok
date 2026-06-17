@@ -10,6 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+    AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type ItemRule = {
     id: string;
@@ -21,6 +26,17 @@ export default function ItemManagementPage() {
     const [type, setType] = useState<"PURCHASE" | "SALES">("PURCHASE");
     const [items, setItems] = useState<ItemRule[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
+
+    // AlertDialog
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmMessage, setConfirmMessage] = useState("");
+    const [confirmAction, setConfirmAction] = useState<(() => void) | null>(null);
+
+    const openConfirm = (message: string, action: () => void) => {
+        setConfirmMessage(message);
+        setConfirmAction(() => action);
+        setConfirmOpen(true);
+    };
 
     const filteredItems = items.filter(item =>
         item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,33 +104,32 @@ export default function ItemManagementPage() {
         return result.sort((a, b) => a.name.localeCompare(b.name));
     }, [items, dbCategories]);
 
-    const handleDeleteCategory = async (name: string, id: string | undefined, e: React.MouseEvent) => {
+    const handleDeleteCategory = (name: string, id: string | undefined, e: React.MouseEvent) => {
         e.stopPropagation();
 
         if (id) {
-            // Explicit Category (Saved in DB)
-            if (!confirm(`이 분류를 삭제하시겠습니까? (이 분류를 사용하는 자동 분류 규칙은 유지되지만, 저장된 분류 목록에서는 사라집니다.)`)) return;
-            try {
-                await fetch(`/api/admin/accounting/categories?id=${id}`, { method: "DELETE" });
-                fetchCategories();
-            } catch (err) {
-                console.error(err);
-                alert("삭제 실패");
-            }
-        } else {
-            // Implicit Category (Derived from Rules)
-            const count = items.filter(i => i.category === name).length;
-            if (!confirm(`'${name}' 분류는 현재 ${count}개의 품목 규칙에서 사용되고 있습니다.\n이 분류를 삭제하면, 해당 ${count}개의 품목 규칙도 함께 삭제됩니다.\n계속하시겠습니까?`)) return;
-
-            try {
-                const res = await fetch(`/api/admin/accounting/items?category=${encodeURIComponent(name)}&type=${type}`, { method: "DELETE" });
-                if (res.ok) {
-                    fetchItems(); // Rules changed, so refresh items to update implicit categories
+            openConfirm(`이 분류를 삭제하시겠습니까? (이 분류를 사용하는 자동 분류 규칙은 유지되지만, 저장된 분류 목록에서는 사라집니다.)`, async () => {
+                try {
+                    await fetch(`/api/admin/accounting/categories?id=${id}`, { method: "DELETE" });
+                    fetchCategories();
+                } catch (err) {
+                    console.error(err);
+                    alert("삭제 실패");
                 }
-            } catch (err) {
-                console.error(err);
-                alert("삭제 실패");
-            }
+            });
+        } else {
+            const count = items.filter(i => i.category === name).length;
+            openConfirm(`'${name}' 분류는 현재 ${count}개의 품목 규칙에서 사용되고 있습니다. 이 분류를 삭제하면, 해당 ${count}개의 품목 규칙도 함께 삭제됩니다. 계속하시겠습니까?`, async () => {
+                try {
+                    const res = await fetch(`/api/admin/accounting/items?category=${encodeURIComponent(name)}&type=${type}`, { method: "DELETE" });
+                    if (res.ok) {
+                        fetchItems();
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("삭제 실패");
+                }
+            });
         }
     };
 
@@ -137,7 +152,7 @@ export default function ItemManagementPage() {
         setNewCategoryInput("");
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
         if (!selectedCategory) {
             alert("분류를 선택해주세요.");
             return;
@@ -147,47 +162,48 @@ export default function ItemManagementPage() {
             return;
         }
 
-        if (!confirm(`선택한 분류 [${selectedCategory}]로 품목들을 등록하시겠습니까?`)) return;
+        openConfirm(`선택한 분류 [${selectedCategory}]로 품목들을 등록하시겠습니까?`, async () => {
+            const lines = itemText.split("\n").map(line => line.trim()).filter(line => line);
+            const formattedText = lines.map(line => `${line} : ${selectedCategory}`).join("\n");
 
-        // Construct payload: "Item : Category" format
-        const lines = itemText.split("\n").map(line => line.trim()).filter(line => line);
-        const formattedText = lines.map(line => `${line} : ${selectedCategory}`).join("\n");
+            setProcessing(true);
+            try {
+                const res = await fetch("/api/admin/accounting/items", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type, text: formattedText })
+                });
 
-        setProcessing(true);
-        try {
-            const res = await fetch("/api/admin/accounting/items", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ type, text: formattedText })
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                alert(`${data.count}개 항목이 등록되었습니다.`);
-                setItemText("");
-                fetchItems();
-            } else {
-                alert("저장 실패");
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(`${data.count}개 항목이 등록되었습니다.`);
+                    setItemText("");
+                    fetchItems();
+                } else {
+                    alert("저장 실패");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("오류 발생");
+            } finally {
+                setProcessing(false);
             }
-        } catch (e) {
-            console.error(e);
-            alert("오류 발생");
-        } finally {
-            setProcessing(false);
-        }
+        });
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm("삭제하시겠습니까?")) return;
-        try {
-            await fetch(`/api/admin/accounting/items?id=${id}`, { method: "DELETE" });
-            fetchItems();
-        } catch (e) {
-            console.error(e);
-        }
+    const handleDelete = (id: string) => {
+        openConfirm("삭제하시겠습니까?", async () => {
+            try {
+                await fetch(`/api/admin/accounting/items?id=${id}`, { method: "DELETE" });
+                fetchItems();
+            } catch (e) {
+                console.error(e);
+            }
+        });
     };
 
     return (
+        <>
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
@@ -339,5 +355,20 @@ export default function ItemManagementPage() {
                 </div>
             )}
         </div>
+
+        {/* Confirm Dialog */}
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>확인</AlertDialogTitle>
+                    <AlertDialogDescription>{confirmMessage}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => { confirmAction?.(); setConfirmAction(null); }}>확인</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 }

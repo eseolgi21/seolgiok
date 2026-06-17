@@ -1,8 +1,8 @@
 
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 const ItemSchema = z.object({
     date: z.string(),
@@ -18,10 +18,8 @@ const BodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();

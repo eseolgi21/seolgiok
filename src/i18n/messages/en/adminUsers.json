@@ -1,0 +1,23 @@
+{
+  "page": {
+    "title": "Admin · User List"
+  },
+  "table": {
+    "detail": "View Detail",
+    "noData": "No data available.",
+    "totalCount": "Total {total} users",
+    "showing": "Showing {start}–{end} (Page {page}/{totalPages})",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "loading": "Loading…",
+  "refresh": "Refresh",
+  "detail": {
+    "title": "UserInfo Detail",
+    "close": "Close",
+    "confirm": "OK",
+    "saveLevel": "Save Level",
+    "savingLevel": "Saving...",
+    "noUserInfo": "No UserInfo found for this user."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "page": {
+    "title": "管理员 · 用户列表"
+  },
+  "table": {
+    "detail": "查看详情",
+    "noData": "暂无数据。",
+    "totalCount": "共 {total} 名",
+    "showing": "显示 {start}–{end}（第 {page}/{totalPages} 页）",
+    "prev": "上一页",
+    "next": "下一页"
+  },
+  "loading": "加载中…",
+  "refresh": "刷新",
+  "detail": {
+    "title": "UserInfo 详情",
+    "close": "关闭",
+    "confirm": "确认",
+    "saveLevel": "保存等级",
+    "savingLevel": "保存中...",
+    "noUserInfo": "该用户没有 UserInfo。"
+  }
+}

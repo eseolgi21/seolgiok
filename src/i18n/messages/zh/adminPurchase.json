@@ -1,0 +1,89 @@
+{
+  "page": {
+    "title": "采购管理",
+    "subtitle": "管理食材、耗材等采购记录。"
+  },
+  "actions": {
+    "deleteSelected": "删除所选 ({count})",
+    "addDirect": "+ 手动添加",
+    "excelSettings": "Excel 设置",
+    "excelUpload": "上传 Excel",
+    "uploading": "上传中...",
+    "saveCurrentMapping": "保存当前设置",
+    "search": "搜索 ({count})",
+    "bulkRegisterFiltered": "批量注册搜索结果",
+    "bulkRegisterAll": "全部批量注册",
+    "deleteAllKeywords": "全部删除",
+    "deleteExceptSearch": "删除搜索结果以外的所有项"
+  },
+  "mapping": {
+    "title": "Excel 列映射设置",
+    "desc": "如果 Excel 的列标题名称不同，请在下方输入框中输入对应列名。",
+    "colDate": "日期列",
+    "colCategory": "分类列",
+    "colItem": "品目名列",
+    "colAmount": "金额列",
+    "colNote": "备注列",
+    "selectPlaceholder": "-- 选择 Excel 设置 --",
+    "deleteTitle": "删除设置",
+    "savePrompt": "请输入此设置的名称（例：KB 国民银行卡）",
+    "saveSuccess": "设置已保存。",
+    "saveFail": "保存失败",
+    "typeSales": "销售",
+    "typePurchase": "采购"
+  },
+  "filter": {
+    "all": "全部",
+    "exclude": "排除",
+    "include": "包含",
+    "passwordPlaceholder": "Excel 密码"
+  },
+  "keyword": {
+    "inputPlaceholder": "输入关键词",
+    "favorites": "收藏:",
+    "deleteConfirm": "确认删除此关键词？",
+    "deleteSettingConfirm": "确认删除所选设置？",
+    "deleteSettingSuccess": "已删除。",
+    "deleteSettingFail": "删除失败",
+    "deleteBulkConfirm": "确认删除所有不包含当前关键词（{keywords}）的'未确认'项目？此操作无法撤销。"
+  },
+  "table": {
+    "colStatus": "状态",
+    "colDate": "日期",
+    "colCategory": "分类",
+    "colItem": "品目名",
+    "colAmount": "金额",
+    "colNote": "备注",
+    "statusConfirmed": "已注册",
+    "statusPending": "待确认",
+    "noData": "暂无数据。"
+  },
+  "addModal": {
+    "title": "手动添加采购记录",
+    "labelDate": "日期",
+    "labelCategory": "分类",
+    "placeholderCategory": "例：食材",
+    "labelItem": "品目名",
+    "placeholderItem": "例：大米 20kg",
+    "labelAmount": "金额",
+    "placeholderAmount": "仅输入数字",
+    "labelNote": "备注",
+    "cancel": "取消",
+    "add": "添加"
+  },
+  "confirm": {
+    "title": "确认",
+    "cancel": "取消",
+    "ok": "确认"
+  },
+  "alerts": {
+    "uploadError": "上传过程中发生错误。",
+    "deleteSuccess": "已删除。",
+    "deleteFail": "删除失败",
+    "addRequired": "请填写所有必填项。",
+    "addSuccess": "已添加项目。",
+    "addFail": "添加失败",
+    "editFail": "修改失败",
+    "error": "发生错误"
+  }
+}

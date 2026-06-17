@@ -11,6 +11,7 @@ import {
 
 // ✅ 세션 유저 ID를 가져오는 함수 (프로젝트에 이미 쓰시던 동일 경로 가정)
 import { getUserId } from "@/lib/request-user";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 import { z } from "zod";
 
 function ok<T>(data: T) {
@@ -129,7 +130,9 @@ export async function POST(req: NextRequest) {
 // ==== PATCH: 수정 ====
 export async function PATCH(req: NextRequest) {
   try {
-    // (선택) 권한 정책이 있으면 작성자/관리자 검증 추가
+    const { error } = await requireAdmin();
+    if (error) return error;
+
     const json = await req.json().catch(() => null);
     if (!json) return err("EMPTY_BODY", 400);
 
@@ -180,9 +183,8 @@ const BulkDeleteSchema = z.object({
 
 export async function DELETE(req: NextRequest) {
   try {
-    // (선택) 관리자/권한 검증이 필요하면 여기서 수행
-    // const userId = await getUserId();
-    // if (!userId) return err("UNAUTHORIZED", 401);
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     const json = await req.json().catch(() => null);
     const parsed = BulkDeleteSchema.safeParse(json);

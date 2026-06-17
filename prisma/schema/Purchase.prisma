@@ -12,4 +12,5 @@ model PurchaseItem {
   updatedAt   DateTime @updatedAt
 
   @@index([date])
+  @@index([confirmed, date])
 }

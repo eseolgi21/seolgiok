@@ -1,0 +1,39 @@
+{
+  "announcements": {
+    "pageTitle": "お知らせ掲示板",
+    "subtitle": "タイトル別一覧"
+  },
+  "events": {
+    "pageTitle": "イベント掲示板",
+    "subtitle": "タイトル別一覧"
+  },
+  "common": {
+    "refresh": "更新",
+    "deleteSelected": "選択削除",
+    "write": "投稿",
+    "loading": "読み込み中…",
+    "noData": "データがありません。",
+    "selectAll": "全て選択",
+    "colTitle": "タイトル",
+    "colPublished": "公開",
+    "colCreatedAt": "作成日",
+    "colPeriod": "期間",
+    "published": "公開",
+    "unpublished": "非公開",
+    "postView": "投稿を見る",
+    "close": "閉じる",
+    "clickToView": "行をクリックすると投稿がここに表示されます。",
+    "createdAt": "作成日",
+    "publishedAt": "公開日",
+    "period": "期間",
+    "banner": "バナー",
+    "ctaLink": "CTAリンク",
+    "bodyRaw": "原文を見る",
+    "deleteFailPrefix": "[削除失敗] {error}",
+    "confirmTitle": "削除確認",
+    "confirmDescAnnouncements": "{count}件の投稿を削除しますか？この操作は元に戻せません。",
+    "confirmDescEvents": "{count}件のイベントを削除しますか？この操作は元に戻せません。",
+    "cancel": "キャンセル",
+    "delete": "削除"
+  }
+}

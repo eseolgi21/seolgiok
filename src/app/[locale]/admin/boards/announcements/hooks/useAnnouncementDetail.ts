@@ -5,22 +5,7 @@
 import { useCallback, useState } from "react";
 import type { AdminDetailResult, AdminPostDetail } from "../types";
 import { AdminDetailResultSchema } from "../gaurd/announcements";
-
-async function jsonFetch<T>(
-  input: RequestInfo | URL,
-  init?: RequestInit
-): Promise<T> {
-  const res = await fetch(input, init);
-  const ct = res.headers.get("content-type") ?? "";
-  if (!ct.includes("application/json")) {
-    const text = await res.text();
-    throw new Error(
-      `HTTP ${res.status} ${res.statusText} — non-JSON: ${text.slice(0, 300)}`
-    );
-  }
-  const data = (await res.json()) as unknown;
-  return data as T;
-}
+import { jsonFetch } from "@/lib/fetch";
 
 export function useAnnouncementDetail() {
   const [detail, setDetail] = useState<AdminPostDetail | null>(null);

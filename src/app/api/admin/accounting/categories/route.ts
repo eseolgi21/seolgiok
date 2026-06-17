@@ -1,13 +1,11 @@
 
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 export async function GET(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type");
@@ -27,10 +25,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();
@@ -57,10 +53,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

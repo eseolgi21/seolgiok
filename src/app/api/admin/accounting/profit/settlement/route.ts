@@ -1,14 +1,12 @@
 
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { parseISO, startOfDay, endOfDay } from "date-fns";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 export async function GET(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 10) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin(10);
+    if (error) return error;
 
     const { searchParams } = new URL(req.url);
     const startDateStr = searchParams.get("startDate");
@@ -146,10 +144,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 20) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin(20);
+    if (error) return error;
 
     try {
         const body = await req.json();

@@ -1,14 +1,12 @@
 
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { KeywordType } from "@/generated/prisma";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 export async function GET(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type"); // "PURCHASE" or "SALES"
@@ -26,10 +24,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     try {
         const body = await req.json();
@@ -68,32 +64,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "No valid rules parsed" }, { status: 400 });
         }
 
-        // Upsert logic is hard with createMany. 
-        // We will loop and unique insert (or upsert).
-        // Since we want to update category if item exists.
-
-        let count = 0;
-        for (const item of inputs) {
-            // Check for exact duplicate (Item + Category + Type)
-            const existing = await prisma.itemClassification.findFirst({
-                where: {
-                    itemName: item.itemName,
-                    category: item.category,
-                    type: type as KeywordType
-                }
+        const existing = await prisma.itemClassification.findMany({
+            where: {
+                type: type as KeywordType,
+                OR: inputs.map(i => ({ itemName: i.itemName, category: i.category })),
+            },
+            select: { itemName: true, category: true },
+        });
+        const existingSet = new Set(existing.map(e => `${e.itemName}|${e.category}`));
+        const toCreate = inputs.filter(i => !existingSet.has(`${i.itemName}|${i.category}`));
+        if (toCreate.length > 0) {
+            await prisma.itemClassification.createMany({
+                data: toCreate.map(i => ({ itemName: i.itemName, category: i.category, type: type as KeywordType })),
+                skipDuplicates: true,
             });
-
-            if (!existing) {
-                await prisma.itemClassification.create({
-                    data: {
-                        itemName: item.itemName,
-                        category: item.category,
-                        type: type as KeywordType
-                    }
-                });
-                count++;
-            }
         }
+        const count = toCreate.length;
 
         return NextResponse.json({ success: true, count });
     } catch (e) {
@@ -103,10 +89,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

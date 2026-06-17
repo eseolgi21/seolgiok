@@ -1,9 +1,8 @@
-import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import * as XLSX from "xlsx";
 import officeCrypto from "officecrypto-tool";
 import { toHalfWidth } from "@/lib/string-utils";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 // Helper to find column index by fuzzy matching
 function findColumn(headers: string[], keywords: string[]): string | undefined {
@@ -45,10 +44,11 @@ function parseDateSafe(value: unknown): Date | null {
 }
 
 export async function POST(req: NextRequest) {
-    const session = await auth();
-    if (!session || (session.user.level ?? 0) < 21) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error } = await requireAdmin();
+    if (error) return error;
+
+    const xlsxModule = await import('xlsx');
+    const XLSX = xlsxModule.default ?? xlsxModule;
 
     try {
         const formData = await req.formData();

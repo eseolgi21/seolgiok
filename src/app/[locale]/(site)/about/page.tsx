@@ -50,6 +50,7 @@ export default async function AboutPage({ params }: Props) {
               src="/images/seolgiok_homescreen.png"
               alt="설기옥"
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 60vw"
               className="object-cover brightness-90 sepia-[0.15]"
             />
           </div>

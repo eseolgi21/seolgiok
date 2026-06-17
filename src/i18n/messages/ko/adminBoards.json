@@ -1,0 +1,39 @@
+{
+  "announcements": {
+    "pageTitle": "공지 게시판",
+    "subtitle": "제목 기준 목록"
+  },
+  "events": {
+    "pageTitle": "이벤트 게시판",
+    "subtitle": "제목 기준 목록"
+  },
+  "common": {
+    "refresh": "새로고침",
+    "deleteSelected": "선택 삭제",
+    "write": "글쓰기",
+    "loading": "불러오는 중…",
+    "noData": "데이터가 없습니다.",
+    "selectAll": "전체 선택",
+    "colTitle": "제목",
+    "colPublished": "발행",
+    "colCreatedAt": "작성",
+    "colPeriod": "기간",
+    "published": "발행",
+    "unpublished": "미발행",
+    "postView": "게시글 보기",
+    "close": "닫기",
+    "clickToView": "행을 클릭하면 게시글이 여기에 표시됩니다.",
+    "createdAt": "작성",
+    "publishedAt": "발행",
+    "period": "기간",
+    "banner": "배너",
+    "ctaLink": "CTA 링크",
+    "bodyRaw": "원문(bodyRaw) 보기",
+    "deleteFailPrefix": "[삭제 실패] {error}",
+    "confirmTitle": "삭제 확인",
+    "confirmDescAnnouncements": "{count}개의 게시글을 삭제하시겠습니까? 되돌릴 수 없습니다.",
+    "confirmDescEvents": "{count}개의 이벤트를 삭제하시겠습니까? 되돌릴 수 없습니다.",
+    "cancel": "취소",
+    "delete": "삭제"
+  }
+}

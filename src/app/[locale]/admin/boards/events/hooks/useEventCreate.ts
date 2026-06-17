@@ -3,24 +3,7 @@
 import { useCallback, useState } from "react";
 import { AdminPostFormInput, AdminUpdateResult } from "../types";
 import { AdminUpdateResultSchema } from "../gaurd/events";
-// import type { AdminPostFormInput, AdminUpdateResult } from "../../types";
-// import { AdminUpdateResultSchema } from "../../gaurd/events";
-
-async function jsonFetch<T>(
-  input: RequestInfo | URL,
-  init?: RequestInit
-): Promise<T> {
-  const res = await fetch(input, init);
-  const ct = res.headers.get("content-type") ?? "";
-  if (!ct.includes("application/json")) {
-    const text = await res.text();
-    throw new Error(
-      `HTTP ${res.status} ${res.statusText} — non-JSON: ${text.slice(0, 300)}`
-    );
-  }
-  const data = (await res.json()) as unknown;
-  return data as T;
-}
+import { jsonFetch } from "@/lib/fetch";
 
 export function useEventCreate() {
   const [creating, setCreating] = useState<boolean>(false);

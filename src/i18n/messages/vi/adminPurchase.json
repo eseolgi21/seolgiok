@@ -1,0 +1,89 @@
+{
+  "page": {
+    "title": "Quản lý mua hàng",
+    "subtitle": "Quản lý lịch sử mua hàng bao gồm nguyên liệu, vật tư."
+  },
+  "actions": {
+    "deleteSelected": "Xóa đã chọn ({count})",
+    "addDirect": "+ Thêm thủ công",
+    "excelSettings": "Cài đặt Excel",
+    "excelUpload": "Tải lên Excel",
+    "uploading": "Đang tải lên...",
+    "saveCurrentMapping": "Lưu cài đặt hiện tại",
+    "search": "Tìm kiếm ({count})",
+    "bulkRegisterFiltered": "Đăng ký hàng loạt kết quả tìm kiếm",
+    "bulkRegisterAll": "Đăng ký hàng loạt tất cả",
+    "deleteAllKeywords": "Xóa tất cả",
+    "deleteExceptSearch": "Xóa tất cả ngoại trừ kết quả tìm kiếm"
+  },
+  "mapping": {
+    "title": "Cài đặt ánh xạ cột Excel",
+    "desc": "Nếu tên tiêu đề cột Excel khác, hãy nhập tên cột vào ô bên dưới.",
+    "colDate": "Cột ngày",
+    "colCategory": "Cột phân loại",
+    "colItem": "Cột tên hàng",
+    "colAmount": "Cột số tiền",
+    "colNote": "Cột ghi chú",
+    "selectPlaceholder": "-- Chọn cài đặt Excel --",
+    "deleteTitle": "Xóa cài đặt",
+    "savePrompt": "Nhập tên cho cài đặt này (ví dụ: Thẻ KB)",
+    "saveSuccess": "Cài đặt đã được lưu.",
+    "saveFail": "Lưu thất bại",
+    "typeSales": "Doanh thu",
+    "typePurchase": "Mua hàng"
+  },
+  "filter": {
+    "all": "Tất cả",
+    "exclude": "Loại trừ",
+    "include": "Bao gồm",
+    "passwordPlaceholder": "Mật khẩu Excel"
+  },
+  "keyword": {
+    "inputPlaceholder": "Nhập từ khóa",
+    "favorites": "Yêu thích:",
+    "deleteConfirm": "Xóa từ khóa này?",
+    "deleteSettingConfirm": "Xóa cài đặt đã chọn?",
+    "deleteSettingSuccess": "Đã xóa.",
+    "deleteSettingFail": "Xóa thất bại",
+    "deleteBulkConfirm": "Xóa tất cả mục 'chưa xác nhận' không chứa từ khóa hiện tại ({keywords})? Thao tác này không thể hoàn tác."
+  },
+  "table": {
+    "colStatus": "Trạng thái",
+    "colDate": "Ngày",
+    "colCategory": "Phân loại",
+    "colItem": "Tên hàng",
+    "colAmount": "Số tiền",
+    "colNote": "Ghi chú",
+    "statusConfirmed": "Đã đăng ký",
+    "statusPending": "Chờ xử lý",
+    "noData": "Không có dữ liệu."
+  },
+  "addModal": {
+    "title": "Thêm thủ công mua hàng",
+    "labelDate": "Ngày",
+    "labelCategory": "Phân loại",
+    "placeholderCategory": "VD: Nguyên liệu",
+    "labelItem": "Tên hàng",
+    "placeholderItem": "VD: Gạo 20kg",
+    "labelAmount": "Số tiền",
+    "placeholderAmount": "Chỉ nhập số",
+    "labelNote": "Ghi chú",
+    "cancel": "Hủy",
+    "add": "Thêm"
+  },
+  "confirm": {
+    "title": "Xác nhận",
+    "cancel": "Hủy",
+    "ok": "Xác nhận"
+  },
+  "alerts": {
+    "uploadError": "Đã xảy ra lỗi khi tải lên.",
+    "deleteSuccess": "Đã xóa.",
+    "deleteFail": "Xóa thất bại",
+    "addRequired": "Vui lòng điền đầy đủ các trường bắt buộc.",
+    "addSuccess": "Đã thêm mục.",
+    "addFail": "Thêm thất bại",
+    "editFail": "Chỉnh sửa thất bại",
+    "error": "Đã xảy ra lỗi"
+  }
+}

@@ -23,6 +23,7 @@ export function MenuGallery({ images, zoomLabel, closeLabel }: Props) {
               alt={`메뉴판 ${i + 1}`}
               width={1200}
               height={900}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="w-full h-auto object-contain"
               priority={i === 0}
             />
@@ -54,6 +55,7 @@ export function MenuGallery({ images, zoomLabel, closeLabel }: Props) {
               alt="메뉴판 확대"
               width={1600}
               height={1200}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 896px"
               className="w-full h-auto object-contain"
             />
           </div>

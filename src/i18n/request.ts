@@ -19,6 +19,10 @@ const NAMESPACES = [
   "help",
   "cases",
   "account",
+  "adminUsers",
+  "adminBoards",
+  "adminSales",
+  "adminPurchase",
 ] as const;
 type Namespace = (typeof NAMESPACES)[number];
 

@@ -49,4 +49,5 @@ model SaleItem {
   updatedAt     DateTime @updatedAt
 
   @@index([date])
+  @@index([confirmed, date])
 }

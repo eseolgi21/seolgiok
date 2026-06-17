@@ -1,0 +1,39 @@
+{
+  "announcements": {
+    "pageTitle": "公告栏",
+    "subtitle": "按标题显示列表"
+  },
+  "events": {
+    "pageTitle": "活动栏",
+    "subtitle": "按标题显示列表"
+  },
+  "common": {
+    "refresh": "刷新",
+    "deleteSelected": "删除所选",
+    "write": "发布",
+    "loading": "加载中…",
+    "noData": "暂无数据。",
+    "selectAll": "全选",
+    "colTitle": "标题",
+    "colPublished": "发布",
+    "colCreatedAt": "创建日期",
+    "colPeriod": "期间",
+    "published": "已发布",
+    "unpublished": "未发布",
+    "postView": "查看帖子",
+    "close": "关闭",
+    "clickToView": "点击行可在此处查看帖子。",
+    "createdAt": "创建",
+    "publishedAt": "发布",
+    "period": "期间",
+    "banner": "横幅",
+    "ctaLink": "CTA 链接",
+    "bodyRaw": "查看原文",
+    "deleteFailPrefix": "[删除失败] {error}",
+    "confirmTitle": "确认删除",
+    "confirmDescAnnouncements": "确认删除 {count} 篇帖子？此操作无法撤销。",
+    "confirmDescEvents": "确认删除 {count} 个活动？此操作无法撤销。",
+    "cancel": "取消",
+    "delete": "删除"
+  }
+}

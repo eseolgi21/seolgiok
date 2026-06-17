@@ -10,6 +10,7 @@ import {
 } from "@/app/[locale]/admin/boards/events/gaurd/events";
 
 import { getUserId } from "@/lib/request-user";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 import { z } from "zod";
 
 function ok<T>(data: T) {
@@ -180,6 +181,9 @@ export async function POST(req: NextRequest) {
 // ==== PATCH: 수정 (BoardType.EVENT) ====
 export async function PATCH(req: NextRequest) {
   try {
+    const { error } = await requireAdmin();
+    if (error) return error;
+
     const json = await req.json().catch(() => null);
     if (!json) return err("EMPTY_BODY", 400);
 
@@ -251,6 +255,9 @@ const BulkDeleteSchema = z.object({
 
 export async function DELETE(req: NextRequest) {
   try {
+    const { error } = await requireAdmin();
+    if (error) return error;
+
     const json = await req.json().catch(() => null);
     const parsed = BulkDeleteSchema.safeParse(json);
     if (!parsed.success) return err("INVALID_BODY", 400);

@@ -1,0 +1,93 @@
+{
+  "page": {
+    "title": "Sales Records",
+    "subtitle": "Manage sales records including dine-in and delivery."
+  },
+  "actions": {
+    "deleteSelected": "Delete Selected ({count})",
+    "addDirect": "+ Add Manually",
+    "excelSettings": "Excel Settings",
+    "excelUpload": "Upload Excel",
+    "uploading": "Uploading...",
+    "saveCurrentMapping": "Save Current Settings",
+    "search": "Search ({count})",
+    "bulkRegisterFiltered": "Bulk Register Search Results",
+    "bulkRegisterAll": "Bulk Register All",
+    "deleteAllKeywords": "Clear All",
+    "deleteExceptSearch": "Delete All Except Search Results"
+  },
+  "mapping": {
+    "title": "Excel Column Mapping Settings",
+    "desc": "If the Excel header names differ, enter the column name in the fields below.",
+    "colDate": "Date Column",
+    "colCategory": "Category Column",
+    "colItem": "Item Column",
+    "colAmount": "Amount Column",
+    "colPayment": "Payment Column",
+    "colNote": "Note Column",
+    "selectPlaceholder": "-- Select Excel Settings --",
+    "deleteTitle": "Delete Settings",
+    "savePrompt": "Enter a name for this setting (e.g. Baemin)",
+    "saveSuccess": "Settings saved.",
+    "saveFail": "Save failed",
+    "typeSales": "Sales",
+    "typePurchase": "Purchase"
+  },
+  "filter": {
+    "all": "All",
+    "exclude": "Exclude",
+    "include": "Include",
+    "passwordPlaceholder": "Excel Password"
+  },
+  "keyword": {
+    "inputPlaceholder": "Enter keyword",
+    "favorites": "Favorites:",
+    "deleteConfirm": "Delete this keyword?",
+    "deleteSettingConfirm": "Delete the selected setting?",
+    "deleteSettingSuccess": "Deleted.",
+    "deleteSettingFail": "Delete failed",
+    "deleteBulkConfirm": "Delete all 'unconfirmed' items that do NOT include the current keyword(s) ({keywords})? This cannot be undone."
+  },
+  "table": {
+    "colStatus": "Status",
+    "colDate": "Date",
+    "colCategory": "Category",
+    "colItem": "Item",
+    "colAmount": "Amount",
+    "colPayment": "Payment",
+    "colNote": "Note",
+    "statusConfirmed": "Registered",
+    "statusPending": "Pending",
+    "noData": "No data available."
+  },
+  "addModal": {
+    "title": "Add Sales Record Manually",
+    "labelDate": "Date",
+    "labelCategory": "Category",
+    "placeholderCategory": "e.g. Dine-in, Delivery",
+    "labelItem": "Item Name",
+    "placeholderItem": "e.g. Americano",
+    "labelAmount": "Amount",
+    "placeholderAmount": "Numbers only",
+    "labelPayment": "Payment Method",
+    "placeholderPayment": "e.g. Card, Cash",
+    "labelNote": "Note",
+    "cancel": "Cancel",
+    "add": "Add"
+  },
+  "confirm": {
+    "title": "Confirm",
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
+  "alerts": {
+    "uploadError": "An error occurred during upload.",
+    "deleteSuccess": "Deleted.",
+    "deleteFail": "Delete failed",
+    "addRequired": "Please fill in all required fields.",
+    "addSuccess": "Item added.",
+    "addFail": "Add failed",
+    "editFail": "Edit failed",
+    "error": "An error occurred"
+  }
+}

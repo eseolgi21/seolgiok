@@ -100,16 +100,13 @@ function NavGroup({
   pathname: string | null;
 }) {
   const active = anyChildActive(pathname, node);
-  const [open, setOpen] = useState(active);
-
-  useEffect(() => {
-    if (active) setOpen(true);
-  }, [active]);
+  const [manualOpen, setManualOpen] = useState(false);
+  const open = active || manualOpen;
 
   return (
     <Collapsible
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={setManualOpen}
       className="group/collapsible"
     >
       <SidebarMenuItem>
