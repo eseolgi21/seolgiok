@@ -2,7 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserId } from "@/lib/request-user";
+import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 // 공용 셀렉트: 목록
 const userListSelect = {
@@ -73,13 +73,9 @@ async function collectAllDownlineIds(rootUserId: string): Promise<Set<string>> {
 // - 목록: ?id 미지정 → "관리자 본인 + 산하(모든 레벨)" 사용자 리스트(페이지네이션)
 // - 상세: ?id=USER_ID → "관리자 본인 또는 산하(모든 레벨)"일 때만 UserInfo 반환(없으면 data=null)
 export async function GET(req: NextRequest) {
-  const adminId = await getUserId();
-  if (!adminId) {
-    return NextResponse.json(
-      { ok: false, error: "UNAUTHORIZED" },
-      { status: 401 }
-    );
-  }
+  const { session, error } = await requireAdmin();
+  if (error) return error;
+  const adminId = session!.user.id!;
 
   // ✅ 산하(모든 레벨) 수집 + 본인 포함
   const downlineSet = await collectAllDownlineIds(adminId);
@@ -166,13 +162,9 @@ export async function GET(req: NextRequest) {
 // - body: { userId, level }
 // - 동작: "관리자 본인 또는 산하(모든 레벨) 유저"의 기존 UserInfo가 존재할 때만 level 수정
 export async function PATCH(req: NextRequest) {
-  const adminId = await getUserId();
-  if (!adminId) {
-    return NextResponse.json(
-      { ok: false, error: "UNAUTHORIZED" },
-      { status: 401 }
-    );
-  }
+  const { session, error } = await requireAdmin();
+  if (error) return error;
+  const adminId = session!.user.id!;
 
   let json: unknown;
   try {
