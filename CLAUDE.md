@@ -141,18 +141,32 @@ NEXT_PUBLIC_BRAND_NAME — 브랜드명 (공개, 클라이언트 노출)
 
 ## Harness Engineering
 
+### E2E 테스트 파일 위치 (절대 규칙)
+
+**E2E 관련 모든 파일·폴더는 반드시 `seolgiok/e2e/` 아래에 생성한다.**
+
+```
+seolgiok/e2e/
+├── *.cjs          — Playwright 테스트 스크립트 (package.json "type":"module" 때문에 .cjs 필수)
+├── screenshots/   — 테스트 중 캡처한 스크린샷
+├── .auth/         — Playwright 인증 상태 저장 (storageState)
+└── results/       — 테스트 결과 JSON
+```
+
+- 프로젝트 루트, `/tmp`, `scratchpad/` 등 다른 위치에 E2E 파일 생성 금지
+- `seolgiok/e2e/` 는 `.gitignore`에 등록되어 있어 커밋되지 않음
+- 테스트 완료 후 스크린샷·결과 파일은 세션이 끝날 때까지 보존 (즉시 삭제 금지)
+
 ### 현재 방식 (운영 중)
 
 - **`npm run lint`** — ESLint 전체 검사
 - **`docs/qa/test-cases.md` (TC-01~TC-48)** — 기능별 수동 시나리오 검증 기준
 - **`docs/qa/checklist.md`** — 배포 전·코드 변경 후 체크리스트
 - **코드 변경 후 전문 에이전트 diff 리뷰** — 회계 로직은 `domain-expert`, 보안은 `security-expert`
-
-> 자동화 테스트 프레임워크 미설정. `__tests__/sample.test.js` 는 플레이스홀더.
+- **E2E: Playwright** — `seolgiok/e2e/*.cjs` 스크립트, `node e2e/<스크립트>.cjs` 로 실행
 
 ### 미래 로드맵 (미구현)
 
 - `tests/harness/<기능명>/` — Mock(DB·외부 API), 입력, 기대값 구조
 - `src/core/` (순수 로직) + `src/infra/` (실 의존성) 분리
 - `package.json`에 `"test": "node --test"` 추가
-- E2E: Playwright (devDependency 설치됨, 미설정)

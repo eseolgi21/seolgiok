@@ -49,8 +49,8 @@ next-env.d.ts
 /generated/
 /scripts/
 
-# Playwright
-e2e/.auth/
+# Playwright / E2E — 모든 E2E 파일은 e2e/ 하위에 보관 (커밋 제외)
+e2e/
 playwright-report/
 test-results/
 .env.test.local
