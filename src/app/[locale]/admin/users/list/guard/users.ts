@@ -16,6 +16,7 @@ export const UserRowSchema = z.object({
   name: z.string().nullable(),
   countryCode: z.string().length(2).nullable(),
   createdAt: z.string().min(1), // ISO 문자열(서버에서 toISOString)
+  level: z.number().int().min(1).default(1),
 });
 
 // 목록 API 응답 (페이지네이션 메타 포함)

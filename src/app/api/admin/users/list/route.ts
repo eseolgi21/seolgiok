@@ -12,6 +12,7 @@ const userListSelect = {
   name: true,
   countryCode: true,
   createdAt: true,
+  info: { select: { level: true } },
 } as const;
 
 // 상세: UserInfo by userId (googleOtpSecret 제외 — 암호화된 시크릿은 API 외부 노출 금지)
@@ -150,8 +151,9 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  const data = rows.map((r) => ({
+  const data = rows.map(({ info, ...r }) => ({
     ...r,
+    level: info?.level ?? 1,
     createdAt: r.createdAt.toISOString(),
   }));
 

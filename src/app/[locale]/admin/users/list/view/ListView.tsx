@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserCheck, UserX } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useTranslations } from "next-intl";
 
@@ -29,12 +29,14 @@ function formatDate(iso: string): string {
 function UsersTable(props: {
   rows: UserRow[];
   onDetail: (userId: string) => void;
+  onToggleStaff: (userId: string, level: number) => void;
+  togglingStaffId: string | null;
   page: number;
   pageSize: number;
   total: number;
   setPage: (p: number) => void;
 }) {
-  const { rows, onDetail, page, pageSize, total, setPage } = props;
+  const { rows, onDetail, onToggleStaff, togglingStaffId, page, pageSize, total, setPage } = props;
   const t = useTranslations("adminUsers");
 
   // 총 페이지 수
@@ -74,6 +76,7 @@ function UsersTable(props: {
             <TableHead>username</TableHead>
             <TableHead>email</TableHead>
             <TableHead>name</TableHead>
+            <TableHead>직원</TableHead>
             <TableHead>country</TableHead>
             <TableHead>created</TableHead>
             <TableHead></TableHead>
@@ -86,6 +89,37 @@ function UsersTable(props: {
               <TableCell>{u.username}</TableCell>
               <TableCell>{u.email}</TableCell>
               <TableCell>{u.name}</TableCell>
+              <TableCell>
+                {u.level < 21 && (
+                  u.level >= 10 ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 border-red-300 hover:bg-red-50 gap-1"
+                      disabled={togglingStaffId === u.id}
+                      onClick={() => onToggleStaff(u.id, u.level)}
+                    >
+                      {togglingStaffId === u.id
+                        ? <Loader2 className="h-3 w-3 animate-spin" />
+                        : <UserX className="h-3 w-3" />}
+                      직원 해제
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-blue-600 border-blue-300 hover:bg-blue-50 gap-1"
+                      disabled={togglingStaffId === u.id}
+                      onClick={() => onToggleStaff(u.id, u.level)}
+                    >
+                      {togglingStaffId === u.id
+                        ? <Loader2 className="h-3 w-3 animate-spin" />
+                        : <UserCheck className="h-3 w-3" />}
+                      직원 등록
+                    </Button>
+                  )
+                )}
+              </TableCell>
               <TableCell>{u.countryCode ?? "-"}</TableCell>
               <TableCell>{formatDate(u.createdAt)}</TableCell>
               <TableCell>
@@ -275,6 +309,8 @@ export default function ListView(props: UseUsersListReturn) {
     setEditLevel,
     savingLevel,
     saveLevel,
+    toggleStaff,
+    togglingStaffId,
     page,
     pageSize,
     total,
@@ -306,6 +342,8 @@ export default function ListView(props: UseUsersListReturn) {
         <UsersTable
           rows={users}
           onDetail={openDetail}
+          onToggleStaff={toggleStaff}
+          togglingStaffId={togglingStaffId}
           page={page}
           pageSize={pageSize}
           total={total}

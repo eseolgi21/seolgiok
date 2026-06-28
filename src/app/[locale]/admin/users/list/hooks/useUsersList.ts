@@ -26,6 +26,9 @@ export function useUsersList(): UseUsersListReturn {
   const [editLevel, setEditLevelState] = useState<number | null>(null);
   const [savingLevel, setSavingLevel] = useState<boolean>(false);
 
+  // 직원 등록/해제 토글 상태
+  const [togglingStaffId, setTogglingStaffId] = useState<string | null>(null);
+
   // pagination
   const [page, setPage] = useState<number>(1);
   const [pageSize] = useState<number>(20);
@@ -118,6 +121,33 @@ export function useUsersList(): UseUsersListReturn {
     }
   }, [detailOpen, detailUserId, fetchDetail]);
 
+  const toggleStaff = useCallback(async (userId: string, currentLevel: number) => {
+    if (currentLevel >= 21) return; // 어드민 보호
+    const newLevel = currentLevel >= 10 ? 1 : 10;
+    setTogglingStaffId(userId);
+    try {
+      const payload = toUpdateLevelPayload(userId, newLevel);
+      const res = await fetch("/api/admin/users/list", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = (await res.json()) as unknown;
+      const parsed = parseUpdateLevelResponse(json);
+      if (!parsed.ok) {
+        toast.error("저장 실패", { description: parsed.error });
+        return;
+      }
+      const label = newLevel >= 10 ? "직원 등록" : "직원 해제";
+      toast.success(`${label} 완료`);
+      void fetchList();
+    } catch {
+      toast.error("네트워크 오류", { description: "저장 중 오류가 발생했습니다." });
+    } finally {
+      setTogglingStaffId(null);
+    }
+  }, [fetchList]);
+
   const saveLevel = useCallback(async () => {
     if (!detailUserId || editLevel === null) {
       toast.error("저장 불가", { description: "잘못된 입력입니다." });
@@ -162,7 +192,8 @@ export function useUsersList(): UseUsersListReturn {
       setEditLevel,
       savingLevel,
       saveLevel,
-
+      toggleStaff,
+      togglingStaffId,
       page,
       pageSize,
       total,
@@ -182,6 +213,8 @@ export function useUsersList(): UseUsersListReturn {
       setEditLevel,
       savingLevel,
       saveLevel,
+      toggleStaff,
+      togglingStaffId,
       page,
       pageSize,
       total,

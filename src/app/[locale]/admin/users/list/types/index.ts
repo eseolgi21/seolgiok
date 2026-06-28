@@ -5,6 +5,7 @@ export type UserRow = {
   name: string | null;
   countryCode: string | null;
   createdAt: string; // ISO
+  level: number;
 };
 
 export type UserInfoDetail = {
@@ -65,6 +66,10 @@ export type UseUsersListReturn = {
   setEditLevel: (n: number) => void;
   savingLevel: boolean;
   saveLevel: () => void;
+
+  // 직원 등록/해제 토글
+  toggleStaff: (userId: string, currentLevel: number) => void;
+  togglingStaffId: string | null;
 
   // 페이지네이션
   page: number;
