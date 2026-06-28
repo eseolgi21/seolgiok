@@ -21,12 +21,13 @@ export const authConfig = {
         },
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
-            const isOnDashboard = nextUrl.pathname.startsWith("/admin");
-            const isOnAuth = nextUrl.pathname.startsWith("/auth");
+            const isOnDashboard = nextUrl.pathname.match(/^\/[a-z]{2}\/admin/);
+            const isOnStaff = nextUrl.pathname.match(/^\/[a-z]{2}\/staff/);
+            const isOnAuth = nextUrl.pathname.match(/^\/[a-z]{2}\/auth/);
 
-            if (isOnDashboard) {
+            if (isOnDashboard || isOnStaff) {
                 if (isLoggedIn) return true;
-                return false; // Redirect unauthenticated users to login page
+                return false;
             }
 
             if (isOnAuth && isLoggedIn) {

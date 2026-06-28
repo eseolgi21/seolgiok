@@ -1,0 +1,66 @@
+// ===== 출퇴근 =====
+
+enum AttendanceType {
+  CLOCK_IN
+  CLOCK_OUT
+}
+
+model AttendanceLog {
+  id        String         @id @default(cuid())
+  userId    String
+  user      User           @relation("StaffAttendance", fields: [userId], references: [id], onDelete: Cascade)
+  type      AttendanceType
+  clockedAt DateTime       @default(now())
+  note      String?
+  createdAt DateTime       @default(now())
+
+  @@index([userId, clockedAt])
+  @@index([clockedAt])
+}
+
+// ===== 인수인계 체크리스트 =====
+
+model HandoverItem {
+  id        String          @id @default(cuid())
+  label     String
+  order     Int             @default(0)
+  isActive  Boolean         @default(true)
+  checks    HandoverCheck[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([isActive, order])
+}
+
+model HandoverCheck {
+  id          String       @id @default(cuid())
+  itemId      String
+  item        HandoverItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  shiftDate   DateTime     @db.Date
+  shiftSlot   String
+  checkedBy   String
+  checkedUser User         @relation("StaffHandoverCheck", fields: [checkedBy], references: [id], onDelete: Cascade)
+  checkedAt   DateTime     @default(now())
+
+  @@unique([itemId, shiftDate, shiftSlot, checkedBy])
+  @@index([shiftDate, shiftSlot])
+  @@index([checkedBy])
+}
+
+// ===== 이달의 우수사원 투표 =====
+
+model EmployeeVote {
+  id        String   @id @default(cuid())
+  voterId   String
+  voter     User     @relation("VoteCaster", fields: [voterId], references: [id], onDelete: Cascade)
+  targetId  String
+  target    User     @relation("VoteReceiver", fields: [targetId], references: [id], onDelete: Cascade)
+  voteDate  DateTime @db.Date
+  voteYear  Int
+  voteMonth Int
+  createdAt DateTime @default(now())
+
+  @@unique([voterId, voteDate])
+  @@index([voteYear, voteMonth, targetId])
+  @@index([voterId, voteDate])
+}

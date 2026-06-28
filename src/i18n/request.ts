@@ -23,6 +23,7 @@ const NAMESPACES = [
   "adminBoards",
   "adminSales",
   "adminPurchase",
+  "staffPortal",
 ] as const;
 type Namespace = (typeof NAMESPACES)[number];
 

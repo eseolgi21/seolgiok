@@ -1,0 +1,9 @@
+{
+  "shell": { "title": "Cổng Nhân Viên Seolgiok", "logout": "Đăng xuất" },
+  "nav": { "notices": "Thông báo", "attendance": "Chấm công", "handover": "Bàn giao", "awards": "Nhân viên xuất sắc", "suggestions": "Góp ý" },
+  "notices": { "pageTitle": "Thông báo nội bộ", "empty": "Không có thông báo." },
+  "attendance": { "pageTitle": "Quản lý chấm công", "clockIn": "Chấm công vào", "clockOut": "Chấm công ra", "history": "Lịch sử hôm nay", "alreadyClockedIn": "Đã chấm công vào rồi.", "alreadyClockedOut": "Đã chấm công ra rồi." },
+  "handover": { "pageTitle": "Bàn giao ca", "morning": "Ca sáng", "evening": "Ca chiều", "night": "Ca đêm", "markDone": "Hoàn thành", "empty": "Không có mục nào." },
+  "awards": { "pageTitle": "Nhân viên xuất sắc tháng", "voteButton": "Bình chọn", "alreadyVoted": "Đã bình chọn hôm nay", "selfVoteBlocked": "Không thể tự bình chọn cho mình.", "voteCount": "{count} phiếu", "top3": "Top 3 tháng này" },
+  "suggestions": { "pageTitle": "Góp ý", "newButton": "Viết góp ý", "placeholder": "Viết góp ý của bạn cho chủ.", "submit": "Gửi", "myList": "Góp ý của tôi", "empty": "Chưa có góp ý." }
+}

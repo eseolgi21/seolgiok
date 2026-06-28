@@ -71,6 +71,16 @@ const navTree: NavNode[] = [
       { label: "이벤트", href: "/admin/boards/events" },
     ],
   },
+  {
+    label: "직원 포털 관리",
+    children: [
+      { label: "사내 공지", href: "/admin/staff/notices" },
+      { label: "출퇴근 현황", href: "/admin/staff/attendance" },
+      { label: "인수인계 항목", href: "/admin/staff/handover" },
+      { label: "건의글", href: "/admin/staff/suggestions" },
+      { label: "우수사원 집계", href: "/admin/staff/awards" },
+    ],
+  },
 ];
 
 function normalizePath(s: string) {

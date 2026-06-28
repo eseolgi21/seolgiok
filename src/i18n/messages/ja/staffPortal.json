@@ -1,0 +1,9 @@
+{
+  "shell": { "title": "ソルギオク スタッフポータル", "logout": "ログアウト" },
+  "nav": { "notices": "社内通知", "attendance": "出退勤", "handover": "引き継ぎ", "awards": "優秀社員", "suggestions": "提案" },
+  "notices": { "pageTitle": "社内通知", "empty": "通知はありません。" },
+  "attendance": { "pageTitle": "出退勤管理", "clockIn": "出勤", "clockOut": "退勤", "history": "本日の記録", "alreadyClockedIn": "すでに出勤済みです。", "alreadyClockedOut": "すでに退勤済みです。" },
+  "handover": { "pageTitle": "引き継ぎ", "morning": "午前シフト", "evening": "午後シフト", "night": "夜間シフト", "markDone": "完了", "empty": "チェックリストがありません。" },
+  "awards": { "pageTitle": "今月の優秀社員", "voteButton": "投票", "alreadyVoted": "本日投票済み", "selfVoteBlocked": "自分には投票できません。", "voteCount": "{count}票", "top3": "今月のTOP 3" },
+  "suggestions": { "pageTitle": "提案", "newButton": "提案を書く", "placeholder": "オーナーへの提案を書いてください。", "submit": "送信", "myList": "自分の提案", "empty": "提案がありません。" }
+}

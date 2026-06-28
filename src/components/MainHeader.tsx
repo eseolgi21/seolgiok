@@ -19,6 +19,7 @@ export default function MainHeader({
   const t = useTranslations("header");
   const locale = useLocale();
   const isManager = Number(userLevel) >= 21;
+  const isStaff = Number(userLevel) >= 10;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = useCallback(async () => {
@@ -83,6 +84,14 @@ export default function MainHeader({
 
         {/* 오른쪽 버튼 영역 */}
         <div className="flex items-center gap-2 w-auto shrink-0 ml-auto">
+          {isStaff && (
+            <Link
+              href="/staff/notices"
+              className="hidden sm:inline-flex items-center mr-2 border border-gray-300 text-gray-700 hover:bg-gray-100 text-sm px-3 h-9 rounded"
+            >
+              {t("auth.staffPortal")}
+            </Link>
+          )}
           {isManager && (
             <Link
               href="/admin/dashboard"
@@ -121,6 +130,13 @@ export default function MainHeader({
                 <UserCircleIcon className="h-7 w-7" aria-hidden />
               </div>
               <ul className="absolute top-full right-0 hidden group-hover:block bg-white w-52 p-2 shadow-lg border border-[#e5e0d4] z-10">
+                {isStaff && (
+                  <li>
+                    <Link href="/staff/notices" className="text-gray-700 hover:text-gold hover:bg-transparent rounded-none px-3 py-2 font-medium">
+                      {t("auth.staffPortal")}
+                    </Link>
+                  </li>
+                )}
                 {isManager && (
                   <li>
                     <Link href="/admin" className="text-gray-700 hover:text-gold hover:bg-transparent rounded-none px-3 py-2 font-medium">
@@ -197,6 +213,15 @@ export default function MainHeader({
 
           {/* 내비게이션 */}
           <nav className="flex flex-col flex-1 py-6 overflow-y-auto">
+            {isStaff && (
+              <Link
+                href="/staff/notices"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-6 py-4 text-sm font-medium tracking-wide text-gold/80 hover:text-gold hover:bg-white/5 transition-colors"
+              >
+                {t("auth.staffPortal")}
+              </Link>
+            )}
             {isManager && (
               <Link
                 href="/admin/dashboard"

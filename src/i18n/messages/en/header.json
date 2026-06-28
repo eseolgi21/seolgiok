@@ -20,7 +20,8 @@
     "login": "Log In",
     "logout": "Log Out",
     "admin": "Admin",
-    "pleaseLogin": "Please log in."
+    "pleaseLogin": "Please log in.",
+    "staffPortal": "Staff Portal"
   },
   "aria": {
     "home": "Go to Home",

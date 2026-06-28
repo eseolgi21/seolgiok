@@ -3,6 +3,8 @@ enum BoardType {
   NOTICE // 공지
   EVENT // 이벤트
   SUPPORT // 고객센터
+  INTERNAL    // 사내 공지 (level >= 10만 열람)
+  SUGGESTION  // 건의글 (직원 작성, level >= 21만 열람)
 }
 
 enum SupportCategory {

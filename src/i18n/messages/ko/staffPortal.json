@@ -1,0 +1,49 @@
+{
+  "shell": {
+    "title": "설기옥 직원 포털",
+    "logout": "로그아웃"
+  },
+  "nav": {
+    "notices": "사내 공지",
+    "attendance": "출퇴근",
+    "handover": "인수인계",
+    "awards": "우수사원",
+    "suggestions": "건의글"
+  },
+  "notices": {
+    "pageTitle": "사내 공지",
+    "empty": "등록된 공지가 없습니다."
+  },
+  "attendance": {
+    "pageTitle": "출퇴근 관리",
+    "clockIn": "출근",
+    "clockOut": "퇴근",
+    "history": "오늘 기록",
+    "alreadyClockedIn": "이미 출근 처리되었습니다.",
+    "alreadyClockedOut": "이미 퇴근 처리되었습니다."
+  },
+  "handover": {
+    "pageTitle": "인수인계",
+    "morning": "오전 교대",
+    "evening": "오후 교대",
+    "night": "야간 교대",
+    "markDone": "완료",
+    "empty": "체크리스트 항목이 없습니다."
+  },
+  "awards": {
+    "pageTitle": "이달의 우수사원",
+    "voteButton": "투표",
+    "alreadyVoted": "오늘 투표 완료",
+    "selfVoteBlocked": "본인에게는 투표할 수 없습니다.",
+    "voteCount": "{count}표",
+    "top3": "이달의 TOP 3"
+  },
+  "suggestions": {
+    "pageTitle": "건의글",
+    "newButton": "건의글 작성",
+    "placeholder": "사장님께 건의할 내용을 작성해 주세요.",
+    "submit": "제출",
+    "myList": "내 건의글",
+    "empty": "작성한 건의글이 없습니다."
+  }
+}

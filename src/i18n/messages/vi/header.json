@@ -20,7 +20,8 @@
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "admin": "Quản trị",
-    "pleaseLogin": "Vui lòng đăng nhập."
+    "pleaseLogin": "Vui lòng đăng nhập.",
+    "staffPortal": "Cổng nhân viên"
   },
   "aria": {
     "home": "Trang chủ",

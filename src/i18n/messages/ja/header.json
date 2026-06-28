@@ -20,7 +20,8 @@
     "login": "ログイン",
     "logout": "ログアウト",
     "admin": "管理",
-    "pleaseLogin": "ログインしてください。"
+    "pleaseLogin": "ログインしてください。",
+    "staffPortal": "スタッフポータル"
   },
   "aria": {
     "home": "ホームへ移動",
