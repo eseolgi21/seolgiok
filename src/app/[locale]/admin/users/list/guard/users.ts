@@ -39,13 +39,13 @@ export const ListApiResponseSchema = z.union([
 ]);
 
 // 상세 스키마 (referralCode nullable, level >= 1)
+// googleOtpSecret은 API에서 보안상 제외되므로 스키마에 포함하지 않음
 export const UserInfoDetailSchema = z.object({
   id: z.string().min(1),
   userId: z.string().min(1),
   referralCode: z.string().nullable(),
   level: z.number().int().min(1),
   googleOtpEnabled: z.boolean(),
-  googleOtpSecret: z.string().nullable(),
   createdAt: z.string().min(1),
   updatedAt: z.string().min(1),
 });
