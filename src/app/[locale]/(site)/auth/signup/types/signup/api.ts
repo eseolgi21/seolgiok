@@ -29,7 +29,6 @@ export type ResolveUserResponse =
   | ApiError<"UNKNOWN">;
 
 export type SignupError =
-  | "USERNAME_TAKEN"
   | "EMAIL_TAKEN"
   | "VALIDATION_ERROR"
   | "UNKNOWN";
@@ -39,10 +38,8 @@ export type SignupResponse =
   | ApiError<SignupError>;
 
 export type SignupBody = {
-  username: string;
   email: string;
   password: string;
-  name: string;
   agreeTerms: boolean;
   agreePrivacy: boolean;
 };

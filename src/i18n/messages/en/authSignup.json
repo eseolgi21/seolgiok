@@ -2,16 +2,12 @@
   "title": "Sign Up",
   "subtitle": "Create a new account and get started.",
   "fields": {
-    "username": "Username",
-    "usernamePlaceholder": "4-16 lowercase letters, numbers, or underscores",
     "email": "Email",
     "emailPlaceholder": "you@example.com",
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Re-enter your password",
-    "nickname": "Nickname",
-    "nicknamePlaceholder": "Enter nickname",
     "search": "Search"
   },
   "checklist": {
@@ -35,14 +31,11 @@
     "inputErrorTitle": "Input Error",
     "inputErrorDesc": "Please check the required fields and format.",
     "successTitle": "Sign Up Successful",
-    "successDesc": "Please log in with your email/ID.",
+    "successDesc": "Please log in with your email.",
     "failTitle": "Sign Up Failed"
   },
   "errors": {
-    "usernameFormat": "Please check the username format.",
     "emailFormat": "Please check the email format.",
-    "nicknameReq": "Please enter a nickname.",
-    "usernameTaken": "Username is already taken.",
     "emailTaken": "Email is already taken.",
     "checkInput": "Please check your input.",
     "serverError": "A server/network error occurred.",

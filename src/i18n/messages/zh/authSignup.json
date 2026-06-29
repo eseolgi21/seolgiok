@@ -2,16 +2,12 @@
   "title": "注册",
   "subtitle": "创建新账户并开始使用服务。",
   "fields": {
-    "username": "账号",
-    "usernamePlaceholder": "4~16位小写字母/数字/下划线",
     "email": "邮箱",
     "emailPlaceholder": "you@example.com",
     "password": "密码",
     "passwordPlaceholder": "请输入密码",
     "confirmPassword": "确认密码",
     "confirmPasswordPlaceholder": "请再次输入密码",
-    "nickname": "昵称",
-    "nicknamePlaceholder": "请输入昵称",
     "search": "搜索"
   },
   "checklist": {
@@ -35,14 +31,11 @@
     "inputErrorTitle": "输入错误",
     "inputErrorDesc": "请检查必填项和格式。",
     "successTitle": "注册成功",
-    "successDesc": "请使用邮箱或账号登录。",
+    "successDesc": "请使用邮箱登录。",
     "failTitle": "注册失败"
   },
   "errors": {
-    "usernameFormat": "请检查账号格式。",
     "emailFormat": "请检查邮箱格式。",
-    "nicknameReq": "请输入昵称。",
-    "usernameTaken": "该账号已被使用。",
     "emailTaken": "该邮箱已被使用。",
     "checkInput": "请重新检查输入内容。",
     "serverError": "发生服务器/网络错误。",

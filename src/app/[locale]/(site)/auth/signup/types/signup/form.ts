@@ -1,9 +1,7 @@
 export type FormState = {
-  username: string;
   email: string;
   password: string;
   password2: string;
-  name: string;
   agreeTerms: boolean;
   agreePrivacy: boolean;
 };
@@ -14,21 +12,11 @@ export type Option = {
 };
 
 export type TopPartValue = {
-  username: string;
   email: string;
 };
 
 export type TopPartErrorText = {
-  username: string;
   email: string;
-};
-
-export type RowPartValue = {
-  name: string;
-};
-
-export type RowPartErrorText = {
-  name: string;
 };
 
 export type ChecklistState = {
@@ -42,7 +30,6 @@ export type ChecklistState = {
 };
 
 export type SignupValidation = {
-  usernameOk: boolean;
   emailOk: boolean;
   pwLenOk: boolean;
   pwHasLetter: boolean;
@@ -51,7 +38,6 @@ export type SignupValidation = {
   pwHasSymbol: boolean;
   pwAllOk: boolean;
   confirmOk: boolean;
-  nameOk: boolean;
   agreementsOk: boolean;
 };
 
@@ -74,13 +60,6 @@ export type MiddlePartProps = {
   onPassword2Change: (v: string) => void;
   disabled: boolean;
   checklist: ChecklistState;
-};
-
-export type RowPartProps = {
-  value: RowPartValue;
-  onChange: (next: RowPartValue) => void;
-  disabled: boolean;
-  errorText?: RowPartErrorText;
 };
 
 export type AgreementsProps = {

@@ -2,16 +2,12 @@
   "title": "会員登録",
   "subtitle": "新しいアカウントを作成して始めましょう。",
   "fields": {
-    "username": "ユーザー名",
-    "usernamePlaceholder": "英小文字/数字/アンダーバー 4〜16文字",
     "email": "メールアドレス",
     "emailPlaceholder": "you@example.com",
     "password": "パスワード",
     "passwordPlaceholder": "パスワードを入力",
     "confirmPassword": "パスワード確認",
     "confirmPasswordPlaceholder": "パスワードを再入力",
-    "nickname": "ニックネーム",
-    "nicknamePlaceholder": "ニックネームを入力",
     "search": "検索"
   },
   "checklist": {
@@ -35,14 +31,11 @@
     "inputErrorTitle": "入力エラー",
     "inputErrorDesc": "必須項目と形式を確認してください。",
     "successTitle": "会員登録完了",
-    "successDesc": "メールまたはIDでログインしてください。",
+    "successDesc": "メールアドレスでログインしてください。",
     "failTitle": "登録失敗"
   },
   "errors": {
-    "usernameFormat": "ユーザー名の形式を確認してください。",
     "emailFormat": "メールアドレスの形式を確認してください。",
-    "nicknameReq": "ニックネームを入力してください。",
-    "usernameTaken": "既に使用されているユーザー名です。",
     "emailTaken": "既に使用されているメールアドレスです。",
     "checkInput": "入力内容をもう一度確認してください。",
     "serverError": "サーバーまたはネットワークエラーが発生しました。",

@@ -2,16 +2,12 @@
   "title": "Đăng ký",
   "subtitle": "Tạo tài khoản mới và bắt đầu dịch vụ.",
   "fields": {
-    "username": "Tên đăng nhập",
-    "usernamePlaceholder": "4~16 chữ thường/số/gạch dưới",
     "email": "Email",
     "emailPlaceholder": "you@example.com",
     "password": "Mật khẩu",
     "passwordPlaceholder": "Nhập mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
     "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
-    "nickname": "Biệt danh",
-    "nicknamePlaceholder": "Nhập biệt danh",
     "search": "Tìm kiếm"
   },
   "checklist": {
@@ -35,14 +31,11 @@
     "inputErrorTitle": "Lỗi nhập liệu",
     "inputErrorDesc": "Vui lòng kiểm tra các mục bắt buộc và định dạng.",
     "successTitle": "Đăng ký thành công",
-    "successDesc": "Vui lòng đăng nhập bằng Email/ID.",
+    "successDesc": "Vui lòng đăng nhập bằng email.",
     "failTitle": "Đăng ký thất bại"
   },
   "errors": {
-    "usernameFormat": "Vui lòng kiểm tra định dạng tên đăng nhập.",
     "emailFormat": "Vui lòng kiểm tra định dạng email.",
-    "nicknameReq": "Vui lòng nhập biệt danh.",
-    "usernameTaken": "Tên đăng nhập đã được sử dụng.",
     "emailTaken": "Email đã được sử dụng.",
     "checkInput": "Vui lòng kiểm tra lại thông tin đầu vào.",
     "serverError": "Đã xảy ra lỗi máy chủ/mạng.",

@@ -7,11 +7,6 @@ import type {
 } from "@/app/[locale]/(site)/auth/signup/types/signup/form";
 
 export function useSignupValidation(f: FormState): SignupValidation {
-  const usernameOk = useMemo(
-    () => /^[a-z0-9_]{4,16}$/.test(f.username),
-    [f.username]
-  );
-
   const emailOk = useMemo(() => {
     if (!f.email) return false;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email);
@@ -27,11 +22,9 @@ export function useSignupValidation(f: FormState): SignupValidation {
 
   const confirmOk = f.password2.length > 0 && f.password === f.password2;
 
-  const nameOk = f.name.trim().length > 0;
   const agreementsOk = f.agreeTerms && f.agreePrivacy;
 
   return {
-    usernameOk,
     emailOk,
     pwLenOk,
     pwHasLetter,
@@ -40,7 +33,6 @@ export function useSignupValidation(f: FormState): SignupValidation {
     pwHasSymbol,
     pwAllOk,
     confirmOk,
-    nameOk,
     agreementsOk,
   };
 }
