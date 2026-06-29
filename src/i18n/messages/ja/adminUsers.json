@@ -16,9 +16,15 @@
     "title": "UserInfo 詳細",
     "close": "閉じる",
     "confirm": "確認",
-    "saveLevel": "レベルを保存",
+    "saveLevel": "グレードを保存",
     "savingLevel": "保存中...",
-    "noUserInfo": "このユーザーの UserInfo が見つかりません。"
+    "noUserInfo": "このユーザーの UserInfo が見つかりません。",
+    "selectLevelPlaceholder": "グレードを選択",
+    "levelLabel": {
+      "user": "一般ユーザー (Lv.1)",
+      "staff": "スタッフ (Lv.10)",
+      "manager": "マネージャー (Lv.15)"
+    }
   },
   "selection": {
     "deleteSelected": "選択削除（{count}名）",

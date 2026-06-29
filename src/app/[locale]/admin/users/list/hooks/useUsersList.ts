@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
+import { USER_LEVELS } from "@/lib/constants/user-levels";
 import {
   parseDeleteUsersResponse,
   parseDetailResponse,
@@ -157,8 +158,8 @@ export function useUsersList(): UseUsersListReturn {
   }, [detailOpen, detailUserId, fetchDetail]);
 
   const toggleStaff = useCallback(async (userId: string, currentLevel: number) => {
-    if (currentLevel >= 21) return; // 어드민 보호
-    const newLevel = currentLevel >= 10 ? 1 : 10;
+    if (currentLevel >= USER_LEVELS.ADMIN) return;
+    const newLevel = currentLevel >= USER_LEVELS.STAFF ? USER_LEVELS.USER : USER_LEVELS.STAFF;
     setTogglingStaffId(userId);
     try {
       const payload = toUpdateLevelPayload(userId, newLevel);

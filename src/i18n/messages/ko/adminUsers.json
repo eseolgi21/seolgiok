@@ -26,8 +26,14 @@
     "title": "UserInfo 상세",
     "close": "닫기",
     "confirm": "확인",
-    "saveLevel": "레벨 저장",
+    "saveLevel": "등급 저장",
     "savingLevel": "저장 중...",
-    "noUserInfo": "해당 사용자의 UserInfo 가 없습니다."
+    "noUserInfo": "해당 사용자의 UserInfo 가 없습니다.",
+    "selectLevelPlaceholder": "등급 선택",
+    "levelLabel": {
+      "user": "일반유저 (Lv.1)",
+      "staff": "스텝 (Lv.10)",
+      "manager": "매니져 (Lv.15)"
+    }
   }
 }

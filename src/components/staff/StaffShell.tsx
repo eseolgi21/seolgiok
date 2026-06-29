@@ -5,16 +5,16 @@ import { useTranslations } from "next-intl";
 import StaffSidebar from "./StaffSidebar";
 import StaffBottomNav from "./StaffBottomNav";
 
-type Props = { children: React.ReactNode; userName: string };
+type Props = { children: React.ReactNode; userName: string; userLevel: number };
 
-export default function StaffShell({ children, userName }: Props) {
+export default function StaffShell({ children, userName, userLevel }: Props) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const t = useTranslations("staffPortal");
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {isDesktop && <StaffSidebar userName={userName} />}
+      {isDesktop && <StaffSidebar userName={userName} userLevel={userLevel} />}
 
       <Box
         component="main"

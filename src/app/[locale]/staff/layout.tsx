@@ -20,7 +20,7 @@ export default async function StaffLayout({ children, params }: Props) {
   const userName = session.user?.name ?? "";
 
   return (
-    <StaffShell userName={userName}>
+    <StaffShell userName={userName} userLevel={level}>
       {children}
     </StaffShell>
   );

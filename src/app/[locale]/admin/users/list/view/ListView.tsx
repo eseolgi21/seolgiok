@@ -3,7 +3,6 @@
 
 import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -17,10 +16,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Trash2, UserCheck, UserX } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import { ASSIGNABLE_LEVELS } from "@/lib/constants/user-levels";
 
 function formatDate(iso: string): string {
   try {
@@ -227,17 +234,22 @@ function DetailPanel(props: {
                         <TableHead>level</TableHead>
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <Input
-                              type="number"
-                              min={1}
-                              className="h-8 text-sm w-32"
-                              value={editLevel ?? ""}
-                              onChange={(e) => {
-                                const v = Number(e.target.value);
-                                if (Number.isFinite(v)) setEditLevel(v);
-                              }}
-                            />
-                            <Button size="sm" onClick={onSaveLevel} disabled={savingLevel || !editLevel || editLevel < 1}>
+                            <Select
+                              value={editLevel !== null ? String(editLevel) : ""}
+                              onValueChange={(v) => setEditLevel(Number(v))}
+                            >
+                              <SelectTrigger className="h-8 text-sm w-44">
+                                <SelectValue placeholder={t("detail.selectLevelPlaceholder")} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {ASSIGNABLE_LEVELS.map(({ value, labelKey }) => (
+                                  <SelectItem key={value} value={String(value)}>
+                                    {t(`detail.${labelKey}`)}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Button size="sm" onClick={onSaveLevel} disabled={savingLevel || editLevel === null}>
                               {savingLevel ? t("detail.savingLevel") : t("detail.saveLevel")}
                             </Button>
                           </div>

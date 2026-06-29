@@ -16,9 +16,15 @@
     "title": "Chi tiết UserInfo",
     "close": "Đóng",
     "confirm": "Xác nhận",
-    "saveLevel": "Lưu cấp độ",
+    "saveLevel": "Lưu cấp bậc",
     "savingLevel": "Đang lưu...",
-    "noUserInfo": "Không tìm thấy UserInfo của người dùng này."
+    "noUserInfo": "Không tìm thấy UserInfo của người dùng này.",
+    "selectLevelPlaceholder": "Chọn cấp bậc",
+    "levelLabel": {
+      "user": "Người dùng (Lv.1)",
+      "staff": "Nhân viên (Lv.10)",
+      "manager": "Quản lý (Lv.15)"
+    }
   },
   "selection": {
     "deleteSelected": "Xóa đã chọn ({count} người)",

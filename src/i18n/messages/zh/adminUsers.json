@@ -16,9 +16,15 @@
     "title": "UserInfo 详情",
     "close": "关闭",
     "confirm": "确认",
-    "saveLevel": "保存等级",
+    "saveLevel": "保存级别",
     "savingLevel": "保存中...",
-    "noUserInfo": "该用户没有 UserInfo。"
+    "noUserInfo": "该用户没有 UserInfo。",
+    "selectLevelPlaceholder": "选择级别",
+    "levelLabel": {
+      "user": "普通用户 (Lv.1)",
+      "staff": "员工 (Lv.10)",
+      "manager": "经理 (Lv.15)"
+    }
   },
   "selection": {
     "deleteSelected": "删除所选（{count}人）",

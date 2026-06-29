@@ -7,6 +7,7 @@
     "notices": "사내 공지",
     "attendance": "출퇴근",
     "handover": "인수인계",
+    "handoverManage": "인수인계 관리",
     "awards": "우수사원",
     "suggestions": "건의글"
   },
@@ -29,6 +30,13 @@
     "night": "야간 교대",
     "markDone": "완료",
     "empty": "체크리스트 항목이 없습니다."
+  },
+  "handoverManage": {
+    "pageTitle": "인수인계 항목 관리",
+    "newItemLabel": "새 항목 입력",
+    "addButton": "추가",
+    "activeLabel": "활성",
+    "inactiveLabel": "비활성"
   },
   "awards": {
     "pageTitle": "이달의 우수사원",

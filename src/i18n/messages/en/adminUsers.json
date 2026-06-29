@@ -16,9 +16,15 @@
     "title": "UserInfo Detail",
     "close": "Close",
     "confirm": "OK",
-    "saveLevel": "Save Level",
+    "saveLevel": "Save Grade",
     "savingLevel": "Saving...",
-    "noUserInfo": "No UserInfo found for this user."
+    "noUserInfo": "No UserInfo found for this user.",
+    "selectLevelPlaceholder": "Select Grade",
+    "levelLabel": {
+      "user": "Regular User (Lv.1)",
+      "staff": "Staff (Lv.10)",
+      "manager": "Manager (Lv.15)"
+    }
   },
   "selection": {
     "deleteSelected": "Delete Selected ({count})",
