@@ -71,20 +71,26 @@ async function collectAllDownlineIds(rootUserId: string): Promise<Set<string>> {
 }
 
 // GET /api/admin/users/list
-// - 목록: ?id 미지정 → "관리자 본인 + 산하(모든 레벨)" 사용자 리스트(페이지네이션)
-// - 상세: ?id=USER_ID → "관리자 본인 또는 산하(모든 레벨)"일 때만 UserInfo 반환(없으면 data=null)
+// - 목록: ?id 미지정 → 슈퍼어드민(level≥99)은 전체, 그 외는 "본인 + 산하" 리스트(페이지네이션)
+// - 상세: ?id=USER_ID → 슈퍼어드민은 모든 유저, 그 외는 "본인 또는 산하"일 때만 UserInfo 반환
 export async function GET(req: NextRequest) {
   const { session, error } = await requireAdmin();
   if (error) return error;
   const adminId = session!.user.id!;
-
-  // ✅ 산하(모든 레벨) 수집 + 본인 포함
-  const downlineSet = await collectAllDownlineIds(adminId);
-  const allowedIdsSet = new Set<string>([adminId, ...downlineSet]);
-  const allowedIds = Array.from(allowedIdsSet);
+  const adminLevel = session!.user.level ?? 0;
+  const isSuperAdmin = adminLevel >= 99;
 
   const { searchParams } = new URL(req.url);
   const idParam = searchParams.get("id");
+
+  // 슈퍼어드민이 아닌 경우에만 downline 수집
+  let allowedIdsSet: Set<string>;
+  if (isSuperAdmin) {
+    allowedIdsSet = new Set(); // 슈퍼어드민은 필터 없이 전체 조회 (아래에서 분기)
+  } else {
+    const downlineSet = await collectAllDownlineIds(adminId);
+    allowedIdsSet = new Set<string>([adminId, ...downlineSet]);
+  }
 
   // 상세
   if (idParam !== null) {
@@ -96,14 +102,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (!allowedIdsSet.has(idParam)) {
+    if (!isSuperAdmin && !allowedIdsSet.has(idParam)) {
       return NextResponse.json(
         { ok: false, error: "FORBIDDEN" },
         { status: 403 }
       );
     }
 
-    // 존재 체크
     const user = await prisma.user.findUnique({
       where: { id: idParam },
       select: { id: true },
@@ -124,26 +129,23 @@ export async function GET(req: NextRequest) {
   }
 
   // 목록 (페이지네이션)
-  if (allowedIds.length === 0) {
-    return NextResponse.json({
-      ok: true,
-      data: [],
-      page: 1,
-      pageSize: 20,
-      total: 0,
-    });
-  }
-
   const pq = PageQuerySchema.safeParse({
     page: searchParams.get("page"),
     pageSize: searchParams.get("pageSize"),
   });
   const { page, pageSize } = pq.success ? pq.data : { page: 1, pageSize: 20 };
 
+  // 슈퍼어드민: 전체 유저 / 일반 어드민: allowedIds 필터
+  const whereClause = isSuperAdmin
+    ? {}
+    : allowedIdsSet.size === 0
+      ? { id: { in: [] as string[] } }
+      : { id: { in: Array.from(allowedIdsSet) } };
+
   const [total, rows] = await Promise.all([
-    prisma.user.count({ where: { id: { in: allowedIds } } }),
+    prisma.user.count({ where: whereClause }),
     prisma.user.findMany({
-      where: { id: { in: allowedIds } },
+      where: whereClause,
       select: userListSelect,
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * pageSize,
@@ -188,15 +190,18 @@ export async function PATCH(req: NextRequest) {
 
   const { userId, level } = parsed.data;
 
-  // ✅ 산하(모든 레벨) + 본인 허용
-  const downlineSet = await collectAllDownlineIds(adminId);
-  const allowedIdsSet = new Set<string>([adminId, ...downlineSet]);
+  const adminLevel = session!.user.level ?? 0;
+  const isSuperAdmin = adminLevel >= 99;
 
-  if (!allowedIdsSet.has(userId)) {
-    return NextResponse.json(
-      { ok: false, error: "FORBIDDEN" },
-      { status: 403 }
-    );
+  if (!isSuperAdmin) {
+    const downlineSet = await collectAllDownlineIds(adminId);
+    const allowedIdsSet = new Set<string>([adminId, ...downlineSet]);
+    if (!allowedIdsSet.has(userId)) {
+      return NextResponse.json(
+        { ok: false, error: "FORBIDDEN" },
+        { status: 403 }
+      );
+    }
   }
 
   // 사용자 및 UserInfo 존재 확인

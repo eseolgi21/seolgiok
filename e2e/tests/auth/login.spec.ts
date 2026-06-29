@@ -8,8 +8,8 @@ test('올바른 자격증명으로 로그인 성공 → 홈 이동', async ({ pa
   await page.getByPlaceholder(/아이디 또는 이메일/).fill(process.env.TEST_USER_EMAIL!);
   await page.getByPlaceholder(/비밀번호 입력/).fill(process.env.TEST_USER_PASSWORD!);
   await page.getByRole('button', { name: /로그인/i }).click();
-  await page.waitForURL('https://seolgiok.com/ko', { timeout: 15000 });
-  await expect(page).toHaveURL(/seolgiok\.com\/ko$/);
+  await page.waitForURL(/\/ko$/, { timeout: 15000 });
+  await expect(page).toHaveURL(/\/ko$/);
 });
 
 test('next 파라미터로 로그인 후 admin 이동', async ({ page }) => {

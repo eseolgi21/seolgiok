@@ -15,8 +15,8 @@ setup('authenticate as admin', async ({ page }) => {
   await page.getByPlaceholder(/비밀번호 입력/).fill(process.env.TEST_USER_PASSWORD!);
   await page.getByRole('button', { name: /로그인/i }).click();
 
-  // 홈으로 이동할 때까지 대기 (next 없으면 로그인 성공 시 / 로 이동)
-  await page.waitForURL('https://seolgiok.com/ko', { timeout: 20000 });
+  // 홈으로 이동할 때까지 대기 (next 없으면 로그인 성공 시 /ko 로 이동)
+  await page.waitForURL(/\/ko$/, { timeout: 20000 });
 
   // 세션 쿠키가 설정된 후 admin으로 이동하여 인증 확인
   await page.goto('/ko/admin/dashboard');
