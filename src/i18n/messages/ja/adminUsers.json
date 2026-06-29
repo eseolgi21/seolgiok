@@ -19,5 +19,15 @@
     "saveLevel": "レベルを保存",
     "savingLevel": "保存中...",
     "noUserInfo": "このユーザーの UserInfo が見つかりません。"
+  },
+  "selection": {
+    "deleteSelected": "選択削除（{count}名）",
+    "confirmTitle": "ユーザー削除",
+    "confirmDesc": "{count}名のユーザーを削除します。この操作は元に戻せません。",
+    "cancel": "キャンセル",
+    "confirm": "削除",
+    "deleteSuccess": "{deleted}名 削除完了",
+    "deleteFail": "削除失敗",
+    "cannotDeleteSelf": "自分のアカウントは削除できません。"
   }
 }

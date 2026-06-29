@@ -40,6 +40,11 @@ const PageQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
 
+// DELETE payload
+const DeletePayloadSchema = z.object({
+  userIds: z.array(z.string().min(1)).min(1).max(100),
+});
+
 /**
  * adminId를 루트로 하여 "모든" 하위(산하) userId를 BFS로 수집
  */
@@ -234,4 +239,49 @@ export async function PATCH(req: NextRequest) {
   });
 
   return NextResponse.json({ ok: true, data: updated });
+}
+
+// DELETE /api/admin/users/list
+// - body: { userIds: string[] }
+// - 슈퍼어드민: 본인 제외 전체 삭제 가능 / 일반 어드민: 산하 유저만 삭제 가능
+export async function DELETE(req: NextRequest) {
+  const { session, error } = await requireAdmin();
+  if (error) return error;
+  const adminId = session!.user.id!;
+  const adminLevel = session!.user.level ?? 0;
+  const isSuperAdmin = adminLevel >= 99;
+
+  let json: unknown;
+  try {
+    json = await req.json();
+  } catch {
+    return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
+  }
+
+  const parsed = DeletePayloadSchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json({ ok: false, error: "INVALID_PAYLOAD" }, { status: 400 });
+  }
+
+  const { userIds } = parsed.data;
+
+  // 본인 삭제 방지
+  if (userIds.includes(adminId)) {
+    return NextResponse.json({ ok: false, error: "CANNOT_DELETE_SELF" }, { status: 400 });
+  }
+
+  // 권한 확인: 일반 어드민은 산하 유저만 삭제 가능
+  if (!isSuperAdmin) {
+    const downlineSet = await collectAllDownlineIds(adminId);
+    const forbidden = userIds.find((id) => !downlineSet.has(id));
+    if (forbidden) {
+      return NextResponse.json({ ok: false, error: "FORBIDDEN" }, { status: 403 });
+    }
+  }
+
+  const result = await prisma.user.deleteMany({
+    where: { id: { in: userIds } },
+  });
+
+  return NextResponse.json({ ok: true, deleted: result.count });
 }

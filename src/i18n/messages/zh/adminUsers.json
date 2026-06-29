@@ -19,5 +19,15 @@
     "saveLevel": "保存等级",
     "savingLevel": "保存中...",
     "noUserInfo": "该用户没有 UserInfo。"
+  },
+  "selection": {
+    "deleteSelected": "删除所选（{count}人）",
+    "confirmTitle": "删除用户",
+    "confirmDesc": "您即将删除 {count} 名用户。此操作无法撤销。",
+    "cancel": "取消",
+    "confirm": "删除",
+    "deleteSuccess": "已删除 {deleted} 名用户",
+    "deleteFail": "删除失败",
+    "cannotDeleteSelf": "无法删除自己的账户。"
   }
 }

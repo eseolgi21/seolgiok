@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
 import {
+  parseDeleteUsersResponse,
   parseDetailResponse,
   parseListResponse,
   parseUpdateLevelResponse,
@@ -29,6 +30,10 @@ export function useUsersList(): UseUsersListReturn {
   // 직원 등록/해제 토글 상태
   const [togglingStaffId, setTogglingStaffId] = useState<string | null>(null);
 
+  // 선택 삭제 상태
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [deletingSelected, setDeletingSelected] = useState(false);
+
   // pagination
   const [page, setPage] = useState<number>(1);
   const [pageSize] = useState<number>(20);
@@ -37,6 +42,36 @@ export function useUsersList(): UseUsersListReturn {
   const setEditLevel = useCallback((n: number) => {
     setEditLevelState(n);
   }, []);
+
+  // 페이지 변경 시 선택 초기화
+  const isAllSelected = users.length > 0 && users.every((u) => selectedIds.has(u.id));
+  const isIndeterminate = !isAllSelected && users.some((u) => selectedIds.has(u.id));
+
+  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    setSelectedIds((prev) => {
+      const allIds = users.map((u) => u.id);
+      const allSelected = allIds.every((id) => prev.has(id));
+      if (allSelected) {
+        const next = new Set(prev);
+        allIds.forEach((id) => next.delete(id));
+        return next;
+      }
+      const next = new Set(prev);
+      allIds.forEach((id) => next.add(id));
+      return next;
+    });
+  }, [users]);
 
   const fetchList = useCallback(async () => {
     setLoading(true);
@@ -148,6 +183,31 @@ export function useUsersList(): UseUsersListReturn {
     }
   }, [fetchList]);
 
+  const deleteSelected = useCallback(async () => {
+    if (selectedIds.size === 0) return;
+    setDeletingSelected(true);
+    try {
+      const res = await fetch("/api/admin/users/list", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userIds: Array.from(selectedIds) }),
+      });
+      const json = (await res.json()) as unknown;
+      const parsed = parseDeleteUsersResponse(json);
+      if (!parsed.ok) {
+        toast.error("삭제 실패", { description: parsed.error });
+        return;
+      }
+      toast.success(`${parsed.deleted}명 삭제 완료`);
+      clearSelection();
+      void fetchList();
+    } catch {
+      toast.error("네트워크 오류", { description: "삭제 중 오류가 발생했습니다." });
+    } finally {
+      setDeletingSelected(false);
+    }
+  }, [selectedIds, clearSelection, fetchList]);
+
   const saveLevel = useCallback(async () => {
     if (!detailUserId || editLevel === null) {
       toast.error("저장 불가", { description: "잘못된 입력입니다." });
@@ -198,6 +258,14 @@ export function useUsersList(): UseUsersListReturn {
       pageSize,
       total,
       setPage,
+      selectedIds,
+      toggleSelect,
+      toggleSelectAll,
+      isAllSelected,
+      isIndeterminate,
+      clearSelection,
+      deleteSelected,
+      deletingSelected,
     }),
     [
       loading,
@@ -219,6 +287,14 @@ export function useUsersList(): UseUsersListReturn {
       pageSize,
       total,
       setPage,
+      selectedIds,
+      toggleSelect,
+      toggleSelectAll,
+      isAllSelected,
+      isIndeterminate,
+      clearSelection,
+      deleteSelected,
+      deletingSelected,
     ]
   );
 

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type {
+  DeleteUsersResponse,
   DetailApiResponse,
   ListApiResponse,
   UpdateLevelPayload,
@@ -113,6 +114,32 @@ export function isUserRow(x: unknown): x is UserRow {
 
 export function isUserInfoDetail(x: unknown): x is UserInfoDetail {
   return UserInfoDetailSchema.safeParse(x).success;
+}
+
+// Delete
+export const DeleteUsersPayloadSchema = z.object({
+  userIds: z.array(z.string().min(1)).min(1).max(100),
+});
+
+export const DeleteUsersOkSchema = z.object({
+  ok: z.literal(true),
+  deleted: z.number().int().min(0),
+});
+
+export const DeleteUsersErrSchema = z.object({
+  ok: z.literal(false),
+  error: z.string(),
+});
+
+export const DeleteUsersResponseSchema = z.union([
+  DeleteUsersOkSchema,
+  DeleteUsersErrSchema,
+]);
+
+export function parseDeleteUsersResponse(json: unknown): DeleteUsersResponse {
+  const parsed = DeleteUsersResponseSchema.safeParse(json);
+  if (!parsed.success) return { ok: false, error: "INVALID_RESPONSE" };
+  return parsed.data;
 }
 
 export function toUpdateLevelPayload(

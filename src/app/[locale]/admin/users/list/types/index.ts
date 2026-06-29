@@ -45,6 +45,12 @@ export type UpdateLevelOk = {
 export type UpdateLevelErr = { ok: false; error: string };
 export type UpdateLevelResponse = UpdateLevelOk | UpdateLevelErr;
 
+// DELETE: 선택 유저 삭제
+export type DeleteUsersPayload = { userIds: string[] };
+export type DeleteUsersOk = { ok: true; deleted: number };
+export type DeleteUsersErr = { ok: false; error: string };
+export type DeleteUsersResponse = DeleteUsersOk | DeleteUsersErr;
+
 export type UseUsersListReturn = {
   loading: boolean;
   error: string | null;
@@ -76,4 +82,14 @@ export type UseUsersListReturn = {
   pageSize: number;
   total: number;
   setPage: (p: number) => void;
+
+  // 선택 삭제
+  selectedIds: Set<string>;
+  toggleSelect: (id: string) => void;
+  toggleSelectAll: () => void;
+  isAllSelected: boolean;
+  isIndeterminate: boolean;
+  clearSelection: () => void;
+  deleteSelected: () => Promise<void>;
+  deletingSelected: boolean;
 };

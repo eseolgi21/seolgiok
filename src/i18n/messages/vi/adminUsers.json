@@ -19,5 +19,15 @@
     "saveLevel": "Lưu cấp độ",
     "savingLevel": "Đang lưu...",
     "noUserInfo": "Không tìm thấy UserInfo của người dùng này."
+  },
+  "selection": {
+    "deleteSelected": "Xóa đã chọn ({count} người)",
+    "confirmTitle": "Xóa người dùng",
+    "confirmDesc": "Bạn sắp xóa {count} người dùng. Hành động này không thể hoàn tác.",
+    "cancel": "Hủy",
+    "confirm": "Xóa",
+    "deleteSuccess": "Đã xóa {deleted} người dùng",
+    "deleteFail": "Xóa thất bại",
+    "cannotDeleteSelf": "Bạn không thể xóa tài khoản của mình."
   }
 }

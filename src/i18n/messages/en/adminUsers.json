@@ -19,5 +19,15 @@
     "saveLevel": "Save Level",
     "savingLevel": "Saving...",
     "noUserInfo": "No UserInfo found for this user."
+  },
+  "selection": {
+    "deleteSelected": "Delete Selected ({count})",
+    "confirmTitle": "Delete Users",
+    "confirmDesc": "You are about to delete {count} user(s). This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "deleteSuccess": "{deleted} user(s) deleted",
+    "deleteFail": "Delete failed",
+    "cannotDeleteSelf": "You cannot delete your own account."
   }
 }
