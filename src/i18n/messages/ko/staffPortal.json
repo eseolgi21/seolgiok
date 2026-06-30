@@ -9,7 +9,8 @@
     "handover": "인수인계",
     "handoverManage": "인수인계 관리",
     "awards": "우수사원",
-    "suggestions": "건의글"
+    "suggestions": "건의글",
+    "payslips": "급여명세서"
   },
   "notices": {
     "pageTitle": "사내 공지",
@@ -53,5 +54,12 @@
     "submit": "제출",
     "myList": "내 건의글",
     "empty": "작성한 건의글이 없습니다."
+  },
+  "payslips": {
+    "pageTitle": "급여명세서",
+    "empty": "등록된 급여명세서가 없습니다.",
+    "preview": "미리보기",
+    "download": "다운로드",
+    "close": "닫기"
   }
 }

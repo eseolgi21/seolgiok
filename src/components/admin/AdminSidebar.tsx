@@ -79,6 +79,7 @@ const navTree: NavNode[] = [
       { label: "인수인계 항목", href: "/admin/staff/handover" },
       { label: "건의글", href: "/admin/staff/suggestions" },
       { label: "우수사원 집계", href: "/admin/staff/awards" },
+      { label: "급여명세서", href: "/admin/staff/payslips" },
     ],
   },
 ];

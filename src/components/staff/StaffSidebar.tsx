@@ -10,6 +10,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import ChatIcon from "@mui/icons-material/Chat";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { key: "handoverManage", icon: EditNoteIcon,      href: "/staff/handover/manage",  managerOnly: true  },
   { key: "awards",         icon: EmojiEventsIcon,   href: "/staff/awards",           managerOnly: false },
   { key: "suggestions",    icon: ChatIcon,          href: "/staff/suggestions",      managerOnly: false },
+  { key: "payslips",       icon: ReceiptLongIcon,   href: "/staff/payslips",         managerOnly: false },
 ] as const;
 
 type Props = { userName: string; userLevel: number };

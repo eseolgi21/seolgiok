@@ -26,6 +26,8 @@ model User {
   handoverChecks HandoverCheck[] @relation("StaffHandoverCheck")
   votesGiven     EmployeeVote[]  @relation("VoteCaster")
   votesReceived  EmployeeVote[]  @relation("VoteReceiver")
+  payslips         Payslip[]     @relation("StaffPayslip")
+  uploadedPayslips Payslip[]     @relation("PayslipUploader")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

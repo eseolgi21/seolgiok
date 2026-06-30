@@ -64,3 +64,23 @@ model EmployeeVote {
   @@index([voteYear, voteMonth, targetId])
   @@index([voterId, voteDate])
 }
+
+// ===== 급여명세서 =====
+
+model Payslip {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation("StaffPayslip", fields: [userId], references: [id], onDelete: Cascade)
+  year       Int
+  month      Int
+  fileName   String
+  fileSize   Int
+  fileData   Bytes
+  uploadedAt DateTime @default(now())
+  uploadedBy String
+  uploader   User     @relation("PayslipUploader", fields: [uploadedBy], references: [id], onDelete: Restrict)
+
+  @@unique([userId, year, month])
+  @@index([userId, year, month])
+  @@index([year, month])
+}
