@@ -9,6 +9,9 @@
 -- DropForeignKey
 ALTER TABLE "HandoverApproval" DROP CONSTRAINT "HandoverApproval_approvedBy_fkey";
 
+-- Safe: v2 incompatible rows 삭제 (submittedBy NOT NULL 추가 전 필수)
+DELETE FROM "HandoverApproval";
+
 -- AlterTable
 ALTER TABLE "HandoverApproval" DROP COLUMN "approvedAt",
 DROP COLUMN "approvedBy",

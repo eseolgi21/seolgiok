@@ -18,24 +18,35 @@ model: sonnet
 
 ## 배포 플랫폼 인증 전제조건
 
-> ⚙️ 아래는 Railway 예시입니다. 실제 배포 플랫폼(Railway/Heroku/Fly.io 등)에 맞게 수정하세요.
+Railway (linetrader 계정 전용):
 
 ```bash
-# 예: Railway 사용 시
-source ~/.zshrc   # API 토큰 환경변수 로드
-railway whoami    # 인증 확인
+source ~/.zshrc              # RAILWAY_TOKEN_LINETRADER 환경변수 로드
+railway-switch linetrader    # linetrader 계정으로 전환 (linetrader@naver.com)
+railway whoami               # 인증 확인
 ```
 
-배포 플랫폼 CLI 명령 및 서비스 목록은 CLAUDE.md 및 프로젝트 docs/runbooks/deploy.md를 참조한다.
+seolgiok 프로젝트 연결 (최초 1회, 이후 ~/.railway/config.json에 저장됨):
+```bash
+cd /Users/aidenyun/project/brand-seolgiok/seolgiok
+railway link
+```
+
+배포 로그 확인:
+```bash
+railway logs --lines 100
+railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
+```
 
 ## 로그 조사 절차 (배포 없이)
 
 배포 없이 배포서버 로그·상태만 확인하라는 요청 시:
 
 ```bash
-# 예: Railway
+source ~/.zshrc && railway-switch linetrader
 railway status
-railway logs -s <SERVICE_NAME> --lines 50
+railway logs --lines 100
+railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
 ```
 
 ### 조사 후 처리

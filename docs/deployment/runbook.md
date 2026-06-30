@@ -131,10 +131,27 @@ npm run start
 
 ## Railway 배포
 
+### Railway 접속 (linetrader 계정)
+
+```bash
+source ~/.zshrc
+railway-switch linetrader    # 계정: linetrader@naver.com
+
+# seolgiok 프로젝트 연결 (최초 1회)
+cd /Users/aidenyun/project/brand-seolgiok/seolgiok
+railway link
+
+# 배포 상태 / 로그 확인
+railway status
+railway logs --lines 100
+```
+
+> 토큰: `~/.zshrc`의 `RAILWAY_TOKEN_LINETRADER`. `railway-switch` 함수로 계정 전환.
+
 ### 사전 조건
 
-- Railway 계정 및 프로젝트 생성 완료
-- Railway CLI 설치 (`npm install -g @railway/cli`) 또는 Railway 웹 콘솔 사용
+- Railway CLI 설치 (`npm install -g @railway/cli`)
+- `railway link` 실행 완료 (seolgiok 프로젝트 연결)
 - PostgreSQL 서비스가 동일 Railway 프로젝트에 연결되어 있을 것
 
 ### 환경변수 설정 (Railway 콘솔)
@@ -151,25 +168,21 @@ BCRYPT_ROUNDS         # 12
 NEXT_PUBLIC_BRAND_NAME # seolgiok
 ```
 
-### 마이그레이션 실행 (배포 전)
+### 마이그레이션 (자동 적용)
 
-Railway 배포 시 마이그레이션은 **자동으로 실행되지 않는다**. 아래 방법 중 하나로 수동 실행한다.
+`package.json`의 `start` 스크립트:
+```json
+"start": "prisma migrate deploy && next start"
+```
 
-**방법 A — Railway CLI 실행**
+Railway 배포(서버 재시작) 시 `prisma migrate deploy`가 **자동으로 실행**된다. 별도 수동 실행 불필요.
 
+긴급 수동 실행이 필요한 경우:
 ```bash
 railway run npx prisma migrate deploy
 ```
 
-**방법 B — Railway 콘솔 One-Off Command**
-
-Railway 콘솔 → 서비스 → **Deploy** 탭 → Run Command:
-
-```
-npx prisma migrate deploy
-```
-
-> `prisma migrate deploy`는 이미 생성된 마이그레이션 파일만 적용한다. 신규 마이그레이션 생성(`migrate dev`)은 로컬에서 수행 후 커밋해야 한다.
+> 신규 마이그레이션 생성(`migrate dev`)은 반드시 로컬에서 수행 후 커밋해야 한다. 생성 전담: `db-expert` 에이전트.
 
 ### 배포 명령 (Railway CLI)
 
