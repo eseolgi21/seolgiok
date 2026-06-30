@@ -21,27 +21,20 @@ model: sonnet
 Railway (linetrader 계정 — linetrader@naver.com):
 
 ```bash
-# Railway CLI v5는 RAILWAY_TOKEN 환경변수 사용
-export RAILWAY_TOKEN="87d36d24-d21f-4591-944b-0f0354fc3dda"
-railway whoami
-
-# 토큰 만료 시 브라우저 재인증 필요
-railway login
+source ~/.zshrc              # RAILWAY_API_TOKEN=linetrader 토큰 기본 설정
+# 또는 명시적 전환
+railway-switch linetrader    # RAILWAY_API_TOKEN 설정 + whoami 확인
 ```
 
-> `~/.zshrc`의 `railway-switch`는 구형 `RAILWAY_API_TOKEN`을 설정함 — Railway CLI v5에서 작동하지 않음.
-> 만료 시 `railway login`으로 재인증.
-
-seolgiok 프로젝트 연결 (최초 1회, 이후 `~/.railway/config.json`에 저장됨):
+seolgiok 프로젝트 연결 (최초 1회 — 이후 `~/.railway/config.json`에 저장됨):
 ```bash
 cd /Users/aidenyun/project/brand-seolgiok/seolgiok
-railway link
+railway link  # seolgiok 프로젝트 선택 후 연결
 ```
 
 배포 로그 확인:
 ```bash
-railway logs --lines 100
-railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
+railway logs -s seolgiok --lines 100
 ```
 
 ## 로그 조사 절차 (배포 없이)
@@ -49,10 +42,9 @@ railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
 배포 없이 배포서버 로그·상태만 확인하라는 요청 시:
 
 ```bash
-export RAILWAY_TOKEN="87d36d24-d21f-4591-944b-0f0354fc3dda"  # linetrader 계정
+source ~/.zshrc  # RAILWAY_API_TOKEN 로드 (linetrader 토큰 기본값)
 railway status
-railway logs --lines 100
-railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
+railway logs -s seolgiok --lines 100
 ```
 
 ### 조사 후 처리
