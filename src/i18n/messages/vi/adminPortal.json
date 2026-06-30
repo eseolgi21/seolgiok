@@ -1,0 +1,10 @@
+{
+  "handoverReview": {
+    "pendingStatus": "Chờ duyệt",
+    "confirmedStatus": "Đã duyệt",
+    "confirmBtn": "Xác nhận",
+    "revokeBtn": "Hủy xác nhận",
+    "submittedBy": "Người nộp",
+    "noApproval": "Chưa nộp"
+  }
+}

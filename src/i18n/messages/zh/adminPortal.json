@@ -1,0 +1,10 @@
+{
+  "handoverReview": {
+    "pendingStatus": "待审批",
+    "confirmedStatus": "已审批",
+    "confirmBtn": "确认",
+    "revokeBtn": "撤销确认",
+    "submittedBy": "提交人",
+    "noApproval": "未提交"
+  }
+}

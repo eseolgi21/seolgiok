@@ -1,0 +1,10 @@
+{
+  "handoverReview": {
+    "pendingStatus": "Pending",
+    "confirmedStatus": "Approved",
+    "confirmBtn": "Confirm",
+    "revokeBtn": "Revoke",
+    "submittedBy": "Submitted By",
+    "noApproval": "Not Submitted"
+  }
+}

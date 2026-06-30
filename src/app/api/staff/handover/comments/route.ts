@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   const comments = await prisma.handoverComment.findMany({
     where,
     orderBy: { createdAt: "asc" },
-    select: { id: true, content: true, createdAt: true, category: true },
+    select: { id: true, content: true, createdAt: true, category: true, imageUrl: true },
   });
   return NextResponse.json({ ok: true, comments });
 }
@@ -29,12 +29,12 @@ export async function POST(req: Request) {
   const level = session?.user?.level ?? 0;
   if (!session || level < 10) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
   const userId = session.user!.id as string;
-  const { shiftDate, shiftSlotId, category, content } = (await req.json()) as {
-    shiftDate: string; shiftSlotId: string; category: string; content: string;
+  const { shiftDate, shiftSlotId, category, content, imageUrl } = (await req.json()) as {
+    shiftDate: string; shiftSlotId: string; category: string; content: string; imageUrl?: string;
   };
   if (!content?.trim()) return NextResponse.json({ ok: false, code: "EMPTY_CONTENT" }, { status: 400 });
   const comment = await prisma.handoverComment.create({
-    data: { shiftDate: new Date(shiftDate), shiftSlotId, category, authorId: userId, content: content.trim() },
+    data: { shiftDate: new Date(shiftDate), shiftSlotId, category, authorId: userId, content: content.trim(), ...(imageUrl ? { imageUrl } : {}) },
   });
   return NextResponse.json({ ok: true, comment }, { status: 201 });
 }

@@ -73,6 +73,7 @@ model HandoverComment {
   authorId    String
   author      User              @relation("StaffHandoverComment", fields: [authorId], references: [id], onDelete: Cascade)
   content     String
+  imageUrl    String?
   createdAt   DateTime          @default(now())
 
   @@index([shiftDate, shiftSlotId, category])
@@ -80,15 +81,19 @@ model HandoverComment {
 }
 
 model HandoverApproval {
-  id          String            @id @default(cuid())
-  shiftDate   DateTime          @db.Date
-  shiftSlotId String
-  shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
-  category    String
-  approvedBy  String
-  approver    User              @relation("StaffHandoverApproval", fields: [approvedBy], references: [id], onDelete: Restrict)
-  approvedAt  DateTime          @default(now())
-  note        String?
+  id           String            @id @default(cuid())
+  shiftDate    DateTime          @db.Date
+  shiftSlotId  String
+  shiftSlot    HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
+  category     String
+  status       String            @default("PENDING")
+  submittedBy  String
+  submitter    User              @relation("HandoverApprovalSubmitter", fields: [submittedBy], references: [id], onDelete: Restrict)
+  submittedAt  DateTime          @default(now())
+  confirmedBy  String?
+  confirmer    User?             @relation("HandoverApprovalConfirmer", fields: [confirmedBy], references: [id], onDelete: SetNull)
+  confirmedAt  DateTime?
+  note         String?
 
   @@unique([shiftDate, shiftSlotId, category])
   @@index([shiftDate, shiftSlotId])

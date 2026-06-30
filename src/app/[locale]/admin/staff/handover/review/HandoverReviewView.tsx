@@ -1,16 +1,27 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import {
   Box, Typography, TextField, Select, MenuItem, FormControl, InputLabel,
   Table, TableHead, TableRow, TableCell, TableBody, Chip, Button,
   List, ListItem, ListItemText, Divider, CircularProgress, Paper,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 
 type Slot = { id: string; label: string; order: number };
 type Check = { itemId: string; item: { label: string }; checkedUser: { name: string } };
-type Comment = { id: string; content: string; createdAt: string; author: { name: string } };
-type Approval = { id: string; category: string; approvedAt: string; approver: { name: string }; note?: string };
+type Comment = { id: string; content: string; imageUrl?: string | null; createdAt: string; author: { name: string } };
+type Approval = {
+  id: string;
+  category: string;
+  status: "PENDING" | "CONFIRMED";
+  submittedAt: string;
+  submitter: { name: string };
+  confirmedAt?: string | null;
+  confirmer?: { name: string } | null;
+  note?: string | null;
+};
 
 function CategoryPanel({
   category,
@@ -18,7 +29,7 @@ function CategoryPanel({
   checks,
   comments,
   approval,
-  onApprove,
+  onConfirm,
   onRevoke,
 }: {
   category: string;
@@ -26,20 +37,62 @@ function CategoryPanel({
   checks: Check[];
   comments: Comment[];
   approval: Approval | undefined;
-  onApprove: (category: string) => void;
+  onConfirm: (id: string) => void;
   onRevoke: (id: string) => void;
 }) {
+  const t = useTranslations("adminPortal");
+
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, flexWrap: "wrap" }}>
         <Typography variant="h6">{label}</Typography>
-        {approval ? (
+        {!approval ? (
+          <Chip label={t("handoverReview.noApproval") ?? "미결제"} size="small" />
+        ) : approval.status === "PENDING" ? (
           <>
-            <Chip icon={<CheckCircleIcon />} label={`결제됨 — ${approval.approver.name}`} color="success" size="small" />
-            <Button size="small" color="error" variant="outlined" onClick={() => onRevoke(approval.id)}>결제 취소</Button>
+            <Chip
+              icon={<HourglassEmptyIcon />}
+              label={t("handoverReview.pendingStatus") ?? "결제 대기"}
+              color="warning"
+              size="small"
+            />
+            <Typography variant="body2" color="text.secondary">
+              {t("handoverReview.submittedBy") ?? "제출자"}: {approval.submitter.name}
+              {" · "}
+              {new Date(approval.submittedAt).toLocaleString("ko-KR")}
+            </Typography>
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={() => onConfirm(approval.id)}
+            >
+              {t("handoverReview.confirmBtn") ?? "컨펌"}
+            </Button>
           </>
         ) : (
-          <Button size="small" variant="contained" onClick={() => onApprove(category)}>결제</Button>
+          <>
+            <Chip
+              icon={<CheckCircleIcon />}
+              label={t("handoverReview.confirmedStatus") ?? "결제완료"}
+              color="success"
+              size="small"
+            />
+            <Typography variant="body2" color="text.secondary">
+              {approval.confirmer?.name}
+              {approval.confirmedAt
+                ? " · " + new Date(approval.confirmedAt).toLocaleString("ko-KR")
+                : ""}
+            </Typography>
+            <Button
+              size="small"
+              color="error"
+              variant="outlined"
+              onClick={() => onRevoke(approval.id)}
+            >
+              {t("handoverReview.revokeBtn") ?? "컨펌 취소"}
+            </Button>
+          </>
         )}
       </Box>
 
@@ -72,11 +125,19 @@ function CategoryPanel({
       ) : (
         <List dense>
           {comments.map((c) => (
-            <ListItem key={c.id} disablePadding>
+            <ListItem key={c.id} disablePadding sx={{ flexDirection: "column", alignItems: "flex-start" }}>
               <ListItemText
                 primary={c.content}
                 secondary={`${c.author.name} · ${new Date(c.createdAt).toLocaleString("ko-KR")}`}
               />
+              {c.imageUrl && (
+                <Box
+                  component="img"
+                  src={c.imageUrl}
+                  onClick={() => window.open(c.imageUrl!, "_blank")}
+                  sx={{ maxWidth: 120, maxHeight: 120, borderRadius: 1, mt: 0.5, cursor: "pointer" }}
+                />
+              )}
             </ListItem>
           ))}
         </List>
@@ -125,11 +186,11 @@ export default function HandoverReviewView() {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  const handleApprove = async (category: string) => {
+  const handleConfirm = async (id: string) => {
     await fetch("/api/admin/staff/handover/approvals", {
-      method: "POST",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ shiftDate: date, shiftSlotId: slotId, category }),
+      body: JSON.stringify({ id }),
     });
     loadData();
   };
@@ -176,7 +237,7 @@ export default function HandoverReviewView() {
             checks={checks}
             comments={hallComments}
             approval={hallApproval}
-            onApprove={handleApprove}
+            onConfirm={handleConfirm}
             onRevoke={handleRevoke}
           />
           <CategoryPanel
@@ -185,7 +246,7 @@ export default function HandoverReviewView() {
             checks={checks}
             comments={kitchenComments}
             approval={kitchenApproval}
-            onApprove={handleApprove}
+            onConfirm={handleConfirm}
             onRevoke={handleRevoke}
           />
         </>

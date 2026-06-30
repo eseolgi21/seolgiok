@@ -1,0 +1,10 @@
+{
+  "handoverReview": {
+    "pendingStatus": "결제 대기",
+    "confirmedStatus": "결제완료",
+    "confirmBtn": "컨펌",
+    "revokeBtn": "컨펌 취소",
+    "submittedBy": "제출자",
+    "noApproval": "미결제"
+  }
+}

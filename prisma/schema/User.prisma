@@ -24,8 +24,9 @@ model User {
 
   attendanceLogs AttendanceLog[] @relation("StaffAttendance")
   handoverChecks HandoverCheck[] @relation("StaffHandoverCheck")
-  handoverComments  HandoverComment[]  @relation("StaffHandoverComment")
-  handoverApprovals HandoverApproval[] @relation("StaffHandoverApproval")
+  handoverComments              HandoverComment[]  @relation("StaffHandoverComment")
+  handoverApprovalSubmissions   HandoverApproval[] @relation("HandoverApprovalSubmitter")
+  handoverApprovalConfirmations HandoverApproval[] @relation("HandoverApprovalConfirmer")
   votesGiven     EmployeeVote[]  @relation("VoteCaster")
   votesReceived  EmployeeVote[]  @relation("VoteReceiver")
   payslips         Payslip[]     @relation("StaffPayslip")

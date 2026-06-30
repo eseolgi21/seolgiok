@@ -34,3 +34,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, code: "ALREADY_CHECKED" }, { status: 409 });
   }
 }
+
+export async function DELETE(req: Request) {
+  const session = await auth();
+  const level = session?.user?.level ?? 0;
+  if (!session || level < 10)
+    return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+  const { itemId, shiftDate, shiftSlotId } = (await req.json()) as {
+    itemId: string;
+    shiftDate: string;
+    shiftSlotId: string;
+  };
+  if (!itemId || !shiftDate || !shiftSlotId)
+    return NextResponse.json({ ok: false, code: "MISSING_PARAMS" }, { status: 400 });
+  await prisma.handoverCheck.deleteMany({
+    where: {
+      itemId,
+      shiftDate: new Date(shiftDate),
+      shiftSlotId,
+      checkedBy: session.user!.id as string,
+    },
+  });
+  return NextResponse.json({ ok: true });
+}

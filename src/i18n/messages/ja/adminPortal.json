@@ -1,0 +1,10 @@
+{
+  "handoverReview": {
+    "pendingStatus": "決裁待ち",
+    "confirmedStatus": "決裁完了",
+    "confirmBtn": "確認",
+    "revokeBtn": "取消確認",
+    "submittedBy": "申請者",
+    "noApproval": "未申請"
+  }
+}

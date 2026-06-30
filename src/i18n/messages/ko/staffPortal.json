@@ -36,7 +36,13 @@
     "approved": "결제됨",
     "commentPlaceholder": "코멘트를 입력하세요",
     "commentSubmit": "등록",
-    "myComments": "내 코멘트"
+    "myComments": "내 코멘트",
+    "submitApproval": "결제 올리기",
+    "cancelApproval": "결제 취소",
+    "approvalPending": "결제 대기중",
+    "approvalConfirmed": "결제완료",
+    "photoAttach": "사진 첨부",
+    "photoUploading": "업로드 중..."
   },
   "handoverManage": {
     "pageTitle": "인수인계 항목 관리",
