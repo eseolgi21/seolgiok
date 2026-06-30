@@ -32,9 +32,22 @@ const SECURITY_HEADERS = [
     : []),
 ];
 
+// PDF 파일 라우트용 — iframe 미리보기 허용 (X-Frame-Options, frame-ancestors 완화)
+const PDF_HEADERS = SECURITY_HEADERS.map((h) => {
+  if (h.key === "X-Frame-Options") return { key: h.key, value: "SAMEORIGIN" };
+  if (h.key === "Content-Security-Policy")
+    return { key: h.key, value: h.value.replace("frame-ancestors 'none'", "frame-ancestors 'self'") };
+  return h;
+});
+
 const nextConfig: NextConfig = {
   async headers() {
-    return [{ source: "/(.*)", headers: SECURITY_HEADERS }];
+    return [
+      // 전체 기본 보안 헤더
+      { source: "/(.*)", headers: SECURITY_HEADERS },
+      // PDF 파일 라우트 — 동일 출처 iframe 허용 (위 규칙 덮어씀)
+      { source: "/api/(admin/staff|staff)/payslips/:id/file", headers: PDF_HEADERS },
+    ];
   },
 
   webpack: (config) => {
