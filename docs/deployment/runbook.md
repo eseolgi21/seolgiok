@@ -134,8 +134,12 @@ npm run start
 ### Railway 접속 (linetrader 계정)
 
 ```bash
-source ~/.zshrc
-railway-switch linetrader    # 계정: linetrader@naver.com
+# Railway CLI v5는 RAILWAY_TOKEN 환경변수 사용
+export RAILWAY_TOKEN="87d36d24-d21f-4591-944b-0f0354fc3dda"  # linetrader 계정
+railway whoami  # 확인: linetrader@naver.com
+
+# 토큰 만료 시 브라우저 재인증
+railway login
 
 # seolgiok 프로젝트 연결 (최초 1회)
 cd /Users/aidenyun/project/brand-seolgiok/seolgiok
@@ -146,7 +150,8 @@ railway status
 railway logs --lines 100
 ```
 
-> 토큰: `~/.zshrc`의 `RAILWAY_TOKEN_LINETRADER`. `railway-switch` 함수로 계정 전환.
+> **주의**: `~/.zshrc`의 `railway-switch`는 구형 `RAILWAY_API_TOKEN`을 사용하며 Railway CLI v5에서 동작하지 않음.
+> 직접 `RAILWAY_TOKEN` 환경변수를 설정하거나 `railway login`으로 재인증 필요.
 
 ### 사전 조건
 

@@ -18,15 +18,21 @@ model: sonnet
 
 ## 배포 플랫폼 인증 전제조건
 
-Railway (linetrader 계정 전용):
+Railway (linetrader 계정 — linetrader@naver.com):
 
 ```bash
-source ~/.zshrc              # RAILWAY_TOKEN_LINETRADER 환경변수 로드
-railway-switch linetrader    # linetrader 계정으로 전환 (linetrader@naver.com)
-railway whoami               # 인증 확인
+# Railway CLI v5는 RAILWAY_TOKEN 환경변수 사용
+export RAILWAY_TOKEN="87d36d24-d21f-4591-944b-0f0354fc3dda"
+railway whoami
+
+# 토큰 만료 시 브라우저 재인증 필요
+railway login
 ```
 
-seolgiok 프로젝트 연결 (최초 1회, 이후 ~/.railway/config.json에 저장됨):
+> `~/.zshrc`의 `railway-switch`는 구형 `RAILWAY_API_TOKEN`을 설정함 — Railway CLI v5에서 작동하지 않음.
+> 만료 시 `railway login`으로 재인증.
+
+seolgiok 프로젝트 연결 (최초 1회, 이후 `~/.railway/config.json`에 저장됨):
 ```bash
 cd /Users/aidenyun/project/brand-seolgiok/seolgiok
 railway link
@@ -43,7 +49,7 @@ railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
 배포 없이 배포서버 로그·상태만 확인하라는 요청 시:
 
 ```bash
-source ~/.zshrc && railway-switch linetrader
+export RAILWAY_TOKEN="87d36d24-d21f-4591-944b-0f0354fc3dda"  # linetrader 계정
 railway status
 railway logs --lines 100
 railway logs -s <서비스명> --lines 100  # 서비스 이름 지정 시
