@@ -28,6 +28,7 @@ export default function StaffBottomNav() {
   return (
     <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1200 }} elevation={3}>
       <BottomNavigation
+        showLabels
         value={currentValue === -1 ? 0 : currentValue}
         onChange={(_, newValue) => {
           router.push(`/staff/${NAV_ITEMS[newValue].path}`);
