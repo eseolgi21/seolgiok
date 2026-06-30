@@ -30,14 +30,26 @@
     "evening": "오후 교대",
     "night": "야간 교대",
     "markDone": "완료",
-    "empty": "체크리스트 항목이 없습니다."
+    "empty": "체크리스트 항목이 없습니다.",
+    "hall": "홀",
+    "kitchen": "주방",
+    "approved": "결제됨",
+    "commentPlaceholder": "코멘트를 입력하세요",
+    "commentSubmit": "등록",
+    "myComments": "내 코멘트"
   },
   "handoverManage": {
     "pageTitle": "인수인계 항목 관리",
     "newItemLabel": "새 항목 입력",
     "addButton": "추가",
     "activeLabel": "활성",
-    "inactiveLabel": "비활성"
+    "inactiveLabel": "비활성",
+    "categoryHall": "홀",
+    "categoryKitchen": "주방",
+    "categoryLabel": "구분",
+    "slotsSection": "교대 슬롯 관리",
+    "newSlotLabel": "새 슬롯 이름",
+    "slotDeleteWarning": "이 슬롯에 연결된 체크 기록이 있어 삭제할 수 없습니다."
   },
   "awards": {
     "pageTitle": "이달의 우수사원",

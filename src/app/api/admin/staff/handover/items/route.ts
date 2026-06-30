@@ -9,7 +9,7 @@ export async function GET() {
   const session = await auth();
   const level = (session?.user as { level?: number })?.level ?? 0;
   if (!session || level < USER_LEVELS.MANAGER) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
-  const items = await prisma.handoverItem.findMany({ orderBy: { order: "asc" } });
+  const items = await prisma.handoverItem.findMany({ orderBy: [{ category: "asc" }, { order: "asc" }] });
   return NextResponse.json({ ok: true, items });
 }
 
@@ -17,10 +17,12 @@ export async function POST(req: Request) {
   const session = await auth();
   const level = (session?.user as { level?: number })?.level ?? 0;
   if (!session || level < USER_LEVELS.MANAGER) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
-  const { label, order } = await req.json() as { label: string; order?: number };
+  const { label, category, order } = await req.json() as { label: string; category?: string; order?: number };
   if (!label?.trim()) return NextResponse.json({ ok: false, code: "VALIDATION_ERROR" }, { status: 400 });
   const maxOrder = await prisma.handoverItem.aggregate({ _max: { order: true } });
-  const item = await prisma.handoverItem.create({ data: { label: label.trim(), order: order ?? (maxOrder._max.order ?? 0) + 1 } });
+  const item = await prisma.handoverItem.create({
+    data: { label: label.trim(), category: category ?? "HALL", order: order ?? (maxOrder._max.order ?? 0) + 1 },
+  });
   return NextResponse.json({ ok: true, item }, { status: 201 });
 }
 
@@ -28,9 +30,12 @@ export async function PATCH(req: Request) {
   const session = await auth();
   const level = (session?.user as { level?: number })?.level ?? 0;
   if (!session || level < USER_LEVELS.MANAGER) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
-  const { id, label, order, isActive } = await req.json() as { id: string; label?: string; order?: number; isActive?: boolean };
+  const { id, label, category, order, isActive } = await req.json() as { id: string; label?: string; category?: string; order?: number; isActive?: boolean };
   if (!id) return NextResponse.json({ ok: false, code: "MISSING_ID" }, { status: 400 });
-  const item = await prisma.handoverItem.update({ where: { id }, data: { ...(label && { label }), ...(order !== undefined && { order }), ...(isActive !== undefined && { isActive }) } });
+  const item = await prisma.handoverItem.update({
+    where: { id },
+    data: { ...(label && { label }), ...(category && { category }), ...(order !== undefined && { order }), ...(isActive !== undefined && { isActive }) },
+  });
   return NextResponse.json({ ok: true, item });
 }
 

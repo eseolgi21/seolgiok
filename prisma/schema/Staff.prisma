@@ -23,6 +23,7 @@ model AttendanceLog {
 model HandoverItem {
   id        String          @id @default(cuid())
   label     String
+  category  String          @default("HALL")
   order     Int             @default(0)
   isActive  Boolean         @default(true)
   checks    HandoverCheck[]
@@ -30,21 +31,67 @@ model HandoverItem {
   updatedAt DateTime        @updatedAt
 
   @@index([isActive, order])
+  @@index([category, isActive, order])
+}
+
+model HandoverShiftSlot {
+  id        String             @id @default(cuid())
+  label     String
+  order     Int                @default(0)
+  isActive  Boolean            @default(true)
+  checks    HandoverCheck[]
+  comments  HandoverComment[]
+  approvals HandoverApproval[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([isActive, order])
 }
 
 model HandoverCheck {
-  id          String       @id @default(cuid())
+  id          String            @id @default(cuid())
   itemId      String
-  item        HandoverItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  shiftDate   DateTime     @db.Date
-  shiftSlot   String
+  item        HandoverItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  shiftDate   DateTime          @db.Date
+  shiftSlotId String
+  shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
   checkedBy   String
-  checkedUser User         @relation("StaffHandoverCheck", fields: [checkedBy], references: [id], onDelete: Cascade)
-  checkedAt   DateTime     @default(now())
+  checkedUser User              @relation("StaffHandoverCheck", fields: [checkedBy], references: [id], onDelete: Cascade)
+  checkedAt   DateTime          @default(now())
 
-  @@unique([itemId, shiftDate, shiftSlot, checkedBy])
-  @@index([shiftDate, shiftSlot])
+  @@unique([itemId, shiftDate, shiftSlotId, checkedBy])
+  @@index([shiftDate, shiftSlotId])
   @@index([checkedBy])
+}
+
+model HandoverComment {
+  id          String            @id @default(cuid())
+  shiftDate   DateTime          @db.Date
+  shiftSlotId String
+  shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
+  category    String
+  authorId    String
+  author      User              @relation("StaffHandoverComment", fields: [authorId], references: [id], onDelete: Cascade)
+  content     String
+  createdAt   DateTime          @default(now())
+
+  @@index([shiftDate, shiftSlotId, category])
+  @@index([authorId])
+}
+
+model HandoverApproval {
+  id          String            @id @default(cuid())
+  shiftDate   DateTime          @db.Date
+  shiftSlotId String
+  shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
+  category    String
+  approvedBy  String
+  approver    User              @relation("StaffHandoverApproval", fields: [approvedBy], references: [id], onDelete: Restrict)
+  approvedAt  DateTime          @default(now())
+  note        String?
+
+  @@unique([shiftDate, shiftSlotId, category])
+  @@index([shiftDate, shiftSlotId])
 }
 
 // ===== 이달의 우수사원 투표 =====
