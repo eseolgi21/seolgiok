@@ -24,7 +24,6 @@ type Approval = {
 };
 
 function CategoryPanel({
-  category,
   label,
   checks,
   comments,
@@ -32,7 +31,6 @@ function CategoryPanel({
   onConfirm,
   onRevoke,
 }: {
-  category: string;
   label: string;
   checks: Check[];
   comments: Comment[];
@@ -61,12 +59,7 @@ function CategoryPanel({
               {" · "}
               {new Date(approval.submittedAt).toLocaleString("ko-KR")}
             </Typography>
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={() => onConfirm(approval.id)}
-            >
+            <Button size="small" variant="contained" color="primary" onClick={() => onConfirm(approval.id)}>
               {t("handoverReview.confirmBtn") ?? "컨펌"}
             </Button>
           </>
@@ -80,16 +73,9 @@ function CategoryPanel({
             />
             <Typography variant="body2" color="text.secondary">
               {approval.confirmer?.name}
-              {approval.confirmedAt
-                ? " · " + new Date(approval.confirmedAt).toLocaleString("ko-KR")
-                : ""}
+              {approval.confirmedAt ? " · " + new Date(approval.confirmedAt).toLocaleString("ko-KR") : ""}
             </Typography>
-            <Button
-              size="small"
-              color="error"
-              variant="outlined"
-              onClick={() => onRevoke(approval.id)}
-            >
+            <Button size="small" color="error" variant="outlined" onClick={() => onRevoke(approval.id)}>
               {t("handoverReview.revokeBtn") ?? "컨펌 취소"}
             </Button>
           </>
@@ -149,40 +135,73 @@ function CategoryPanel({
 export default function HandoverReviewView() {
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
-  const [slots, setSlots] = useState<Slot[]>([]);
-  const [slotId, setSlotId] = useState("");
-  const [checks, setChecks] = useState<Check[]>([]);
+
+  const [hallSlots, setHallSlots] = useState<Slot[]>([]);
+  const [kitchenSlots, setKitchenSlots] = useState<Slot[]>([]);
+  const [hallSlotId, setHallSlotId] = useState("");
+  const [kitchenSlotId, setKitchenSlotId] = useState("");
+
+  const [hallChecks, setHallChecks] = useState<Check[]>([]);
+  const [kitchenChecks, setKitchenChecks] = useState<Check[]>([]);
   const [hallComments, setHallComments] = useState<Comment[]>([]);
   const [kitchenComments, setKitchenComments] = useState<Comment[]>([]);
-  const [approvals, setApprovals] = useState<Approval[]>([]);
+  const [hallApproval, setHallApproval] = useState<Approval | undefined>();
+  const [kitchenApproval, setKitchenApproval] = useState<Approval | undefined>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/staff/handover/slots")
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.ok) {
-          setSlots(d.slots);
-          if (d.slots.length > 0) setSlotId(d.slots[0].id);
-        }
-      });
+    Promise.all([
+      fetch("/api/admin/staff/handover/slots?category=HALL").then((r) => r.json()),
+      fetch("/api/admin/staff/handover/slots?category=KITCHEN").then((r) => r.json()),
+    ]).then(([hall, kitchen]) => {
+      if (hall.ok) {
+        const active = hall.slots.filter((s: Slot & { isActive: boolean }) => s.isActive);
+        setHallSlots(active);
+        if (active.length > 0) setHallSlotId(active[0].id);
+      }
+      if (kitchen.ok) {
+        const active = kitchen.slots.filter((s: Slot & { isActive: boolean }) => s.isActive);
+        setKitchenSlots(active);
+        if (active.length > 0) setKitchenSlotId(active[0].id);
+      }
+    });
   }, []);
 
   const loadData = useCallback(() => {
-    if (!date || !slotId) return;
+    if (!date) return;
     setLoading(true);
-    Promise.all([
-      fetch(`/api/staff/handover/checks?shiftDate=${date}&shiftSlotId=${slotId}`).then((r) => r.json()),
-      fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${slotId}&category=HALL`).then((r) => r.json()),
-      fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${slotId}&category=KITCHEN`).then((r) => r.json()),
-      fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${slotId}`).then((r) => r.json()),
-    ]).then(([checksData, hallData, kitchenData, approvalsData]) => {
-      if (checksData.ok) setChecks(checksData.checks);
-      if (hallData.ok) setHallComments(hallData.comments);
-      if (kitchenData.ok) setKitchenComments(kitchenData.comments);
-      if (approvalsData.ok) setApprovals(approvalsData.approvals);
-    }).finally(() => setLoading(false));
-  }, [date, slotId]);
+    const fetches: Promise<void>[] = [];
+
+    if (hallSlotId) {
+      fetches.push(
+        Promise.all([
+          fetch(`/api/staff/handover/checks?shiftDate=${date}&shiftSlotId=${hallSlotId}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${hallSlotId}&category=HALL`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${hallSlotId}`).then((r) => r.json()),
+        ]).then(([checksData, commentsData, approvalsData]) => {
+          if (checksData.ok) setHallChecks(checksData.checks);
+          if (commentsData.ok) setHallComments(commentsData.comments);
+          if (approvalsData.ok) setHallApproval(approvalsData.approvals?.find((a: Approval) => a.category === "HALL"));
+        })
+      );
+    }
+
+    if (kitchenSlotId) {
+      fetches.push(
+        Promise.all([
+          fetch(`/api/staff/handover/checks?shiftDate=${date}&shiftSlotId=${kitchenSlotId}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${kitchenSlotId}&category=KITCHEN`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${kitchenSlotId}`).then((r) => r.json()),
+        ]).then(([checksData, commentsData, approvalsData]) => {
+          if (checksData.ok) setKitchenChecks(checksData.checks);
+          if (commentsData.ok) setKitchenComments(commentsData.comments);
+          if (approvalsData.ok) setKitchenApproval(approvalsData.approvals?.find((a: Approval) => a.category === "KITCHEN"));
+        })
+      );
+    }
+
+    Promise.all(fetches).finally(() => setLoading(false));
+  }, [date, hallSlotId, kitchenSlotId]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -204,13 +223,10 @@ export default function HandoverReviewView() {
     loadData();
   };
 
-  const hallApproval = approvals.find((a) => a.category === "HALL");
-  const kitchenApproval = approvals.find((a) => a.category === "KITCHEN");
-
   return (
     <Box>
       <Typography variant="h6" gutterBottom>인수인계 결제</Typography>
-      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap", alignItems: "center" }}>
         <TextField
           type="date"
           label="날짜"
@@ -220,9 +236,15 @@ export default function HandoverReviewView() {
           slotProps={{ inputLabel: { shrink: true } }}
         />
         <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel>교대</InputLabel>
-          <Select value={slotId} label="교대" onChange={(e) => setSlotId(e.target.value)}>
-            {slots.map((s) => <MenuItem key={s.id} value={s.id}>{s.label}</MenuItem>)}
+          <InputLabel>홀 교대</InputLabel>
+          <Select value={hallSlotId} label="홀 교대" onChange={(e) => setHallSlotId(e.target.value)}>
+            {hallSlots.map((s) => <MenuItem key={s.id} value={s.id}>{s.label}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel>주방 교대</InputLabel>
+          <Select value={kitchenSlotId} label="주방 교대" onChange={(e) => setKitchenSlotId(e.target.value)}>
+            {kitchenSlots.map((s) => <MenuItem key={s.id} value={s.id}>{s.label}</MenuItem>)}
           </Select>
         </FormControl>
       </Box>
@@ -232,18 +254,16 @@ export default function HandoverReviewView() {
       ) : (
         <>
           <CategoryPanel
-            category="HALL"
             label="홀"
-            checks={checks}
+            checks={hallChecks}
             comments={hallComments}
             approval={hallApproval}
             onConfirm={handleConfirm}
             onRevoke={handleRevoke}
           />
           <CategoryPanel
-            category="KITCHEN"
             label="주방"
-            checks={checks}
+            checks={kitchenChecks}
             comments={kitchenComments}
             approval={kitchenApproval}
             onConfirm={handleConfirm}

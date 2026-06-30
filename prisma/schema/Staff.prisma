@@ -37,6 +37,7 @@ model HandoverItem {
 model HandoverShiftSlot {
   id        String             @id @default(cuid())
   label     String
+  category  String             @default("HALL")
   order     Int                @default(0)
   isActive  Boolean            @default(true)
   checks    HandoverCheck[]
@@ -45,7 +46,7 @@ model HandoverShiftSlot {
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
 
-  @@index([isActive, order])
+  @@index([isActive, category, order])
 }
 
 model HandoverCheck {

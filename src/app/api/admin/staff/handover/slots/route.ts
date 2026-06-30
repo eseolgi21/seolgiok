@@ -4,21 +4,30 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
   const { error } = await requireAdmin(15);
   if (error) return error;
-  const slots = await prisma.handoverShiftSlot.findMany({ orderBy: { order: "asc" } });
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get("category");
+  const slots = await prisma.handoverShiftSlot.findMany({
+    where: category ? { category } : undefined,
+    orderBy: { order: "asc" },
+  });
   return NextResponse.json({ ok: true, slots });
 }
 
 export async function POST(req: Request) {
   const { error } = await requireAdmin(15);
   if (error) return error;
-  const { label, order } = await req.json() as { label: string; order?: number };
+  const { label, category, order } = await req.json() as { label: string; category?: string; order?: number };
   if (!label?.trim()) return NextResponse.json({ ok: false, code: "VALIDATION_ERROR" }, { status: 400 });
-  const maxOrder = await prisma.handoverShiftSlot.aggregate({ _max: { order: true } });
+  const cat = category === "KITCHEN" ? "KITCHEN" : "HALL";
+  const maxOrder = await prisma.handoverShiftSlot.aggregate({
+    where: { category: cat },
+    _max: { order: true },
+  });
   const slot = await prisma.handoverShiftSlot.create({
-    data: { label: label.trim(), order: order ?? (maxOrder._max.order ?? 0) + 1 },
+    data: { label: label.trim(), category: cat, order: order ?? (maxOrder._max.order ?? 0) + 1 },
   });
   return NextResponse.json({ ok: true, slot }, { status: 201 });
 }
