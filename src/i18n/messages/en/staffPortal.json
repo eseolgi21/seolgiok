@@ -1,11 +1,86 @@
 {
-  "shell": { "title": "Seolgiok Staff Portal", "logout": "Logout" },
-  "nav": { "notices": "Notices", "attendance": "Attendance", "handover": "Handover", "handoverManage": "Handover Management", "awards": "Awards", "suggestions": "Suggestions", "payslips": "Payslips" },
-  "notices": { "pageTitle": "Internal Notices", "empty": "No notices available." },
-  "attendance": { "pageTitle": "Attendance", "clockIn": "Clock In", "clockOut": "Clock Out", "history": "Today's Log", "alreadyClockedIn": "Already clocked in.", "alreadyClockedOut": "Already clocked out." },
-  "handover": { "pageTitle": "Shift Handover", "morning": "Morning Shift", "evening": "Evening Shift", "night": "Night Shift", "markDone": "Done", "empty": "No checklist items.", "hall": "Hall", "kitchen": "Kitchen", "approved": "Approved", "commentPlaceholder": "Add a comment", "commentSubmit": "Submit", "myComments": "My Comments", "submitApproval": "Submit for Approval", "cancelApproval": "Cancel Submission", "approvalPending": "Pending Approval", "approvalConfirmed": "Approved", "photoAttach": "Attach Photo", "photoUploading": "Uploading..." },
-  "handoverManage": { "pageTitle": "Handover Item Management", "newItemLabel": "Enter new item", "addButton": "Add", "activeLabel": "Active", "inactiveLabel": "Inactive", "categoryHall": "Hall", "categoryKitchen": "Kitchen", "categoryLabel": "Category", "slotsSection": "Shift Slot Management", "newSlotLabel": "New Slot Name", "slotDeleteWarning": "Cannot delete a slot with existing records." },
-  "awards": { "pageTitle": "Employee of the Month", "voteButton": "Vote", "alreadyVoted": "Voted Today", "selfVoteBlocked": "You cannot vote for yourself.", "voteCount": "{count} votes", "top3": "This Month's Top 3" },
-  "suggestions": { "pageTitle": "Suggestions", "newButton": "Write Suggestion", "placeholder": "Write your suggestion for the owner.", "submit": "Submit", "myList": "My Suggestions", "empty": "No suggestions yet." },
-  "payslips": { "pageTitle": "Payslips", "empty": "No payslips registered.", "preview": "Preview", "download": "Download", "close": "Close" }
+  "shell": {
+    "title": "Seolgiok Staff Portal",
+    "logout": "Logout"
+  },
+  "nav": {
+    "notices": "Notices",
+    "attendance": "Attendance",
+    "handover": "Handover",
+    "handoverManage": "Handover Management",
+    "awards": "Awards",
+    "suggestions": "Suggestions",
+    "payslips": "Payslips"
+  },
+  "notices": {
+    "pageTitle": "Internal Notices",
+    "empty": "No notices available."
+  },
+  "attendance": {
+    "pageTitle": "Attendance",
+    "clockIn": "Clock In",
+    "clockOut": "Clock Out",
+    "history": "Today's Log",
+    "alreadyClockedIn": "Already clocked in.",
+    "alreadyClockedOut": "Already clocked out."
+  },
+  "handover": {
+    "pageTitle": "Shift Handover",
+    "morning": "Morning Shift",
+    "evening": "Evening Shift",
+    "night": "Night Shift",
+    "markDone": "Done",
+    "empty": "No checklist items.",
+    "hall": "Hall",
+    "kitchen": "Kitchen",
+    "approved": "Approved",
+    "commentPlaceholder": "Add a comment",
+    "commentSubmit": "Submit",
+    "myComments": "My Comments",
+    "submitApproval": "Submit for Approval",
+    "cancelApproval": "Cancel Submission",
+    "approvalPending": "Pending Approval",
+    "approvalConfirmed": "Approved",
+    "photoAttach": "Attach Photo",
+    "photoUploading": "Uploading..."
+  },
+  "handoverManage": {
+    "pageTitle": "Handover Item Management",
+    "newItemLabel": "Enter new item",
+    "addButton": "Add",
+    "activeLabel": "Active",
+    "inactiveLabel": "Inactive",
+    "categoryHall": "Hall",
+    "categoryKitchen": "Kitchen",
+    "categoryLabel": "Category",
+    "slotsSection": "Shift Slot Management",
+    "newSlotLabel": "New Slot Name",
+    "slotDeleteWarning": "Cannot delete a slot with existing records.",
+    "tabItems": "Checklist Items",
+    "tabSlots": "Shift Slots",
+    "noSlots": "No slots registered."
+  },
+  "awards": {
+    "pageTitle": "Employee of the Month",
+    "voteButton": "Vote",
+    "alreadyVoted": "Voted Today",
+    "selfVoteBlocked": "You cannot vote for yourself.",
+    "voteCount": "{count} votes",
+    "top3": "This Month's Top 3"
+  },
+  "suggestions": {
+    "pageTitle": "Suggestions",
+    "newButton": "Write Suggestion",
+    "placeholder": "Write your suggestion for the owner.",
+    "submit": "Submit",
+    "myList": "My Suggestions",
+    "empty": "No suggestions yet."
+  },
+  "payslips": {
+    "pageTitle": "Payslips",
+    "empty": "No payslips registered.",
+    "preview": "Preview",
+    "download": "Download",
+    "close": "Close"
+  }
 }

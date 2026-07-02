@@ -1,11 +1,86 @@
 {
-  "shell": { "title": "雪基玉员工门户", "logout": "退出登录" },
-  "nav": { "notices": "内部公告", "attendance": "考勤", "handover": "交接", "handoverManage": "交接管理", "awards": "优秀员工", "suggestions": "建议", "payslips": "工资单" },
-  "notices": { "pageTitle": "内部公告", "empty": "暂无公告。" },
-  "attendance": { "pageTitle": "考勤管理", "clockIn": "上班打卡", "clockOut": "下班打卡", "history": "今日记录", "alreadyClockedIn": "已经打卡上班。", "alreadyClockedOut": "已经打卡下班。" },
-  "handover": { "pageTitle": "工作交接", "morning": "早班", "evening": "晚班", "night": "夜班", "markDone": "完成", "empty": "没有待办事项。", "hall": "大厅", "kitchen": "厨房", "approved": "已结算", "commentPlaceholder": "输入评论", "commentSubmit": "提交", "myComments": "我的评论", "submitApproval": "提交审批", "cancelApproval": "取消提交", "approvalPending": "审批待定", "approvalConfirmed": "已审批", "photoAttach": "附加照片", "photoUploading": "上传中..." },
-  "handoverManage": { "pageTitle": "交接项目管理", "newItemLabel": "输入新项目", "addButton": "添加", "activeLabel": "启用", "inactiveLabel": "禁用", "categoryHall": "大厅", "categoryKitchen": "厨房", "categoryLabel": "类别", "slotsSection": "班次管理", "newSlotLabel": "新班次名称", "slotDeleteWarning": "有关联记录，无法删除。" },
-  "awards": { "pageTitle": "本月优秀员工", "voteButton": "投票", "alreadyVoted": "今日已投票", "selfVoteBlocked": "不能给自己投票。", "voteCount": "{count}票", "top3": "本月前三名" },
-  "suggestions": { "pageTitle": "建议", "newButton": "写建议", "placeholder": "请写下您对老板的建议。", "submit": "提交", "myList": "我的建议", "empty": "暂无建议。" },
-  "payslips": { "pageTitle": "工资单", "empty": "暂无工资单。", "preview": "预览", "download": "下载", "close": "关闭" }
+  "shell": {
+    "title": "雪基玉员工门户",
+    "logout": "退出登录"
+  },
+  "nav": {
+    "notices": "内部公告",
+    "attendance": "考勤",
+    "handover": "交接",
+    "handoverManage": "交接管理",
+    "awards": "优秀员工",
+    "suggestions": "建议",
+    "payslips": "工资单"
+  },
+  "notices": {
+    "pageTitle": "内部公告",
+    "empty": "暂无公告。"
+  },
+  "attendance": {
+    "pageTitle": "考勤管理",
+    "clockIn": "上班打卡",
+    "clockOut": "下班打卡",
+    "history": "今日记录",
+    "alreadyClockedIn": "已经打卡上班。",
+    "alreadyClockedOut": "已经打卡下班。"
+  },
+  "handover": {
+    "pageTitle": "工作交接",
+    "morning": "早班",
+    "evening": "晚班",
+    "night": "夜班",
+    "markDone": "完成",
+    "empty": "没有待办事项。",
+    "hall": "大厅",
+    "kitchen": "厨房",
+    "approved": "已结算",
+    "commentPlaceholder": "输入评论",
+    "commentSubmit": "提交",
+    "myComments": "我的评论",
+    "submitApproval": "提交审批",
+    "cancelApproval": "取消提交",
+    "approvalPending": "审批待定",
+    "approvalConfirmed": "已审批",
+    "photoAttach": "附加照片",
+    "photoUploading": "上传中..."
+  },
+  "handoverManage": {
+    "pageTitle": "交接项目管理",
+    "newItemLabel": "输入新项目",
+    "addButton": "添加",
+    "activeLabel": "启用",
+    "inactiveLabel": "禁用",
+    "categoryHall": "大厅",
+    "categoryKitchen": "厨房",
+    "categoryLabel": "类别",
+    "slotsSection": "班次管理",
+    "newSlotLabel": "新班次名称",
+    "slotDeleteWarning": "有关联记录，无法删除。",
+    "tabItems": "核查项目",
+    "tabSlots": "班次",
+    "noSlots": "没有已注册的班次。"
+  },
+  "awards": {
+    "pageTitle": "本月优秀员工",
+    "voteButton": "投票",
+    "alreadyVoted": "今日已投票",
+    "selfVoteBlocked": "不能给自己投票。",
+    "voteCount": "{count}票",
+    "top3": "本月前三名"
+  },
+  "suggestions": {
+    "pageTitle": "建议",
+    "newButton": "写建议",
+    "placeholder": "请写下您对老板的建议。",
+    "submit": "提交",
+    "myList": "我的建议",
+    "empty": "暂无建议。"
+  },
+  "payslips": {
+    "pageTitle": "工资单",
+    "empty": "暂无工资单。",
+    "preview": "预览",
+    "download": "下载",
+    "close": "关闭"
+  }
 }

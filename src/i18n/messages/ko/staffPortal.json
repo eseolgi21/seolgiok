@@ -55,7 +55,10 @@
     "categoryLabel": "구분",
     "slotsSection": "교대 슬롯 관리",
     "newSlotLabel": "새 슬롯 이름",
-    "slotDeleteWarning": "이 슬롯에 연결된 체크 기록이 있어 삭제할 수 없습니다."
+    "slotDeleteWarning": "이 슬롯에 연결된 체크 기록이 있어 삭제할 수 없습니다.",
+    "tabItems": "체크리스트 항목",
+    "tabSlots": "교대 슬롯",
+    "noSlots": "등록된 슬롯이 없습니다."
   },
   "awards": {
     "pageTitle": "이달의 우수사원",

@@ -1,11 +1,86 @@
 {
-  "shell": { "title": "ソルギオク スタッフポータル", "logout": "ログアウト" },
-  "nav": { "notices": "社内通知", "attendance": "出退勤", "handover": "引き継ぎ", "handoverManage": "引き継ぎ管理", "awards": "優秀社員", "suggestions": "提案", "payslips": "給与明細" },
-  "notices": { "pageTitle": "社内通知", "empty": "通知はありません。" },
-  "attendance": { "pageTitle": "出退勤管理", "clockIn": "出勤", "clockOut": "退勤", "history": "本日の記録", "alreadyClockedIn": "すでに出勤済みです。", "alreadyClockedOut": "すでに退勤済みです。" },
-  "handover": { "pageTitle": "引き継ぎ", "morning": "午前シフト", "evening": "午後シフト", "night": "夜間シフト", "markDone": "完了", "empty": "チェックリストがありません。", "hall": "ホール", "kitchen": "キッチン", "approved": "承認済み", "commentPlaceholder": "コメントを入力してください", "commentSubmit": "登録", "myComments": "自分のコメント", "submitApproval": "決裁申請", "cancelApproval": "申請取消", "approvalPending": "決裁待ち", "approvalConfirmed": "決裁完了", "photoAttach": "写真添付", "photoUploading": "アップロード中..." },
-  "handoverManage": { "pageTitle": "引き継ぎ項目管理", "newItemLabel": "新しい項目を入力", "addButton": "追加", "activeLabel": "有効", "inactiveLabel": "無効", "categoryHall": "ホール", "categoryKitchen": "キッチン", "categoryLabel": "カテゴリ", "slotsSection": "シフトスロット管理", "newSlotLabel": "新しいスロット名", "slotDeleteWarning": "既存のレコードがあるため削除できません。" },
-  "awards": { "pageTitle": "今月の優秀社員", "voteButton": "投票", "alreadyVoted": "本日投票済み", "selfVoteBlocked": "自分には投票できません。", "voteCount": "{count}票", "top3": "今月のTOP 3" },
-  "suggestions": { "pageTitle": "提案", "newButton": "提案を書く", "placeholder": "オーナーへの提案を書いてください。", "submit": "送信", "myList": "自分の提案", "empty": "提案がありません。" },
-  "payslips": { "pageTitle": "給与明細", "empty": "給与明細はありません。", "preview": "プレビュー", "download": "ダウンロード", "close": "閉じる" }
+  "shell": {
+    "title": "ソルギオク スタッフポータル",
+    "logout": "ログアウト"
+  },
+  "nav": {
+    "notices": "社内通知",
+    "attendance": "出退勤",
+    "handover": "引き継ぎ",
+    "handoverManage": "引き継ぎ管理",
+    "awards": "優秀社員",
+    "suggestions": "提案",
+    "payslips": "給与明細"
+  },
+  "notices": {
+    "pageTitle": "社内通知",
+    "empty": "通知はありません。"
+  },
+  "attendance": {
+    "pageTitle": "出退勤管理",
+    "clockIn": "出勤",
+    "clockOut": "退勤",
+    "history": "本日の記録",
+    "alreadyClockedIn": "すでに出勤済みです。",
+    "alreadyClockedOut": "すでに退勤済みです。"
+  },
+  "handover": {
+    "pageTitle": "引き継ぎ",
+    "morning": "午前シフト",
+    "evening": "午後シフト",
+    "night": "夜間シフト",
+    "markDone": "完了",
+    "empty": "チェックリストがありません。",
+    "hall": "ホール",
+    "kitchen": "キッチン",
+    "approved": "承認済み",
+    "commentPlaceholder": "コメントを入力してください",
+    "commentSubmit": "登録",
+    "myComments": "自分のコメント",
+    "submitApproval": "決裁申請",
+    "cancelApproval": "申請取消",
+    "approvalPending": "決裁待ち",
+    "approvalConfirmed": "決裁完了",
+    "photoAttach": "写真添付",
+    "photoUploading": "アップロード中..."
+  },
+  "handoverManage": {
+    "pageTitle": "引き継ぎ項目管理",
+    "newItemLabel": "新しい項目を入力",
+    "addButton": "追加",
+    "activeLabel": "有効",
+    "inactiveLabel": "無効",
+    "categoryHall": "ホール",
+    "categoryKitchen": "キッチン",
+    "categoryLabel": "カテゴリ",
+    "slotsSection": "シフトスロット管理",
+    "newSlotLabel": "新しいスロット名",
+    "slotDeleteWarning": "既存のレコードがあるため削除できません。",
+    "tabItems": "チェックリスト項目",
+    "tabSlots": "シフトスロット",
+    "noSlots": "登録されたスロットがありません。"
+  },
+  "awards": {
+    "pageTitle": "今月の優秀社員",
+    "voteButton": "投票",
+    "alreadyVoted": "本日投票済み",
+    "selfVoteBlocked": "自分には投票できません。",
+    "voteCount": "{count}票",
+    "top3": "今月のTOP 3"
+  },
+  "suggestions": {
+    "pageTitle": "提案",
+    "newButton": "提案を書く",
+    "placeholder": "オーナーへの提案を書いてください。",
+    "submit": "送信",
+    "myList": "自分の提案",
+    "empty": "提案がありません。"
+  },
+  "payslips": {
+    "pageTitle": "給与明細",
+    "empty": "給与明細はありません。",
+    "preview": "プレビュー",
+    "download": "ダウンロード",
+    "close": "閉じる"
+  }
 }
