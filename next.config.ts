@@ -7,6 +7,14 @@ import createNextIntlPlugin from "next-intl/plugin";
 // [핵심 확인] 플러그인 경로가 src/i18n/request.ts를 정확히 가리키는지 확인
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const CDN_ORIGIN = (() => {
+  try {
+    return process.env.NEXT_PUBLIC_CDN_URL
+      ? new URL(process.env.NEXT_PUBLIC_CDN_URL).origin
+      : "";
+  } catch { return ""; }
+})();
+
 const SECURITY_HEADERS = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -19,7 +27,7 @@ const SECURITY_HEADERS = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob:",
+      `img-src 'self' data: blob:${CDN_ORIGIN ? " " + CDN_ORIGIN : ""}`,
       "font-src 'self'",
       "connect-src 'self'",
       "frame-ancestors 'none'",

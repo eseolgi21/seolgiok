@@ -35,15 +35,20 @@ export async function POST(req: Request) {
   const key = `handover/${randomUUID()}.${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  await r2.send(
-    new PutObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME!,
-      Key: key,
-      Body: buffer,
-      ContentType: file.type,
-      CacheControl: "public, max-age=31536000",
-    })
-  );
+  try {
+    await r2.send(
+      new PutObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Key: key,
+        Body: buffer,
+        ContentType: file.type,
+        CacheControl: "public, max-age=31536000",
+      })
+    );
+  } catch (err) {
+    console.error("[upload] R2 error:", err);
+    return NextResponse.json({ ok: false, error: "업로드에 실패했습니다." }, { status: 500 });
+  }
 
   const url = `${process.env.NEXT_PUBLIC_CDN_URL}/${key}`;
   return NextResponse.json({ ok: true, url });

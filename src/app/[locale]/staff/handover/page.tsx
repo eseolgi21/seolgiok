@@ -6,6 +6,27 @@ import {
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 
+async function compressImage(file: File, maxPx = 1920, quality = 0.8): Promise<File> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(
+        (blob) => resolve(new File([blob!], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" })),
+        "image/jpeg",
+        quality,
+      );
+    };
+    img.src = url;
+  });
+}
+
 type SlotInfo = { id: string; label: string; order: number; category: string };
 type Item = { id: string; label: string; category: string };
 type Check = { itemId: string; shiftSlotId: string; checkedBy: string };
@@ -215,12 +236,22 @@ export default function HandoverPage() {
                 const file = e.target.files?.[0];
                 if (!file) return;
                 setUploading((prev) => ({ ...prev, [category]: true }));
-                const fd = new FormData();
-                fd.append("file", file);
-                const res = await fetch("/api/staff/handover/upload", { method: "POST", body: fd });
-                const data = await res.json();
-                if (data.ok) setImageUrls((prev) => ({ ...prev, [category]: data.url as string }));
-                setUploading((prev) => ({ ...prev, [category]: false }));
+                try {
+                  const compressed = await compressImage(file);
+                  const fd = new FormData();
+                  fd.append("file", compressed);
+                  const res = await fetch("/api/staff/handover/upload", { method: "POST", body: fd });
+                  const data = await res.json();
+                  if (data.ok) {
+                    setImageUrls((prev) => ({ ...prev, [category]: data.url as string }));
+                  } else {
+                    alert(data.error ?? "사진 업로드에 실패했습니다.");
+                  }
+                } catch {
+                  alert("사진 업로드 중 오류가 발생했습니다.");
+                } finally {
+                  setUploading((prev) => ({ ...prev, [category]: false }));
+                }
               }} />
             </Button>
             {imageUrls[category] && (
