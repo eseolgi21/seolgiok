@@ -7,6 +7,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 type Item = { id: string; label: string; category: string; order: number; isActive: boolean };
 type Slot = { id: string; label: string; category: string; order: number; isActive: boolean };
@@ -137,6 +139,28 @@ export default function HandoverAdminPage() {
     fetchItems();
   };
 
+  const handleMoveItem = async (id: string, direction: "up" | "down") => {
+    const sorted = [...items].sort((a, b) => a.category.localeCompare(b.category) || a.order - b.order);
+    const current = sorted.find((item) => item.id === id)!;
+    const catItems = sorted.filter((item) => item.category === current.category);
+    const catIdx = catItems.findIndex((item) => item.id === id);
+    if (direction === "up" && catIdx === 0) return;
+    if (direction === "down" && catIdx === catItems.length - 1) return;
+    const next = [...catItems];
+    const swap = direction === "up" ? catIdx - 1 : catIdx + 1;
+    [next[catIdx], next[swap]] = [next[swap], next[catIdx]];
+    await Promise.all(
+      next.map((item, i) =>
+        fetch("/api/admin/staff/handover/items", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: item.id, order: i + 1 }),
+        })
+      )
+    );
+    fetchItems();
+  };
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>인수인계 관리</Typography>
@@ -165,28 +189,36 @@ export default function HandoverAdminPage() {
             <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd}>추가</Button>
           </Box>
           <List>
-            {items.map((item) => (
-              <ListItem
-                key={item.id}
-                secondaryAction={
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Switch size="small" checked={item.isActive} onChange={(e) => handleToggle(item.id, e.target.checked)} />
-                    <IconButton edge="end" onClick={() => handleDelete(item.id)} color="error"><DeleteIcon /></IconButton>
+            {[...items].sort((a, b) => a.category.localeCompare(b.category) || a.order - b.order).map((item) => {
+              const catItems = items.filter((x) => x.category === item.category).sort((a, b) => a.order - b.order);
+              const catIdx = catItems.findIndex((x) => x.id === item.id);
+              return (
+                <ListItem
+                  key={item.id}
+                  secondaryAction={
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Switch size="small" checked={item.isActive} onChange={(e) => handleToggle(item.id, e.target.checked)} />
+                      <IconButton edge="end" onClick={() => handleDelete(item.id)} color="error"><DeleteIcon /></IconButton>
+                    </Box>
+                  }
+                >
+                  <Box sx={{ display: "flex", flexDirection: "column", mr: 0.5 }}>
+                    <IconButton size="small" disabled={catIdx === 0} onClick={() => handleMoveItem(item.id, "up")}><ArrowUpwardIcon fontSize="small" /></IconButton>
+                    <IconButton size="small" disabled={catIdx === catItems.length - 1} onClick={() => handleMoveItem(item.id, "down")}><ArrowDownwardIcon fontSize="small" /></IconButton>
                   </Box>
-                }
-              >
-                <Chip
-                  label={item.category === "HALL" ? "홀" : "주방"}
-                  size="small"
-                  color={item.category === "HALL" ? "primary" : "warning"}
-                  sx={{ mr: 1 }}
-                />
-                <ListItemText
-                  primary={item.label}
-                  sx={{ textDecoration: item.isActive ? "none" : "line-through", color: item.isActive ? "inherit" : "text.secondary" }}
-                />
-              </ListItem>
-            ))}
+                  <Chip
+                    label={item.category === "HALL" ? "홀" : "주방"}
+                    size="small"
+                    color={item.category === "HALL" ? "primary" : "warning"}
+                    sx={{ mr: 1 }}
+                  />
+                  <ListItemText
+                    primary={item.label}
+                    sx={{ textDecoration: item.isActive ? "none" : "line-through", color: item.isActive ? "inherit" : "text.secondary" }}
+                  />
+                </ListItem>
+              );
+            })}
           </List>
         </Box>
       )}

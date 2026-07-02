@@ -198,7 +198,7 @@ export default function HandoverHistoryView() {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>교대 기록</Typography>
+      <Typography variant="h6" gutterBottom>인수인계 기록</Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 3, flexWrap: "wrap", alignItems: "center" }}>
         <Button size="small" variant="outlined" startIcon={<ChevronLeftIcon />} onClick={() => shiftDate(-1)}>
           전날

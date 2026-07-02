@@ -80,7 +80,7 @@ const navTree: NavNode[] = [
       { label: "출퇴근 현황", href: "/admin/staff/attendance" },
       { label: "인수인계 항목", href: "/admin/staff/handover" },
       { label: "인수인계 결제", href: "/admin/staff/handover/review" },
-      { label: "교대 기록", href: "/admin/staff/handover/history" },
+      { label: "인수인계 기록", href: "/admin/staff/handover/history" },
       { label: "건의글", href: "/admin/staff/suggestions" },
       { label: "우수사원 집계", href: "/admin/staff/awards" },
       { label: "급여명세서", href: "/admin/staff/payslips" },
