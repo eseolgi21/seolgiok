@@ -10,25 +10,11 @@ type SlotInfo = { id: string; label: string; order: number; category: string };
 type Item = { id: string; label: string; category: string };
 type Check = { itemId: string; shiftSlotId: string; checkedBy: string };
 type CommentItem = { id: string; content: string; createdAt: string; category: string; imageUrl?: string | null };
-type ApprovalItem = {
-  id: string;
-  category: string;
-  status: string;
-  submittedAt: string;
-  submitter?: { name: string };
-};
+type ApprovalItem = { id: string; category: string; status: string; submittedAt: string; submitter?: { name: string } };
 
 export default function HandoverPage() {
   const t = useTranslations("staffPortal");
-  const [userId, setUserId] = useState<string | null>(null);
   const today = new Date().toISOString().slice(0, 10);
-
-  useEffect(() => {
-    fetch("/api/auth/session")
-      .then((r) => r.json())
-      .then((d) => { if (d?.user?.id) setUserId(d.user.id); })
-      .catch(() => {});
-  }, []);
 
   const [hallSlots, setHallSlots] = useState<SlotInfo[]>([]);
   const [kitchenSlots, setKitchenSlots] = useState<SlotInfo[]>([]);
@@ -95,41 +81,25 @@ export default function HandoverPage() {
     Promise.all([loadHallData(), loadKitchenData()]).finally(() => setLoading(false));
   }, [loadHallData, loadKitchenData]);
 
-  const isHallChecked = (itemId: string) =>
-    hallChecks.some((c) => c.itemId === itemId && c.shiftSlotId === hallSlotId);
-  const isKitchenChecked = (itemId: string) =>
-    kitchenChecks.some((c) => c.itemId === itemId && c.shiftSlotId === kitchenSlotId);
+  const isHallChecked = (itemId: string) => hallChecks.some((c) => c.itemId === itemId && c.shiftSlotId === hallSlotId);
+  const isKitchenChecked = (itemId: string) => kitchenChecks.some((c) => c.itemId === itemId && c.shiftSlotId === kitchenSlotId);
 
   const handleCheck = async (itemId: string, slotId: string, isChecked: boolean, refreshFn: () => void) => {
     if (!slotId) return;
-    if (isChecked) {
-      await fetch("/api/staff/handover/checks", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId, shiftDate: today, shiftSlotId: slotId }),
-      });
-    } else {
-      await fetch("/api/staff/handover/checks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId, shiftDate: today, shiftSlotId: slotId }),
-      });
-    }
+    await fetch("/api/staff/handover/checks", {
+      method: isChecked ? "DELETE" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId, shiftDate: today, shiftSlotId: slotId }),
+    });
     refreshFn();
   };
 
   const handleComment = async (category: string, slotId: string, content: string, refreshFn: () => void, clearInput: () => void) => {
-    if (!content.trim()) return;
+    if (!content.trim() || !slotId) return;
     const res = await fetch("/api/staff/handover/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        shiftDate: today,
-        shiftSlotId: slotId,
-        category,
-        content,
-        imageUrl: imageUrls[category] ?? undefined,
-      }),
+      body: JSON.stringify({ shiftDate: today, shiftSlotId: slotId, category, content, imageUrl: imageUrls[category] ?? undefined }),
     });
     if ((await res.json()).ok) {
       setImageUrls((prev) => ({ ...prev, [category]: null }));
@@ -139,6 +109,7 @@ export default function HandoverPage() {
   };
 
   const handleApprovalSubmit = async (category: string, slotId: string, refreshFn: () => void) => {
+    if (!slotId) return;
     await fetch("/api/staff/handover/approvals", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -156,50 +127,37 @@ export default function HandoverPage() {
     refreshFn();
   };
 
-  if (loading && hallSlots.length === 0 && kitchenSlots.length === 0) return <CircularProgress />;
-
   const renderSection = (
-    label: string,
-    category: string,
+    category: "HALL" | "KITCHEN",
+    slots: SlotInfo[],
+    slotIdx: number,
+    setSlotIdx: (v: number) => void,
     items: Item[],
-    comments: CommentItem[],
     checks: Check[],
+    comments: CommentItem[],
     approval: ApprovalItem | null,
     slotId: string,
-    isCheckedFn: (itemId: string) => boolean,
+    isCheckedFn: (id: string) => boolean,
     input: string,
     setInput: (v: string) => void,
     refreshFn: () => void,
   ) => (
     <Box sx={{ mb: 3 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>{label}</Typography>
-        {approval?.status === "CONFIRMED" ? (
-          <Chip label={t("handover.approvalConfirmed")} color="success" size="small" />
-        ) : approval?.status === "PENDING" ? (
-          <>
-            <Chip label={t("handover.approvalPending")} color="warning" size="small" />
-            <Button size="small" variant="outlined" color="warning"
-              onClick={() => handleApprovalCancel(approval.id, refreshFn)}>
-              {t("handover.cancelApproval")}
-            </Button>
-          </>
-        ) : (
-          <Button size="small" variant="contained"
-            onClick={() => handleApprovalSubmit(category, slotId, refreshFn)}>
-            {t("handover.submitApproval")}
-          </Button>
-        )}
-      </Box>
+      {/* 항목 목록 - 슬롯 유무 무관하게 항상 표시 */}
       {items.length === 0 ? (
-        <Typography color="text.secondary">{t("handover.empty")}</Typography>
+        <Typography color="text.secondary" sx={{ mb: 1 }}>{t("handover.empty")}</Typography>
       ) : (
-        <List dense>
+        <List dense sx={{ mb: 1 }}>
           {items.map((item) => {
-            const checked = isCheckedFn(item.id);
+            const checked = !!slotId && isCheckedFn(item.id);
             return (
               <ListItem key={item.id} disablePadding>
-                <Checkbox checked={checked} onChange={() => handleCheck(item.id, slotId, checked, refreshFn)} size="small" />
+                <Checkbox
+                  size="small"
+                  checked={checked}
+                  disabled={!slotId}
+                  onChange={() => handleCheck(item.id, slotId, checked, refreshFn)}
+                />
                 <ListItemText
                   primary={item.label}
                   sx={{ textDecoration: checked ? "line-through" : "none", color: checked ? "text.secondary" : "inherit" }}
@@ -209,88 +167,105 @@ export default function HandoverPage() {
           })}
         </List>
       )}
-      <Divider sx={{ my: 1 }} />
-      <Typography variant="body2" color="text.secondary" gutterBottom>{t("handover.myComments")}</Typography>
-      {comments.map((c) => (
-        <Box key={c.id} sx={{ mb: 0.5 }}>
-          <Typography variant="body2" sx={{ pl: 1, borderLeft: "2px solid #eee" }}>{c.content}</Typography>
-          {c.imageUrl && (
-            <Box component="img" src={c.imageUrl}
-              sx={{ maxWidth: 120, maxHeight: 120, borderRadius: 1, mt: 0.5, cursor: "pointer" }}
-              onClick={() => window.open(c.imageUrl!, "_blank")} />
-          )}
-        </Box>
-      ))}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1, mt: 1 }}>
-        <Button variant="outlined" size="small" component="label" disabled={uploading[category]}>
-          {uploading[category] ? t("handover.photoUploading") : t("handover.photoAttach")}
-          <input type="file" hidden accept="image/*" onChange={async (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            setUploading((prev) => ({ ...prev, [category]: true }));
-            const fd = new FormData();
-            fd.append("file", file);
-            const res = await fetch("/api/staff/handover/upload", { method: "POST", body: fd });
-            const data = await res.json();
-            if (data.ok) setImageUrls((prev) => ({ ...prev, [category]: data.url as string }));
-            setUploading((prev) => ({ ...prev, [category]: false }));
-          }} />
-        </Button>
-        {imageUrls[category] && (
-          <Box component="img" src={imageUrls[category]!}
-            sx={{ maxWidth: 80, maxHeight: 80, borderRadius: 1, cursor: "pointer" }}
-            onClick={() => window.open(imageUrls[category]!, "_blank")} />
-        )}
-      </Box>
-      <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
-        <TextField size="small" fullWidth placeholder={t("handover.commentPlaceholder")}
-          value={input} onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleComment(category, slotId, input, refreshFn, () => setInput(""))} />
-        <Button size="small" variant="outlined"
-          onClick={() => handleComment(category, slotId, input, refreshFn, () => setInput(""))}>
-          {t("handover.commentSubmit")}
-        </Button>
-      </Box>
+
+      {/* 슬롯 의존 기능 */}
+      {slots.length === 0 ? (
+        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
+          교대 슬롯을 추가하면 체크 및 결제 기능을 사용할 수 있습니다.
+        </Typography>
+      ) : (
+        <>
+          <Tabs value={slotIdx} onChange={(_, v) => setSlotIdx(v)} sx={{ mb: 1 }}>
+            {slots.map((s) => <Tab key={s.id} label={s.label} />)}
+          </Tabs>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            {approval?.status === "CONFIRMED" ? (
+              <Chip label={t("handover.approvalConfirmed")} color="success" size="small" />
+            ) : approval?.status === "PENDING" ? (
+              <>
+                <Chip label={t("handover.approvalPending")} color="warning" size="small" />
+                <Button size="small" variant="outlined" color="warning"
+                  onClick={() => handleApprovalCancel(approval.id, refreshFn)}>
+                  {t("handover.cancelApproval")}
+                </Button>
+              </>
+            ) : (
+              <Button size="small" variant="contained"
+                onClick={() => handleApprovalSubmit(category, slotId, refreshFn)}>
+                {t("handover.submitApproval")}
+              </Button>
+            )}
+          </Box>
+          <Divider sx={{ my: 1 }} />
+          <Typography variant="body2" color="text.secondary" gutterBottom>{t("handover.myComments")}</Typography>
+          {comments.map((c) => (
+            <Box key={c.id} sx={{ mb: 0.5 }}>
+              <Typography variant="body2" sx={{ pl: 1, borderLeft: "2px solid #eee" }}>{c.content}</Typography>
+              {c.imageUrl && (
+                <Box component="img" src={c.imageUrl}
+                  sx={{ maxWidth: 120, maxHeight: 120, borderRadius: 1, mt: 0.5, cursor: "pointer" }}
+                  onClick={() => window.open(c.imageUrl!, "_blank")} />
+              )}
+            </Box>
+          ))}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1, mt: 1 }}>
+            <Button variant="outlined" size="small" component="label" disabled={uploading[category]}>
+              {uploading[category] ? t("handover.photoUploading") : t("handover.photoAttach")}
+              <input type="file" hidden accept="image/*" onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                setUploading((prev) => ({ ...prev, [category]: true }));
+                const fd = new FormData();
+                fd.append("file", file);
+                const res = await fetch("/api/staff/handover/upload", { method: "POST", body: fd });
+                const data = await res.json();
+                if (data.ok) setImageUrls((prev) => ({ ...prev, [category]: data.url as string }));
+                setUploading((prev) => ({ ...prev, [category]: false }));
+              }} />
+            </Button>
+            {imageUrls[category] && (
+              <Box component="img" src={imageUrls[category]!}
+                sx={{ maxWidth: 80, maxHeight: 80, borderRadius: 1, cursor: "pointer" }}
+                onClick={() => window.open(imageUrls[category]!, "_blank")} />
+            )}
+          </Box>
+          <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+            <TextField size="small" fullWidth placeholder={t("handover.commentPlaceholder")}
+              value={input} onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleComment(category, slotId, input, refreshFn, () => setInput(""))} />
+            <Button size="small" variant="outlined"
+              onClick={() => handleComment(category, slotId, input, refreshFn, () => setInput(""))}>
+              {t("handover.commentSubmit")}
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
+
+  if (loading && hallSlots.length === 0 && kitchenSlots.length === 0 && hallItems.length === 0 && kitchenItems.length === 0) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box>
       <Typography variant="h6" gutterBottom>{t("handover.pageTitle")}</Typography>
 
-      {/* 홀 섹션 */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>{t("handover.hall")}</Typography>
-        {hallSlots.length === 0 ? (
-          <Typography color="text.secondary" sx={{ mb: 2 }}>홀 교대 슬롯이 없습니다. 어드민에서 추가해 주세요.</Typography>
-        ) : (
-          <>
-            <Tabs value={hallSlotIdx} onChange={(_, v) => setHallSlotIdx(v)} sx={{ mb: 2 }}>
-              {hallSlots.map((s) => <Tab key={s.id} label={s.label} />)}
-            </Tabs>
-            {renderSection(
-              t("handover.hall"), "HALL", hallItems, hallComments, hallChecks, hallApproval,
-              hallSlotId, isHallChecked, hallInput, setHallInput, loadHallData,
-            )}
-          </>
+        {renderSection(
+          "HALL", hallSlots, hallSlotIdx, setHallSlotIdx,
+          hallItems, hallChecks, hallComments, hallApproval,
+          hallSlotId, isHallChecked, hallInput, setHallInput, loadHallData,
         )}
       </Box>
 
-      {/* 주방 섹션 */}
       <Box>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>{t("handover.kitchen")}</Typography>
-        {kitchenSlots.length === 0 ? (
-          <Typography color="text.secondary">주방 교대 슬롯이 없습니다. 어드민에서 추가해 주세요.</Typography>
-        ) : (
-          <>
-            <Tabs value={kitchenSlotIdx} onChange={(_, v) => setKitchenSlotIdx(v)} sx={{ mb: 2 }}>
-              {kitchenSlots.map((s) => <Tab key={s.id} label={s.label} />)}
-            </Tabs>
-            {renderSection(
-              t("handover.kitchen"), "KITCHEN", kitchenItems, kitchenComments, kitchenChecks, kitchenApproval,
-              kitchenSlotId, isKitchenChecked, kitchenInput, setKitchenInput, loadKitchenData,
-            )}
-          </>
+        {renderSection(
+          "KITCHEN", kitchenSlots, kitchenSlotIdx, setKitchenSlotIdx,
+          kitchenItems, kitchenChecks, kitchenComments, kitchenApproval,
+          kitchenSlotId, isKitchenChecked, kitchenInput, setKitchenInput, loadKitchenData,
         )}
       </Box>
     </Box>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Box, Typography, List, ListItem, ListItemText, IconButton,
   TextField, Button, Switch, Select, MenuItem, FormControl,
-  InputLabel, Chip, Tabs, Tab, Divider,
+  InputLabel, Chip, Tabs, Tab,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -97,6 +97,7 @@ function SlotManager({ category, label }: { category: "HALL" | "KITCHEN"; label:
 
 export default function HandoverAdminPage() {
   const [tabIdx, setTabIdx] = useState(0);
+  const [slotCatIdx, setSlotCatIdx] = useState(0);
   const [items, setItems] = useState<Item[]>([]);
   const [newLabel, setNewLabel] = useState("");
   const [newCategory, setNewCategory] = useState("HALL");
@@ -191,15 +192,14 @@ export default function HandoverAdminPage() {
       )}
 
       {tabIdx === 1 && (
-        <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          <Box sx={{ flex: 1, minWidth: 240 }}>
-            <SlotManager category="HALL" label="홀" />
-          </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box sx={{ flex: 1, minWidth: 240 }}>
-            <SlotManager category="KITCHEN" label="주방" />
-          </Box>
-        </Box>
+        <>
+          <Tabs value={slotCatIdx} onChange={(_, v) => setSlotCatIdx(v)} sx={{ mb: 2 }}>
+            <Tab label="홀" />
+            <Tab label="주방" />
+          </Tabs>
+          {slotCatIdx === 0 && <SlotManager category="HALL" label="홀" />}
+          {slotCatIdx === 1 && <SlotManager category="KITCHEN" label="주방" />}
+        </>
       )}
     </Box>
   );
