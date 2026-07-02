@@ -7,12 +7,58 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import {
+  DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext, useSortable, verticalListSortingStrategy, arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useTranslations } from "next-intl";
 
 type Item = { id: string; label: string; category: string; order: number; isActive: boolean };
 type Slot = { id: string; label: string; category: string; order: number; isActive: boolean };
+
+function SortableItem({
+  item,
+  chipLabel,
+  onToggle,
+  onDelete,
+}: {
+  item: Item;
+  chipLabel: string;
+  onToggle: (id: string, isActive: boolean) => void;
+  onDelete: (id: string) => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
+  return (
+    <ListItem
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }}
+      secondaryAction={
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Switch size="small" checked={item.isActive} onChange={(e) => onToggle(item.id, e.target.checked)} />
+          <IconButton edge="end" onClick={() => onDelete(item.id)} color="error"><DeleteIcon /></IconButton>
+        </Box>
+      }
+    >
+      <Box {...attributes} {...listeners} sx={{ cursor: "grab", mr: 0.5, display: "flex", color: "text.disabled", touchAction: "none" }}>
+        <DragIndicatorIcon />
+      </Box>
+      <Chip
+        label={chipLabel}
+        size="small"
+        color={item.category === "HALL" ? "primary" : "warning"}
+        sx={{ mr: 1 }}
+      />
+      <ListItemText
+        primary={item.label}
+        sx={{ textDecoration: item.isActive ? "none" : "line-through", color: item.isActive ? "inherit" : "text.secondary" }}
+      />
+    </ListItem>
+  );
+}
 
 function SlotManager({ category }: { category: "HALL" | "KITCHEN" }) {
   const t = useTranslations("staffPortal.handoverManage");
@@ -106,6 +152,8 @@ export default function HandoverManageClient() {
   const [newLabel, setNewLabel] = useState("");
   const [newCategory, setNewCategory] = useState("HALL");
 
+  const sensors = useSensors(useSensor(PointerSensor));
+
   const fetchItems = () =>
     fetch("/api/admin/staff/handover/items")
       .then((r) => r.json())
@@ -141,27 +189,28 @@ export default function HandoverManageClient() {
     fetchItems();
   };
 
-  const handleMoveItem = async (id: string, direction: "up" | "down") => {
-    const sorted = [...items].sort((a, b) => a.category.localeCompare(b.category) || a.order - b.order);
-    const current = sorted.find((item) => item.id === id)!;
-    const catItems = sorted.filter((item) => item.category === current.category);
-    const catIdx = catItems.findIndex((item) => item.id === id);
-    if (direction === "up" && catIdx === 0) return;
-    if (direction === "down" && catIdx === catItems.length - 1) return;
-    const next = [...catItems];
-    const swap = direction === "up" ? catIdx - 1 : catIdx + 1;
-    [next[catIdx], next[swap]] = [next[swap], next[catIdx]];
+  const handleDragEnd = async (event: DragEndEvent, category: string) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const catItems = [...items].filter((i) => i.category === category).sort((a, b) => a.order - b.order);
+    const oldIndex = catItems.findIndex((i) => i.id === active.id);
+    const newIndex = catItems.findIndex((i) => i.id === over.id);
+    if (oldIndex === newIndex) return;
+    const reordered = arrayMove(catItems, oldIndex, newIndex);
     await Promise.all(
-      next.map((item, i) =>
+      reordered.map((item, idx) =>
         fetch("/api/admin/staff/handover/items", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: item.id, order: i + 1 }),
+          body: JSON.stringify({ id: item.id, order: idx + 1 }),
         })
       )
     );
     fetchItems();
   };
+
+  const hallItems = [...items].filter((i) => i.category === "HALL").sort((a, b) => a.order - b.order);
+  const kitchenItems = [...items].filter((i) => i.category === "KITCHEN").sort((a, b) => a.order - b.order);
 
   return (
     <Box>
@@ -190,38 +239,28 @@ export default function HandoverManageClient() {
             </FormControl>
             <Button variant="contained" startIcon={<AddIcon />} onClick={handleAdd}>{t("addButton")}</Button>
           </Box>
-          <List>
-            {[...items].sort((a, b) => a.category.localeCompare(b.category) || a.order - b.order).map((item) => {
-              const catItems = items.filter((x) => x.category === item.category).sort((a, b) => a.order - b.order);
-              const catIdx = catItems.findIndex((x) => x.id === item.id);
-              return (
-                <ListItem
-                  key={item.id}
-                  secondaryAction={
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Switch size="small" checked={item.isActive} onChange={(e) => handleToggle(item.id, e.target.checked)} />
-                      <IconButton edge="end" onClick={() => handleDelete(item.id)} color="error"><DeleteIcon /></IconButton>
-                    </Box>
-                  }
-                >
-                  <Box sx={{ display: "flex", flexDirection: "column", mr: 0.5 }}>
-                    <IconButton size="small" disabled={catIdx === 0} onClick={() => handleMoveItem(item.id, "up")}><ArrowUpwardIcon fontSize="small" /></IconButton>
-                    <IconButton size="small" disabled={catIdx === catItems.length - 1} onClick={() => handleMoveItem(item.id, "down")}><ArrowDownwardIcon fontSize="small" /></IconButton>
-                  </Box>
-                  <Chip
-                    label={item.category === "HALL" ? t("categoryHall") : t("categoryKitchen")}
-                    size="small"
-                    color={item.category === "HALL" ? "primary" : "warning"}
-                    sx={{ mr: 1 }}
-                  />
-                  <ListItemText
-                    primary={item.label}
-                    sx={{ textDecoration: item.isActive ? "none" : "line-through", color: item.isActive ? "inherit" : "text.secondary" }}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
+
+          <Typography variant="subtitle2" sx={{ mb: 0.5, color: "text.secondary" }}>{t("categoryHall")}</Typography>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, "HALL")}>
+            <SortableContext items={hallItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+              <List dense>
+                {hallItems.map((item) => (
+                  <SortableItem key={item.id} item={item} chipLabel={t("categoryHall")} onToggle={handleToggle} onDelete={handleDelete} />
+                ))}
+              </List>
+            </SortableContext>
+          </DndContext>
+
+          <Typography variant="subtitle2" sx={{ mt: 2, mb: 0.5, color: "text.secondary" }}>{t("categoryKitchen")}</Typography>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, "KITCHEN")}>
+            <SortableContext items={kitchenItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+              <List dense>
+                {kitchenItems.map((item) => (
+                  <SortableItem key={item.id} item={item} chipLabel={t("categoryKitchen")} onToggle={handleToggle} onDelete={handleDelete} />
+                ))}
+              </List>
+            </SortableContext>
+          </DndContext>
         </Box>
       )}
 
