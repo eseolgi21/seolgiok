@@ -6,5 +6,10 @@
     "revokeBtn": "Hủy xác nhận",
     "submittedBy": "Người nộp",
     "noApproval": "Chưa nộp"
+  },
+  "handoverStoreSelector": {
+    "label": "Chọn cửa hàng",
+    "allStores": "Tất cả cửa hàng",
+    "notAssignedGuidance": "Bạn chưa được phân công cửa hàng nên không thể sử dụng chức năng này. Vui lòng liên hệ quản trị viên."
   }
 }

@@ -1,0 +1,61 @@
+{
+  "page": {
+    "title": "Quản trị · Quản lý cửa hàng"
+  },
+  "table": {
+    "name": "Tên cửa hàng",
+    "address": "Địa chỉ",
+    "coordinates": "Tọa độ",
+    "radiusMeters": "Bán kính cho phép",
+    "timezone": "Múi giờ",
+    "memberCount": "Số nhân viên",
+    "isActive": "Đang hoạt động",
+    "updatedAt": "Cập nhật lúc",
+    "actions": "Thao tác",
+    "noData": "Không có dữ liệu."
+  },
+  "loading": "Đang tải…",
+  "refresh": "Làm mới",
+  "actions": {
+    "create": "Thêm cửa hàng",
+    "edit": "Sửa",
+    "deleteSelected": "Xóa mục đã chọn ({count})"
+  },
+  "form": {
+    "createTitle": "Thêm cửa hàng",
+    "editTitle": "Sửa cửa hàng",
+    "name": "Tên cửa hàng",
+    "address": "Địa chỉ",
+    "latitude": "Vĩ độ",
+    "longitude": "Kinh độ",
+    "radiusMeters": "Bán kính cho phép (m)",
+    "timezoneHelper": "Múi giờ dùng để tính toán và hiển thị thời gian chấm công của nhân viên.",
+    "isActive": "Đang hoạt động",
+    "cancel": "Hủy",
+    "save": "Lưu"
+  },
+  "deleteDialog": {
+    "confirmTitle": "Xóa cửa hàng",
+    "confirmDesc": "Thao tác này sẽ xóa {count} cửa hàng. Không thể hoàn tác.",
+    "cancel": "Hủy",
+    "confirm": "Xóa"
+  },
+  "toast": {
+    "createSuccess": "Đã thêm cửa hàng thành công.",
+    "updateSuccess": "Đã cập nhật cửa hàng thành công.",
+    "toggleActiveSuccess": "Đã thay đổi trạng thái hoạt động.",
+    "deleteSuccess": "Đã xóa cửa hàng thành công.",
+    "storeInUse": "Không thể xóa vì vẫn còn nhân viên thuộc cửa hàng này. Hãy vô hiệu hóa trước.",
+    "storeNameDuplicate": "Đã tồn tại cửa hàng với tên này.",
+    "notFound": "Không tìm thấy cửa hàng.",
+    "validationError": "Vui lòng kiểm tra lại thông tin nhập.",
+    "loadError": "Đã xảy ra lỗi khi tải dữ liệu.",
+    "networkError": "Đã xảy ra lỗi mạng. Vui lòng thử lại.",
+    "genericError": "Đã xảy ra lỗi khi xử lý yêu cầu."
+  },
+  "timezoneSearch": {
+    "label": "Múi giờ",
+    "placeholder": "Tìm múi giờ",
+    "noOptions": "Không có múi giờ phù hợp."
+  }
+}

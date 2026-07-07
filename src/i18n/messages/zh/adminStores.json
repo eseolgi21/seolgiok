@@ -1,0 +1,61 @@
+{
+  "page": {
+    "title": "管理员 · 门店管理"
+  },
+  "table": {
+    "name": "门店名称",
+    "address": "地址",
+    "coordinates": "坐标",
+    "radiusMeters": "允许范围",
+    "timezone": "时区",
+    "memberCount": "所属人数",
+    "isActive": "是否启用",
+    "updatedAt": "更新时间",
+    "actions": "操作",
+    "noData": "暂无数据。"
+  },
+  "loading": "加载中…",
+  "refresh": "刷新",
+  "actions": {
+    "create": "添加门店",
+    "edit": "编辑",
+    "deleteSelected": "删除所选 ({count})"
+  },
+  "form": {
+    "createTitle": "添加门店",
+    "editTitle": "编辑门店",
+    "name": "门店名称",
+    "address": "地址",
+    "latitude": "纬度",
+    "longitude": "经度",
+    "radiusMeters": "允许范围（米）",
+    "timezoneHelper": "用于计算和显示员工打卡时间的时区。",
+    "isActive": "启用",
+    "cancel": "取消",
+    "save": "保存"
+  },
+  "deleteDialog": {
+    "confirmTitle": "删除门店",
+    "confirmDesc": "将删除 {count} 个门店。此操作无法撤销。",
+    "cancel": "取消",
+    "confirm": "删除"
+  },
+  "toast": {
+    "createSuccess": "门店已添加。",
+    "updateSuccess": "门店信息已更新。",
+    "toggleActiveSuccess": "启用状态已变更。",
+    "deleteSuccess": "门店已删除。",
+    "storeInUse": "该门店仍有所属员工，无法删除。请先停用。",
+    "storeNameDuplicate": "该门店名称已存在。",
+    "notFound": "未找到该门店。",
+    "validationError": "请检查输入内容。",
+    "loadError": "加载数据时发生错误。",
+    "networkError": "发生网络错误，请重试。",
+    "genericError": "处理时发生错误。"
+  },
+  "timezoneSearch": {
+    "label": "时区",
+    "placeholder": "搜索时区",
+    "noOptions": "没有匹配的时区。"
+  }
+}

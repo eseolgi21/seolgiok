@@ -45,6 +45,20 @@ model: sonnet
 | `keywords` | GET/POST/DELETE | 개인 검색 키워드 관리 |
 | `excel-mappings` | GET/POST/DELETE | 엑셀 컬럼 매핑 프리셋 |
 
+### 관리자 영역 내 예외 소관 — 인수인계 (직원 도메인)
+
+`admin/` 전체는 원칙적으로 `admin-expert` 영역이지만, 인수인계는 직원 도메인 기능이라
+아래 경로만 site-expert가 예외적으로 담당한다 (Phase 3~4에서 확정).
+
+| 경로 | 설명 |
+|---|---|
+| `src/app/[locale]/admin/staff/handover/*` | 인수인계 관리자 화면 (현황·리뷰·이력) |
+| `src/app/api/admin/staff/handover/items` | 인수인계 체크리스트 항목 CRUD |
+| `src/app/api/admin/staff/handover/slots` | 근무 교대 슬롯 CRUD |
+| `src/app/api/admin/staff/handover/comments` | 인수인계 코멘트 CRUD |
+| `src/app/api/admin/staff/handover/approvals` | 인수인계 승인/확정 |
+| `src/app/api/admin/staff/handover/checks` | 인수인계 체크 기록 |
+
 ---
 
 ## 핵심 도메인 지식
@@ -121,7 +135,7 @@ SHOW_UNTIL = new Date("2026-06-16T00:00:00+09:00")
 
 ## 금지
 
-- **`src/app/[locale]/admin/` 또는 `src/app/api/admin/` 코드 수정** — `admin-expert` 영역
+- **`src/app/[locale]/admin/` 또는 `src/app/api/admin/` 코드 수정 — `admin/staff/handover/*`(인수인계, 직원 도메인)는 site-expert 소관 예외. 그 외 `admin/` 전체(회계·게시판·회원·매장 CRUD 등)는 `admin-expert` 영역이므로 수정 금지.**
 - **직접 SQL 실행** — Prisma ORM만 사용
 - **운영 DB 쓰기** (`SELECT` 읽기 전용만)
 - **JWT 직접 발급** — NextAuth 5 패턴만 허용

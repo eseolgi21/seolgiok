@@ -24,7 +24,11 @@
       "user": "一般ユーザー (Lv.1)",
       "staff": "スタッフ (Lv.10)",
       "manager": "マネージャー (Lv.15)"
-    }
+    },
+    "storeLabel": "所属店舗",
+    "selectStorePlaceholder": "店舗を選択",
+    "noStoreOption": "店舗なし",
+    "inactiveStoreSuffix": "無効"
   },
   "selection": {
     "deleteSelected": "選択削除（{count}名）",

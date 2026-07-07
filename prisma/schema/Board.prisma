@@ -3,8 +3,8 @@ enum BoardType {
   NOTICE // 공지
   EVENT // 이벤트
   SUPPORT // 고객센터
-  INTERNAL    // 사내 공지 (level >= 10만 열람)
-  SUGGESTION  // 건의글 (직원 작성, level >= 21만 열람)
+  INTERNAL // 사내 공지 (level >= 10만 열람)
+  SUGGESTION // 건의글 (직원 작성, level >= 21만 열람)
 }
 
 enum SupportCategory {
@@ -76,17 +76,16 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // (선택) 최신순 목록 자주 쓰면
+  // @@index([createdAt(sort: Desc)])
+
   @@index([boardType, isPublished, publishedAt])
   @@index([authorId])
   @@index([supportCategory])
   @@index([visibility])
   @@index([sourceUrl])
-
   // ✅ 태그 검색 최적화
   @@index([tags(ops: ArrayOps)], type: Gin)
-
-  // (선택) 최신순 목록 자주 쓰면
-  // @@index([createdAt(sort: Desc)])
 }
 
 // 1:1 문의 담당자(선택) — Post 1 : 0..1 SupportAssignment

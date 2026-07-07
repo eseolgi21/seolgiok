@@ -3,6 +3,7 @@ import type {
   DeleteUsersResponse,
   DetailApiResponse,
   ListApiResponse,
+  StoreOptionListResponse,
   UpdateLevelPayload,
   UpdateLevelResponse,
   UserInfoDetail,
@@ -49,7 +50,35 @@ export const UserInfoDetailSchema = z.object({
   googleOtpEnabled: z.boolean(),
   createdAt: z.string().min(1),
   updatedAt: z.string().min(1),
+  storeId: z.string().nullable(),
+  store: z.object({ name: z.string() }).nullable(),
 });
+
+// 매장 배정 Select 옵션 (/api/admin/stores GET 응답 중 일부 필드만 사용)
+export const StoreOptionSchema = z.object({
+  id: z.string().min(1),
+  name: z.string(),
+  isActive: z.boolean(),
+});
+
+export const StoreOptionListOkSchema = z.object({
+  ok: z.literal(true),
+  data: z.array(StoreOptionSchema),
+});
+export const StoreOptionListErrSchema = z.object({
+  ok: z.literal(false),
+  code: z.string(),
+});
+export const StoreOptionListResponseSchema = z.union([
+  StoreOptionListOkSchema,
+  StoreOptionListErrSchema,
+]);
+
+export function parseStoreOptionListResponse(json: unknown): StoreOptionListResponse {
+  const parsed = StoreOptionListResponseSchema.safeParse(json);
+  if (!parsed.success) return { ok: false, code: "INVALID_RESPONSE" };
+  return parsed.data;
+}
 
 export const DetailApiOkSchema = z.object({
   ok: z.literal(true),
@@ -66,10 +95,11 @@ export const DetailApiResponseSchema = z.union([
   DetailApiErrSchema,
 ]);
 
-// Update Level
+// Update Level (+ 매장 배정 storeId)
 export const UpdateLevelPayloadSchema = z.object({
   userId: z.string().min(1),
   level: z.number().int().min(1),
+  storeId: z.string().min(1).nullable().optional(),
 });
 
 export const UpdateLevelOkSchema = z.object({
@@ -77,6 +107,7 @@ export const UpdateLevelOkSchema = z.object({
   data: z.object({
     userId: z.string().min(1),
     level: z.number().int().min(1),
+    storeId: z.string().nullable(),
   }),
 });
 
@@ -144,9 +175,11 @@ export function parseDeleteUsersResponse(json: unknown): DeleteUsersResponse {
 
 export function toUpdateLevelPayload(
   userId: string,
-  level: number
+  level: number,
+  storeId?: string | null
 ): UpdateLevelPayload {
-  const payload = { userId, level };
+  const payload: UpdateLevelPayload =
+    storeId !== undefined ? { userId, level, storeId } : { userId, level };
   const ok = UpdateLevelPayloadSchema.safeParse(payload);
   if (!ok.success) {
     throw new Error("INVALID_PAYLOAD");

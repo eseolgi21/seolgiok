@@ -2,6 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { Prisma } from "@/generated/prisma";
 import { requireAdmin } from "@/lib/middleware/admin-auth";
 
 // 공용 셀렉트: 목록
@@ -24,14 +25,17 @@ const userInfoSelect = {
   googleOtpEnabled: true,
   createdAt: true,
   updatedAt: true,
+  storeId: true,
+  store: { select: { name: true } },
 } as const;
 
 const IdParamSchema = z.string().min(1);
 
-// PATCH payload (레벨 업데이트)
+// PATCH payload (레벨 업데이트 + 소속 매장 변경)
 const PatchPayloadSchema = z.object({
   userId: z.string().min(1),
   level: z.number().int().min(1),
+  storeId: z.string().min(1).nullable().optional(),
 });
 
 // 페이지네이션 파라미터 스키마
@@ -193,7 +197,7 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const { userId, level } = parsed.data;
+  const { userId, level, storeId } = parsed.data;
 
   const adminLevel = session!.user.level ?? 0;
   const isSuperAdmin = adminLevel >= 99;
@@ -232,13 +236,30 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const updated = await prisma.userInfo.update({
-    where: { userId },
-    data: { level },
-    select: { userId: true, level: true },
-  });
+  try {
+    const updated = await prisma.userInfo.update({
+      where: { userId },
+      data: {
+        level,
+        ...(storeId !== undefined ? { storeId } : {}),
+      },
+      select: { userId: true, level: true, storeId: true },
+    });
 
-  return NextResponse.json({ ok: true, data: updated });
+    return NextResponse.json({ ok: true, data: updated });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2003") {
+      return NextResponse.json(
+        { ok: false, error: "STORE_NOT_FOUND" },
+        { status: 400 }
+      );
+    }
+    console.error(e);
+    return NextResponse.json(
+      { ok: false, error: "UPDATE_FAILED" },
+      { status: 500 }
+    );
+  }
 }
 
 // DELETE /api/admin/users/list

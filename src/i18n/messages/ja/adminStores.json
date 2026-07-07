@@ -1,0 +1,61 @@
+{
+  "page": {
+    "title": "管理者 · 店舗管理"
+  },
+  "table": {
+    "name": "店舗名",
+    "address": "住所",
+    "coordinates": "座標",
+    "radiusMeters": "許容範囲",
+    "timezone": "タイムゾーン",
+    "memberCount": "所属人数",
+    "isActive": "有効",
+    "updatedAt": "更新日",
+    "actions": "操作",
+    "noData": "データがありません。"
+  },
+  "loading": "読み込み中…",
+  "refresh": "更新",
+  "actions": {
+    "create": "店舗を追加",
+    "edit": "編集",
+    "deleteSelected": "選択削除 ({count})"
+  },
+  "form": {
+    "createTitle": "店舗を追加",
+    "editTitle": "店舗を編集",
+    "name": "店舗名",
+    "address": "住所",
+    "latitude": "緯度",
+    "longitude": "経度",
+    "radiusMeters": "許容範囲（m）",
+    "timezoneHelper": "スタッフの出退勤時刻の計算・表示に使用されるタイムゾーンです。",
+    "isActive": "有効",
+    "cancel": "キャンセル",
+    "save": "保存"
+  },
+  "deleteDialog": {
+    "confirmTitle": "店舗を削除",
+    "confirmDesc": "{count}件の店舗を削除します。この操作は元に戻せません。",
+    "cancel": "キャンセル",
+    "confirm": "削除"
+  },
+  "toast": {
+    "createSuccess": "店舗が追加されました。",
+    "updateSuccess": "店舗情報が更新されました。",
+    "toggleActiveSuccess": "有効状態が変更されました。",
+    "deleteSuccess": "店舗が削除されました。",
+    "storeInUse": "所属スタッフがいるため削除できません。先に無効化してください。",
+    "storeNameDuplicate": "既に存在する店舗名です。",
+    "notFound": "店舗が見つかりません。",
+    "validationError": "入力内容をご確認ください。",
+    "loadError": "データの読み込み中にエラーが発生しました。",
+    "networkError": "ネットワークエラーが発生しました。もう一度お試しください。",
+    "genericError": "処理中にエラーが発生しました。"
+  },
+  "timezoneSearch": {
+    "label": "タイムゾーン",
+    "placeholder": "タイムゾーンを検索",
+    "noOptions": "一致するタイムゾーンがありません。"
+  }
+}

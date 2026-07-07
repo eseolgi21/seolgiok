@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-06-17 -->
+<!-- Last updated: 2026-07-07 -->
 
 # seolgiok 데이터베이스 명세
 
@@ -24,18 +24,26 @@
 ```
 prisma/schema/
 ├─ Base.prisma          — generator·datasource 선언
-├─ User.prisma          — User, UserInfo, SearchKeyword, ExcelMapping + KeywordType enum
+├─ User.prisma          — User, UserInfo(+storeId), SearchKeyword, ExcelMapping + KeywordType enum
 ├─ ReferralEdge.prisma  — ReferralEdge + EdgeType enum
 ├─ Board.prisma         — Post, SupportAssignment, Attachment, Comment + 4개 enum
 ├─ Sales.prisma         — DailySales, CardTransaction, SaleItem
 ├─ Purchase.prisma      — PurchaseItem
 ├─ Item.prisma          — ItemClassification, ItemCategory, ExcelFilter
 ├─ Profit.prisma        — Settlement
-└─ Country.prisma       — Country
+├─ Country.prisma       — Country
+└─ Staff.prisma         — AttendanceLog(+storeId), Store, HandoverItem, HandoverShiftSlot,
+                           HandoverCheck, HandoverComment, HandoverApproval, EmployeeVote,
+                           Payslip + AttendanceType enum (멀티 매장 확장, Phase 1~4)
 ```
 
-총 모델 수: **17개**  
-총 Enum 수: **7개**
+총 모델 수: **26개** (Staff.prisma 9개 모델 포함)
+총 Enum 수: **8개** (AttendanceType 포함)
+
+> **멀티 매장(프랜차이즈) 확장 요약**: `Store`가 매장 마스터(지오펜싱 좌표·반경·IANA 타임존)이며
+> `UserInfo.storeId`(소속 직원)와 `AttendanceLog.storeId`(출퇴근 기록)로 매장을 구분한다.
+> 인수인계 5개 모델(`HandoverItem`/`HandoverShiftSlot`/`HandoverCheck`/`HandoverComment`/
+> `HandoverApproval`)은 `storeId`가 **필수**(NOT NULL) 필드다. 상세는 아래 `Store` 모델 섹션 참조.
 
 ---
 
@@ -81,11 +89,13 @@ prisma/schema/
 | level | Int | — | 1 | 회원 등급 (≥21이면 관리자로 취급) |
 | googleOtpEnabled | Boolean | — | false | Google OTP 활성화 여부 |
 | googleOtpSecret | String? | — | — | Google OTP 시크릿 (AES 암호화 저장 권장) |
+| storeId | String? | FK→Store.id, onDelete: Restrict | — | 소속 매장 (멀티 매장 확장, nullable — 매장 미배정 직원 가능) |
 | createdAt | DateTime | — | now() | 생성 시각 |
 | updatedAt | DateTime | @updatedAt | — | 수정 시각 |
 
 관계:
 - `user` → User (1:1, "User_UserInfo", onDelete: Cascade, onUpdate: Cascade)
+- `store` → Store? (N:1, onDelete: Restrict)
 
 비고: `level >= 21` → 관리자 계정으로 간주 (seed.ts 참조)
 
@@ -442,6 +452,69 @@ prisma/schema/
 
 ---
 
+### Store (멀티 매장 확장)
+
+매장(지오펜싱 기준점) 마스터. 프랜차이즈 다중 매장 지원의 핵심 모델 (`prisma/schema/Staff.prisma`).
+
+| 필드 | 타입 | 제약조건 | 기본값 | 설명 |
+|---|---|---|---|---|
+| id | String | @id | cuid() | PK |
+| name | String | **@@unique([name])** | — | 매장명 (중복 불가) |
+| address | String? | — | — | 주소 |
+| latitude | Float | — | — | 지오펜싱 기준 위도 |
+| longitude | Float | — | — | 지오펜싱 기준 경도 |
+| radiusMeters | Int | — | 100 | 지오펜싱 허용 반경(m) |
+| timezone | String | — | "Asia/Seoul" | IANA 타임존 (매장별 상이 가능, DST 대응) |
+| isActive | Boolean | — | true | 매장 활성 여부 |
+| updatedBy | String? | FK→User.id, onDelete: SetNull | — | 마지막 수정자 |
+| createdAt / updatedAt | DateTime | — | now() / @updatedAt | 생성·수정 시각 |
+
+관계:
+- `members` → UserInfo[] (소속 직원)
+- `attendanceLogs` → AttendanceLog[]
+- `handoverItems` / `handoverSlots` / `handoverChecks` / `handoverComments` / `handoverApprovals` → 각 Handover 모델[]
+
+인덱스 / 유니크:
+- `@@unique([name])` — 매장명 중복 생성 방지 (POST/PATCH 시 Prisma `P2002` 위반 가능 — 보안 리뷰 WARN #2 참조)
+- `@@index([isActive])`
+
+### AttendanceLog (멀티 매장 확장)
+
+직원 출퇴근 기록. `storeId`로 어느 매장에서 찍었는지 구분(nullable — 매장 미지정 기록 허용).
+
+| 필드 | 타입 | 제약조건 | 기본값 | 설명 |
+|---|---|---|---|---|
+| storeId | String? | FK→Store.id, onDelete: SetNull | — | 출퇴근 매장 (nullable) |
+
+인덱스: `@@index([storeId, clockedAt])`
+
+### 인수인계(Handover) 5개 모델 — storeId 필수화
+
+`HandoverItem`, `HandoverShiftSlot`, `HandoverCheck`, `HandoverComment`, `HandoverApproval` 모두
+`storeId String`(**NOT NULL**, FK→Store.id, onDelete: Restrict)을 갖는다. 출퇴근(`AttendanceLog`)과
+달리 nullable이 아니며, 매장 삭제 시 소속 인수인계 레코드가 있으면 FK Restrict로 삭제가 차단된다.
+
+| 모델 | 유니크/인덱스 (storeId 포함) |
+|---|---|
+| HandoverItem | `@@index([storeId, isActive, order])` |
+| HandoverShiftSlot | `@@index([storeId, isActive, category, order])` |
+| HandoverCheck | `@@unique([storeId, itemId, shiftDate, shiftSlotId, checkedBy])`, `@@index([storeId, shiftDate, shiftSlotId])` |
+| HandoverComment | `@@index([storeId, shiftDate, shiftSlotId, category])` |
+| HandoverApproval | `@@unique([storeId, shiftDate, shiftSlotId, category])`, `@@index([storeId, shiftDate, shiftSlotId])` |
+
+### 조회 범위 결정 (`src/lib/middleware/store-scope.ts`)
+
+`resolveStoreScope()`가 세션 레벨에 따라 매장 조회 범위를 결정한다.
+
+| 세션 레벨 | scope | 설명 |
+|---|---|---|
+| ≥21 (ADMIN) | `ALL` | 전체 매장 조회 가능 |
+| ≥15 (MANAGER) | `OWN` | `UserInfo.storeId` 기준 본인 소속 매장만 (미배정 시 403 `STORE_NOT_ASSIGNED`) |
+| 그 외 | 거부 | 403 `FORBIDDEN` |
+| 미인증 | 거부 | 401 `UNAUTHORIZED` |
+
+---
+
 ## Enum 정의
 
 ### KeywordType
@@ -518,6 +591,17 @@ prisma/schema/
 ### BodyFormat (Comment용)
 
 Comment 모델은 `bodyHtml: String` 필드만 저장하며 별도 enum 없이 HTML 고정.
+
+---
+
+### AttendanceType
+
+`AttendanceLog.type` — 출퇴근 구분.
+
+| 값 | 설명 |
+|---|---|
+| CLOCK_IN | 출근 |
+| CLOCK_OUT | 퇴근 |
 
 ---
 

@@ -6,5 +6,10 @@
     "revokeBtn": "컨펌 취소",
     "submittedBy": "제출자",
     "noApproval": "미결제"
+  },
+  "handoverStoreSelector": {
+    "label": "매장 선택",
+    "allStores": "전체 매장",
+    "notAssignedGuidance": "소속 매장이 배정되지 않아 이 기능을 사용할 수 없습니다. 관리자에게 문의하세요."
   }
 }

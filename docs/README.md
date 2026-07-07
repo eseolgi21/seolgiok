@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-06-17 -->
+<!-- Last updated: 2026-07-07 -->
 
 # seolgiok 문서 인덱스
 
@@ -10,10 +10,10 @@
 | 파일 | 담당 에이전트 | 마지막 업데이트 | 설명 |
 |---|---|---|---|
 | [domain.md](specs/domain.md) | domain-expert | 2026-06-17 | 도메인 규칙, 엔티티, 불변식 |
-| [database.md](specs/database.md) | db-expert | 2026-06-17 | Prisma 스키마, 모델 관계, 인덱스 |
-| [features.md](specs/features.md) | product-planner | 2026-06-17 | 기능 명세, 비즈니스 규칙 |
+| [database.md](specs/database.md) | db-expert | 2026-07-07 | Prisma 스키마, 모델 관계, 인덱스 (멀티 매장 확장 반영) |
+| [features.md](specs/features.md) | product-planner | 2026-07-07 | 기능 명세, 비즈니스 규칙 (매장 관리·인수인계 체크 API 반영) |
 | [i18n.md](specs/i18n.md) | i18n-expert | 2026-06-17 | 다국어 구조, 네임스페이스, 워크플로우 |
-| [security.md](specs/security.md) | security-expert | 2026-06-17 | 보안 패턴, 인증, 암호화 가이드 |
+| [security.md](specs/security.md) | security-expert | 2026-07-07 | 보안 패턴, 인증, 암호화 가이드 (P6 리뷰 WARN 백로그 반영) |
 
 ### 디자인 (design/)
 | 파일 | 담당 에이전트 | 마지막 업데이트 | 설명 |

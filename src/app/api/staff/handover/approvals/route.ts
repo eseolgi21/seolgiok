@@ -9,13 +9,23 @@ export async function GET(req: Request) {
   const level = session?.user?.level ?? 0;
   if (!session || level < 10)
     return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+  const userId = session.user!.id as string;
+
+  const userInfo = await prisma.userInfo.findUnique({
+    where: { userId },
+    select: { storeId: true },
+  });
+  if (!userInfo?.storeId) {
+    return NextResponse.json({ ok: false, code: "STORE_NOT_ASSIGNED" }, { status: 403 });
+  }
+
   const { searchParams } = new URL(req.url);
   const shiftDate = searchParams.get("shiftDate");
   const shiftSlotId = searchParams.get("shiftSlotId");
   if (!shiftDate || !shiftSlotId)
     return NextResponse.json({ ok: false, code: "MISSING_PARAMS" }, { status: 400 });
   const approvals = await prisma.handoverApproval.findMany({
-    where: { shiftDate: new Date(shiftDate), shiftSlotId },
+    where: { shiftDate: new Date(shiftDate), shiftSlotId, storeId: userInfo.storeId },
     select: { id: true, category: true, status: true, submittedAt: true, submitter: { select: { name: true } } },
   });
   return NextResponse.json({ ok: true, approvals });
@@ -26,6 +36,16 @@ export async function POST(req: Request) {
   const level = session?.user?.level ?? 0;
   if (!session || level < 10)
     return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+  const userId = session.user!.id as string;
+
+  const userInfo = await prisma.userInfo.findUnique({
+    where: { userId },
+    select: { storeId: true },
+  });
+  if (!userInfo?.storeId) {
+    return NextResponse.json({ ok: false, code: "STORE_NOT_ASSIGNED" }, { status: 403 });
+  }
+
   const { shiftDate, shiftSlotId, category } = (await req.json()) as {
     shiftDate: string;
     shiftSlotId: string;
@@ -33,6 +53,12 @@ export async function POST(req: Request) {
   };
   if (!shiftDate || !shiftSlotId || !category)
     return NextResponse.json({ ok: false, code: "MISSING_PARAMS" }, { status: 400 });
+
+  const slot = await prisma.handoverShiftSlot.findUnique({ where: { id: shiftSlotId }, select: { storeId: true } });
+  if (!slot || slot.storeId !== userInfo.storeId) {
+    return NextResponse.json({ ok: false, code: "NOT_FOUND" }, { status: 404 });
+  }
+
   try {
     const approval = await prisma.handoverApproval.create({
       data: {
@@ -40,7 +66,8 @@ export async function POST(req: Request) {
         shiftSlotId,
         category,
         status: "PENDING",
-        submittedBy: session.user!.id as string,
+        submittedBy: userId,
+        storeId: userInfo.storeId,
       },
     });
     return NextResponse.json({ ok: true, approval }, { status: 201 });

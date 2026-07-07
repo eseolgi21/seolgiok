@@ -9,12 +9,21 @@ export async function GET(req: Request) {
   const level = session?.user?.level ?? 0;
   if (!session || level < 10) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
   const userId = session.user!.id as string;
+
+  const userInfo = await prisma.userInfo.findUnique({
+    where: { userId },
+    select: { storeId: true },
+  });
+  if (!userInfo?.storeId) {
+    return NextResponse.json({ ok: false, code: "STORE_NOT_ASSIGNED" }, { status: 403 });
+  }
+
   const { searchParams } = new URL(req.url);
   const shiftDate = searchParams.get("shiftDate");
   const shiftSlotId = searchParams.get("shiftSlotId");
   const category = searchParams.get("category");
   if (!shiftDate || !shiftSlotId) return NextResponse.json({ ok: false, code: "MISSING_PARAMS" }, { status: 400 });
-  const where: Record<string, unknown> = { shiftDate: new Date(shiftDate), shiftSlotId, authorId: userId };
+  const where: Record<string, unknown> = { shiftDate: new Date(shiftDate), shiftSlotId, authorId: userId, storeId: userInfo.storeId };
   if (category) where.category = category;
   const comments = await prisma.handoverComment.findMany({
     where,
@@ -29,12 +38,27 @@ export async function POST(req: Request) {
   const level = session?.user?.level ?? 0;
   if (!session || level < 10) return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
   const userId = session.user!.id as string;
+
+  const userInfo = await prisma.userInfo.findUnique({
+    where: { userId },
+    select: { storeId: true },
+  });
+  if (!userInfo?.storeId) {
+    return NextResponse.json({ ok: false, code: "STORE_NOT_ASSIGNED" }, { status: 403 });
+  }
+
   const { shiftDate, shiftSlotId, category, content, imageUrl } = (await req.json()) as {
     shiftDate: string; shiftSlotId: string; category: string; content: string; imageUrl?: string;
   };
   if (!content?.trim()) return NextResponse.json({ ok: false, code: "EMPTY_CONTENT" }, { status: 400 });
+
+  const slot = await prisma.handoverShiftSlot.findUnique({ where: { id: shiftSlotId }, select: { storeId: true } });
+  if (!slot || slot.storeId !== userInfo.storeId) {
+    return NextResponse.json({ ok: false, code: "NOT_FOUND" }, { status: 404 });
+  }
+
   const comment = await prisma.handoverComment.create({
-    data: { shiftDate: new Date(shiftDate), shiftSlotId, category, authorId: userId, content: content.trim(), ...(imageUrl ? { imageUrl } : {}) },
+    data: { shiftDate: new Date(shiftDate), shiftSlotId, category, authorId: userId, content: content.trim(), storeId: userInfo.storeId, ...(imageUrl ? { imageUrl } : {}) },
   });
   return NextResponse.json({ ok: true, comment }, { status: 201 });
 }

@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-06-17 -->
+<!-- Last updated: 2026-07-07 -->
 
 # seolgiok 기능 명세
 
@@ -207,6 +207,32 @@
 
 ---
 
+### 8. 매장 관리 (멀티 매장 확장, Phase 1~4)
+
+- **설명**: 프랜차이즈 다중 매장 CRUD. 매장명(중복 불가)·주소·지오펜싱 좌표(위도/경도)·허용 반경(m)·
+  IANA 타임존·활성 여부 관리. 목록/상세 조회 시 소속 직원 수(`_count.members`) 동봉. 매장 삭제는
+  다건(`ids[]`) 지원하며, 소속 직원(UserInfo)이 있는 매장은 FK Restrict(P2003)로 삭제 차단
+  (`STORE_IN_USE`).
+- **페이지 경로**: `/[locale]/admin/stores` — 옛 싱글톤 지오펜싱 화면
+  (`/[locale]/admin/staff/attendance/location`)을 대체함(해당 경로는 삭제됨).
+- **관련 API**:
+  - `GET /api/admin/stores` — 전체 매장 목록 또는 `?id=` 단건 상세 (level ≥ 21)
+  - `POST /api/admin/stores` — 매장 생성 (level ≥ 21)
+  - `PATCH /api/admin/stores` — 매장 부분 수정 (level ≥ 21)
+  - `DELETE /api/admin/stores` — 다건 삭제, 소속 직원 있으면 `STORE_IN_USE` (level ≥ 21)
+- **관련 DB 모델**: `Store`
+- **비고**: 인증·레벨 검사는 `requireAdmin(21)`(`src/lib/middleware/admin-auth.ts`) 사용 — 미인증·
+  권한부족 모두 401 응답(보안 리뷰 WARN #3, `docs/specs/security.md` 참조).
+
+### 9. 인수인계 체크 기록 API (site-expert 소관 예외)
+
+- **설명**: 인수인계 체크리스트 항목의 교대별 체크 기록. `admin/staff/handover/*`는 직원 도메인
+  기능이라 `admin-expert`가 아닌 `site-expert`가 전담 (`.claude/agents/site-expert.md` 참조).
+- **관련 API**: `src/app/api/admin/staff/handover/checks/route.ts`
+- **관련 DB 모델**: `HandoverCheck (storeId 필수)`
+
+---
+
 ## 공개 사이트 기능
 
 ### 1. 홈
@@ -394,7 +420,7 @@
 
 ---
 
-## API 라우트 권한 테이블 (29개)
+## API 라우트 권한 테이블 (39개)
 
 > 세션 = NextAuth 로그인 필요 (level 무관). Level N = `session.user.level >= N` 조건.
 
@@ -434,6 +460,9 @@
 | `/api/admin/boards/events` | GET | 없음 | 이벤트 목록/상세 |
 | `/api/admin/boards/events` | POST/PATCH/DELETE | 세션 | 이벤트 생성/수정/삭제 |
 | `/api/admin/users/list` | GET/PATCH | 세션 (BFS 산하만) | 사용자 목록 조회 / 레벨 수정 |
+| `/api/admin/stores` | GET | Level 21 | 매장 목록/상세 조회 (`requireAdmin`) |
+| `/api/admin/stores` | POST/PATCH/DELETE | Level 21 | 매장 생성/수정/삭제 (`requireAdmin`) |
+| `/api/admin/staff/handover/checks` | GET | 세션 (`resolveStoreScope`) | 인수인계 체크 현황 — ADMIN/SUPER 전 매장, MANAGER 자기 매장 한정 |
 
 > **Level 검사 구현**: 각 API 핸들러에서 `const session = await auth()` 후 `session.user.level >= N` 확인.
 > `authorized` 콜백(auth.config.ts)은 **페이지** 접근만 제어, API 레벨 검사는 각 핸들러 담당.

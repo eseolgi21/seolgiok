@@ -24,7 +24,11 @@
       "user": "Người dùng (Lv.1)",
       "staff": "Nhân viên (Lv.10)",
       "manager": "Quản lý (Lv.15)"
-    }
+    },
+    "storeLabel": "Cửa hàng phụ trách",
+    "selectStorePlaceholder": "Chọn cửa hàng",
+    "noStoreOption": "Không có cửa hàng",
+    "inactiveStoreSuffix": "Ngừng hoạt động"
   },
   "selection": {
     "deleteSelected": "Xóa đã chọn ({count} người)",

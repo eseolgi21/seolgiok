@@ -22,7 +22,16 @@
     "clockOut": "Chấm công ra",
     "history": "Lịch sử hôm nay",
     "alreadyClockedIn": "Đã chấm công vào rồi.",
-    "alreadyClockedOut": "Đã chấm công ra rồi."
+    "alreadyClockedOut": "Đã chấm công ra rồi.",
+    "locating": "Đang xác định vị trí...",
+    "locationPermissionDenied": "Quyền truy cập vị trí bị từ chối. Vui lòng cho phép truy cập vị trí trong cài đặt trình duyệt.",
+    "locationUnavailable": "Không thể xác định vị trí hiện tại.",
+    "locationTimeout": "Yêu cầu xác định vị trí đã hết thời gian. Vui lòng thử lại.",
+    "locationUnsupported": "Thiết bị này không hỗ trợ dịch vụ định vị.",
+    "outOfRange": "Bạn đang cách cửa hàng {distance}m (bán kính cho phép: {radius}m).",
+    "storeLocationNotConfigured": "Vị trí cửa hàng chưa được thiết lập nên không thể chấm công. Vui lòng liên hệ quản trị viên.",
+    "storeNotAssigned": "Bạn chưa được phân công vào cửa hàng nào nên không thể chấm công. Vui lòng liên hệ quản trị viên.",
+    "genericError": "Đã xảy ra lỗi khi xử lý chấm công. Vui lòng thử lại."
   },
   "handover": {
     "pageTitle": "Bàn giao ca",

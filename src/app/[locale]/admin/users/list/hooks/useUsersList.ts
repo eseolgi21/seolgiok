@@ -2,12 +2,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
+import type { UseUsersListReturn, UserRow, UserInfoDetail, StoreOption } from "../types";
 import { USER_LEVELS } from "@/lib/constants/user-levels";
 import {
   parseDeleteUsersResponse,
   parseDetailResponse,
   parseListResponse,
+  parseStoreOptionListResponse,
   parseUpdateLevelResponse,
   toUpdateLevelPayload,
 } from "../guard/users";
@@ -27,6 +28,11 @@ export function useUsersList(): UseUsersListReturn {
   // level edit state
   const [editLevel, setEditLevelState] = useState<number | null>(null);
   const [savingLevel, setSavingLevel] = useState<boolean>(false);
+
+  // 매장 배정 상태
+  const [storeOptions, setStoreOptions] = useState<StoreOption[]>([]);
+  const [storeOptionsLoading, setStoreOptionsLoading] = useState<boolean>(false);
+  const [editStoreId, setEditStoreIdState] = useState<string | null>(null);
 
   // 직원 등록/해제 토글 상태
   const [togglingStaffId, setTogglingStaffId] = useState<string | null>(null);
@@ -102,6 +108,38 @@ export function useUsersList(): UseUsersListReturn {
     }
   }, [page, pageSize]);
 
+  const setEditStoreId = useCallback((id: string | null) => {
+    setEditStoreIdState(id);
+  }, []);
+
+  // 매장 배정 Select 옵션 로드 (isActive=true 매장 + 현재 배정된 매장이 비활성이어도 유지)
+  const fetchStoreOptions = useCallback(
+    async (currentStoreId: string | null, currentStoreName: string | null) => {
+      setStoreOptionsLoading(true);
+      try {
+        const res = await fetch("/api/admin/stores", { cache: "no-store" });
+        const json = (await res.json()) as unknown;
+        const parsed = parseStoreOptionListResponse(json);
+        if (!parsed.ok) {
+          toast.error("매장 목록 로드 실패", { description: parsed.code });
+          setStoreOptions([]);
+          return;
+        }
+        const active = parsed.data.filter((s) => s.isActive);
+        if (currentStoreId && !active.some((s) => s.id === currentStoreId)) {
+          active.push({ id: currentStoreId, name: currentStoreName ?? currentStoreId, isActive: false });
+        }
+        setStoreOptions(active);
+      } catch {
+        toast.error("네트워크 오류", { description: "매장 목록 조회 중 오류가 발생했습니다." });
+        setStoreOptions([]);
+      } finally {
+        setStoreOptionsLoading(false);
+      }
+    },
+    []
+  );
+
   const fetchDetail = useCallback(
     async (userId: string) => {
       setDetailLoading(true);
@@ -114,19 +152,26 @@ export function useUsersList(): UseUsersListReturn {
           toast.error("상세 로드 실패", { description: parsed.error });
           setDetail(null);
           setEditLevelState(null);
+          setEditStoreIdState(null);
         } else {
           setDetail(parsed.data);
           setEditLevelState(parsed.data ? parsed.data.level : null);
+          setEditStoreIdState(parsed.data ? parsed.data.storeId : null);
+          void fetchStoreOptions(
+            parsed.data ? parsed.data.storeId : null,
+            parsed.data?.store ? parsed.data.store.name : null
+          );
         }
       } catch {
         toast.error("네트워크 오류", { description: "상세 조회 중 오류가 발생했습니다." });
         setDetail(null);
         setEditLevelState(null);
+        setEditStoreIdState(null);
       } finally {
         setDetailLoading(false);
       }
     },
-    []
+    [fetchStoreOptions]
   );
 
   const openDetail = useCallback((userId: string) => {
@@ -139,6 +184,8 @@ export function useUsersList(): UseUsersListReturn {
     setDetail(null);
     setDetailUserId(null);
     setEditLevelState(null);
+    setEditStoreIdState(null);
+    setStoreOptions([]);
   }, []);
 
   const refresh = useCallback(() => {
@@ -216,7 +263,7 @@ export function useUsersList(): UseUsersListReturn {
     }
     setSavingLevel(true);
     try {
-      const payload = toUpdateLevelPayload(detailUserId, editLevel);
+      const payload = toUpdateLevelPayload(detailUserId, editLevel, editStoreId);
       const res = await fetch("/api/admin/users/list", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -236,7 +283,7 @@ export function useUsersList(): UseUsersListReturn {
     } finally {
       setSavingLevel(false);
     }
-  }, [detailUserId, editLevel, fetchDetail]);
+  }, [detailUserId, editLevel, editStoreId, fetchDetail]);
 
   const value: UseUsersListReturn = useMemo(
     () => ({
@@ -253,6 +300,10 @@ export function useUsersList(): UseUsersListReturn {
       setEditLevel,
       savingLevel,
       saveLevel,
+      storeOptions,
+      storeOptionsLoading,
+      editStoreId,
+      setEditStoreId,
       toggleStaff,
       togglingStaffId,
       page,
@@ -282,6 +333,10 @@ export function useUsersList(): UseUsersListReturn {
       setEditLevel,
       savingLevel,
       saveLevel,
+      storeOptions,
+      storeOptionsLoading,
+      editStoreId,
+      setEditStoreId,
       toggleStaff,
       togglingStaffId,
       page,

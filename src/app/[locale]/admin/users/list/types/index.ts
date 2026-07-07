@@ -16,6 +16,15 @@ export type UserInfoDetail = {
   googleOtpEnabled: boolean;
   createdAt: string; // ISO
   updatedAt: string; // ISO
+  storeId: string | null;
+  store: { name: string } | null;
+};
+
+// 매장 배정 Select 옵션 (level >= 10 일 때만 노출)
+export type StoreOption = {
+  id: string;
+  name: string;
+  isActive: boolean;
 };
 
 export type ListApiOk = {
@@ -32,18 +41,24 @@ export type DetailApiOk = { ok: true; data: UserInfoDetail | null };
 export type DetailApiErr = { ok: false; error: string };
 export type DetailApiResponse = DetailApiOk | DetailApiErr;
 
-// PATCH: level 업데이트
+// PATCH: level 업데이트 (+ 매장 배정 storeId, optional/nullable)
 export type UpdateLevelPayload = {
   userId: string;
   level: number; // int >= 1
+  storeId?: string | null;
 };
 
 export type UpdateLevelOk = {
   ok: true;
-  data: { userId: string; level: number };
+  data: { userId: string; level: number; storeId: string | null };
 };
 export type UpdateLevelErr = { ok: false; error: string };
 export type UpdateLevelResponse = UpdateLevelOk | UpdateLevelErr;
+
+// 매장 목록 응답 (StoreOption[] — /api/admin/stores GET)
+export type StoreOptionListOk = { ok: true; data: StoreOption[] };
+export type StoreOptionListErr = { ok: false; code: string };
+export type StoreOptionListResponse = StoreOptionListOk | StoreOptionListErr;
 
 // DELETE: 선택 유저 삭제
 export type DeleteUsersPayload = { userIds: string[] };
@@ -72,6 +87,12 @@ export type UseUsersListReturn = {
   setEditLevel: (n: number) => void;
   savingLevel: boolean;
   saveLevel: () => void;
+
+  // 매장 배정 (level >= 10 일 때만 노출)
+  storeOptions: StoreOption[];
+  storeOptionsLoading: boolean;
+  editStoreId: string | null; // null = 매장 없음(배정 해제)
+  setEditStoreId: (id: string | null) => void;
 
   // 직원 등록/해제 토글
   toggleStaff: (userId: string, currentLevel: number) => void;

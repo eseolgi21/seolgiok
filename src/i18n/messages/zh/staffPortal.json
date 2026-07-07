@@ -22,7 +22,16 @@
     "clockOut": "下班打卡",
     "history": "今日记录",
     "alreadyClockedIn": "已经打卡上班。",
-    "alreadyClockedOut": "已经打卡下班。"
+    "alreadyClockedOut": "已经打卡下班。",
+    "locating": "正在定位...",
+    "locationPermissionDenied": "位置权限被拒绝，请在浏览器设置中允许访问位置信息。",
+    "locationUnavailable": "无法确定当前位置。",
+    "locationTimeout": "定位请求超时，请重试。",
+    "locationUnsupported": "此设备不支持定位功能。",
+    "outOfRange": "您距离门店{distance}米（允许范围{radius}米）。",
+    "storeLocationNotConfigured": "门店位置尚未设置，无法处理打卡。请联系管理员。",
+    "storeNotAssigned": "尚未分配所属门店，无法打卡。请联系管理员。",
+    "genericError": "处理打卡时发生错误，请重试。"
   },
   "handover": {
     "pageTitle": "工作交接",

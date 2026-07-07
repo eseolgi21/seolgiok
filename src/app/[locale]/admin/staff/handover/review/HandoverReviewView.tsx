@@ -4,12 +4,13 @@ import { useTranslations } from "next-intl";
 import {
   Box, Typography, TextField, Select, MenuItem, FormControl, InputLabel,
   Table, TableHead, TableRow, TableCell, TableBody, Chip, Button,
-  List, ListItem, ListItemText, Divider, CircularProgress, Paper,
+  List, ListItem, ListItemText, Divider, CircularProgress, Paper, Alert,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 
 type Slot = { id: string; label: string; order: number };
+type Store = { id: string; name: string };
 type Check = { itemId: string; item: { label: string }; checkedUser: { name: string } };
 type Comment = { id: string; content: string; imageUrl?: string | null; createdAt: string; author: { name: string } };
 type Approval = {
@@ -132,9 +133,13 @@ function CategoryPanel({
   );
 }
 
-export default function HandoverReviewView() {
+export default function HandoverReviewView({ isAdmin }: { isAdmin: boolean }) {
+  const t = useTranslations("adminPortal");
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
+
+  const [stores, setStores] = useState<Store[]>([]);
+  const [storeId, setStoreId] = useState("");
 
   const [hallSlots, setHallSlots] = useState<Slot[]>([]);
   const [kitchenSlots, setKitchenSlots] = useState<Slot[]>([]);
@@ -148,36 +153,52 @@ export default function HandoverReviewView() {
   const [hallApproval, setHallApproval] = useState<Approval | undefined>();
   const [kitchenApproval, setKitchenApproval] = useState<Approval | undefined>();
   const [loading, setLoading] = useState(false);
+  const [storeNotAssigned, setStoreNotAssigned] = useState(false);
 
   useEffect(() => {
+    if (!isAdmin) return;
+    fetch("/api/admin/stores")
+      .then((r) => r.json())
+      .then((d) => { if (d.ok) setStores(d.data); });
+  }, [isAdmin]);
+
+  useEffect(() => {
+    const storeQuery = storeId ? `&storeId=${storeId}` : "";
     Promise.all([
-      fetch("/api/admin/staff/handover/slots?category=HALL").then((r) => r.json()),
-      fetch("/api/admin/staff/handover/slots?category=KITCHEN").then((r) => r.json()),
+      fetch(`/api/admin/staff/handover/slots?category=HALL${storeQuery}`).then((r) => r.json()),
+      fetch(`/api/admin/staff/handover/slots?category=KITCHEN${storeQuery}`).then((r) => r.json()),
     ]).then(([hall, kitchen]) => {
+      if ((!hall.ok && hall.code === "STORE_NOT_ASSIGNED") || (!kitchen.ok && kitchen.code === "STORE_NOT_ASSIGNED")) {
+        setStoreNotAssigned(true);
+        return;
+      }
       if (hall.ok) {
         const active = hall.slots.filter((s: Slot & { isActive: boolean }) => s.isActive);
         setHallSlots(active);
-        if (active.length > 0) setHallSlotId(active[0].id);
+        setHallSlotId(active.length > 0 ? active[0].id : "");
+        if (active.length === 0) { setHallChecks([]); setHallComments([]); setHallApproval(undefined); }
       }
       if (kitchen.ok) {
         const active = kitchen.slots.filter((s: Slot & { isActive: boolean }) => s.isActive);
         setKitchenSlots(active);
-        if (active.length > 0) setKitchenSlotId(active[0].id);
+        setKitchenSlotId(active.length > 0 ? active[0].id : "");
+        if (active.length === 0) { setKitchenChecks([]); setKitchenComments([]); setKitchenApproval(undefined); }
       }
     });
-  }, []);
+  }, [storeId]);
 
   const loadData = useCallback(() => {
     if (!date) return;
     setLoading(true);
+    const storeQuery = storeId ? `&storeId=${storeId}` : "";
     const fetches: Promise<void>[] = [];
 
     if (hallSlotId) {
       fetches.push(
         Promise.all([
-          fetch(`/api/staff/handover/checks?shiftDate=${date}&shiftSlotId=${hallSlotId}`).then((r) => r.json()),
-          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${hallSlotId}&category=HALL`).then((r) => r.json()),
-          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${hallSlotId}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/checks?shiftDate=${date}&shiftSlotId=${hallSlotId}${storeQuery}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${hallSlotId}&category=HALL${storeQuery}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${hallSlotId}${storeQuery}`).then((r) => r.json()),
         ]).then(([checksData, commentsData, approvalsData]) => {
           if (checksData.ok) setHallChecks(checksData.checks);
           if (commentsData.ok) setHallComments(commentsData.comments);
@@ -189,9 +210,9 @@ export default function HandoverReviewView() {
     if (kitchenSlotId) {
       fetches.push(
         Promise.all([
-          fetch(`/api/staff/handover/checks?shiftDate=${date}&shiftSlotId=${kitchenSlotId}`).then((r) => r.json()),
-          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${kitchenSlotId}&category=KITCHEN`).then((r) => r.json()),
-          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${kitchenSlotId}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/checks?shiftDate=${date}&shiftSlotId=${kitchenSlotId}${storeQuery}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/comments?shiftDate=${date}&shiftSlotId=${kitchenSlotId}&category=KITCHEN${storeQuery}`).then((r) => r.json()),
+          fetch(`/api/admin/staff/handover/approvals?shiftDate=${date}&shiftSlotId=${kitchenSlotId}${storeQuery}`).then((r) => r.json()),
         ]).then(([checksData, commentsData, approvalsData]) => {
           if (checksData.ok) setKitchenChecks(checksData.checks);
           if (commentsData.ok) setKitchenComments(commentsData.comments);
@@ -201,7 +222,7 @@ export default function HandoverReviewView() {
     }
 
     Promise.all(fetches).finally(() => setLoading(false));
-  }, [date, hallSlotId, kitchenSlotId]);
+  }, [date, storeId, hallSlotId, kitchenSlotId]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -226,7 +247,24 @@ export default function HandoverReviewView() {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>인수인계 결제</Typography>
+      {storeNotAssigned ? (
+        <Alert severity="warning">{t("handoverStoreSelector.notAssignedGuidance")}</Alert>
+      ) : (
+      <>
       <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap", alignItems: "center" }}>
+        {isAdmin && (
+          <FormControl size="small" sx={{ minWidth: 160 }}>
+            <InputLabel>{t("handoverStoreSelector.label") ?? "매장 선택"}</InputLabel>
+            <Select
+              value={storeId}
+              label={t("handoverStoreSelector.label") ?? "매장 선택"}
+              onChange={(e) => setStoreId(e.target.value)}
+            >
+              <MenuItem value="">{t("handoverStoreSelector.allStores") ?? "전체 매장"}</MenuItem>
+              {stores.map((s) => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+        )}
         <TextField
           type="date"
           label="날짜"
@@ -270,6 +308,8 @@ export default function HandoverReviewView() {
             onRevoke={handleRevoke}
           />
         </>
+      )}
+      </>
       )}
     </Box>
   );

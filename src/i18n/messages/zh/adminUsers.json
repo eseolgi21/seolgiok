@@ -24,7 +24,11 @@
       "user": "普通用户 (Lv.1)",
       "staff": "员工 (Lv.10)",
       "manager": "经理 (Lv.15)"
-    }
+    },
+    "storeLabel": "所属门店",
+    "selectStorePlaceholder": "选择门店",
+    "noStoreOption": "无门店",
+    "inactiveStoreSuffix": "已停用"
   },
   "selection": {
     "deleteSelected": "删除所选（{count}人）",

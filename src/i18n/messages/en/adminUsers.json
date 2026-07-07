@@ -24,7 +24,11 @@
       "user": "Regular User (Lv.1)",
       "staff": "Staff (Lv.10)",
       "manager": "Manager (Lv.15)"
-    }
+    },
+    "storeLabel": "Assigned Store",
+    "selectStorePlaceholder": "Select Store",
+    "noStoreOption": "No Store",
+    "inactiveStoreSuffix": "Inactive"
   },
   "selection": {
     "deleteSelected": "Delete Selected ({count})",

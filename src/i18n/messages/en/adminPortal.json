@@ -6,5 +6,10 @@
     "revokeBtn": "Revoke",
     "submittedBy": "Submitted By",
     "noApproval": "Not Submitted"
+  },
+  "handoverStoreSelector": {
+    "label": "Select Store",
+    "allStores": "All Stores",
+    "notAssignedGuidance": "This feature is unavailable because you are not assigned to a store. Please contact your administrator."
   }
 }

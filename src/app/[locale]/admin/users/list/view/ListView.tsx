@@ -1,7 +1,7 @@
 // src/app/admin/users/list/view/ListView.tsx
 "use client";
 
-import type { UseUsersListReturn, UserRow, UserInfoDetail } from "../types";
+import type { UseUsersListReturn, UserRow, UserInfoDetail, StoreOption } from "../types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -193,6 +193,8 @@ function UsersTable(props: {
   );
 }
 
+const NO_STORE_VALUE = "__NONE__";
+
 function DetailPanel(props: {
   open: boolean;
   loading: boolean;
@@ -202,10 +204,19 @@ function DetailPanel(props: {
   setEditLevel: (n: number) => void;
   savingLevel: boolean;
   onSaveLevel: () => void;
+  storeOptions: StoreOption[];
+  storeOptionsLoading: boolean;
+  editStoreId: string | null;
+  setEditStoreId: (id: string | null) => void;
 }) {
-  const { open, loading, detail, onClose, editLevel, setEditLevel, savingLevel, onSaveLevel } = props;
+  const {
+    open, loading, detail, onClose, editLevel, setEditLevel, savingLevel, onSaveLevel,
+    storeOptions, storeOptionsLoading, editStoreId, setEditStoreId,
+  } = props;
   const t = useTranslations("adminUsers");
   if (!open) return null;
+
+  const showStoreAssignment = editLevel !== null && editLevel >= 10;
 
   return (
     <div className="fixed inset-0 bg-background/60 backdrop-blur z-50 flex items-center justify-center">
@@ -255,6 +266,31 @@ function DetailPanel(props: {
                           </div>
                         </TableCell>
                       </TableRow>
+                      {showStoreAssignment && (
+                        <TableRow>
+                          <TableHead>{t("detail.storeLabel")}</TableHead>
+                          <TableCell>
+                            <Select
+                              value={editStoreId ?? NO_STORE_VALUE}
+                              onValueChange={(v) => setEditStoreId(v === NO_STORE_VALUE ? null : v)}
+                              disabled={storeOptionsLoading}
+                            >
+                              <SelectTrigger className="h-8 text-sm w-56">
+                                <SelectValue placeholder={t("detail.selectStorePlaceholder")} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value={NO_STORE_VALUE}>{t("detail.noStoreOption")}</SelectItem>
+                                {storeOptions.map((s) => (
+                                  <SelectItem key={s.id} value={s.id}>
+                                    {s.name}
+                                    {!s.isActive ? ` (${t("detail.inactiveStoreSuffix")})` : ""}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                        </TableRow>
+                      )}
                       <TableRow>
                         <TableHead>googleOtpEnabled</TableHead>
                         <TableCell>{detail.googleOtpEnabled ? "true" : "false"}</TableCell>
@@ -291,6 +327,7 @@ export default function ListView(props: UseUsersListReturn) {
     loading, error, users,
     detailLoading, detail, isDetailOpen, openDetail, closeDetail,
     refresh, editLevel, setEditLevel, savingLevel, saveLevel,
+    storeOptions, storeOptionsLoading, editStoreId, setEditStoreId,
     toggleStaff, togglingStaffId,
     page, pageSize, total, setPage,
     selectedIds, toggleSelect, toggleSelectAll,
@@ -384,6 +421,10 @@ export default function ListView(props: UseUsersListReturn) {
         setEditLevel={setEditLevel}
         savingLevel={savingLevel}
         onSaveLevel={saveLevel}
+        storeOptions={storeOptions}
+        storeOptionsLoading={storeOptionsLoading}
+        editStoreId={editStoreId}
+        setEditStoreId={setEditStoreId}
       />
     </div>
   );

@@ -38,6 +38,10 @@ const navTree: NavNode[] = [
     children: [{ label: "유저 목록", href: "/admin/users/list" }],
   },
   {
+    label: "매장 관리",
+    children: [{ label: "매장 목록", href: "/admin/stores" }],
+  },
+  {
     label: "품목 관리",
     children: [
       { label: "품목 분류 설정", href: "/admin/items" },

@@ -8,14 +8,24 @@
 브라우저
   └─ Next.js 16 App Router (SSR, [locale] 세그먼트)
         ├─ src/app/[locale]/(site)/   — 공개 페이지 (홈·메뉴·안내·공지)
-        ├─ src/app/[locale]/admin/    — 관리자 대시보드 (매출·매입·정산·게시판·회원)
+        ├─ src/app/[locale]/admin/    — 관리자 대시보드 (매출·매입·정산·게시판·회원·매장·직원관리)
+        ├─ src/app/[locale]/staff/    — 직원 셀프서비스 (출퇴근·인수인계·급여명세·공지·수상·건의)
         └─ src/app/api/               — API Routes
               ├─ (site)/auth/         — 로그인·회원가입·NextAuth callback
               ├─ user/                — 개인 설정(키워드·엑셀매핑)
-              └─ admin/               — 회계·게시판·회원 관리 API
+              ├─ staff/               — 직원 셀프서비스 API
+              └─ admin/               — 회계·게시판·회원·매장·직원 관리 API
 
 NextAuth 5 (세션 기반) → Prisma 7 → PostgreSQL (Railway)
 AES-256-GCM 암호화(CRED_ENC_KEY_B64) · Google OTP/2FA
+
+멀티 매장(프랜차이즈) 지원 — `Store` 모델 기준으로 `UserInfo`·`AttendanceLog`·인수인계 5개
+모델(`HandoverItem`/`HandoverShiftSlot`/`HandoverCheck`/`HandoverComment`/`HandoverApproval`)이
+모두 `storeId`로 소속 매장을 구분한다. `src/lib/middleware/store-scope.ts`의
+`resolveStoreScope()`가 세션 레벨에 따라 전체(`ALL`, level≥21 ADMIN) 또는 소속 매장 한정
+(`OWN`, level≥15 MANAGER)으로 조회 범위를 결정한다. 옛 싱글톤 지오펜싱 화면
+(`admin/staff/attendance/location/*`)은 삭제되었고 `admin/stores`(매장 CRUD, 다중 매장 지원)로
+대체되었다.
 ```
 
 ## 코드 트리
@@ -26,31 +36,40 @@ seolgiok/
 │   ├─ app/
 │   │   ├─ [locale]/
 │   │   │   ├─ (site)/          — 공개 페이지
-│   │   │   └─ admin/           — 관리자 페이지 (sales, purchase, profit, boards, users, items, dashboard)
+│   │   │   ├─ admin/           — 관리자 페이지 (sales, purchase, profit, boards, users, items, stores, staff, dashboard)
+│   │   │   │                     stores/ — 매장 CRUD (멀티 매장, admin-expert 소관)
+│   │   │   └─ staff/           — 직원 셀프서비스 (attendance/, handover/, payslips/, notices/, awards/, suggestions/)
 │   │   └─ api/
 │   │       ├─ (site)/auth/     — 인증 API
 │   │       ├─ user/            — 회원 개인 API
-│   │       └─ admin/           — 관리자 API (accounting/, boards/, users/)
+│   │       ├─ staff/           — 직원 API (attendance/, handover/, payslips/, notices/, awards/, suggestions/)
+│   │       └─ admin/           — 관리자 API (accounting/, boards/, users/, stores/, staff/)
+│   │             stores/route.ts              — 매장 CRUD (GET/POST/PATCH/DELETE)
+│   │             staff/handover/checks/route.ts — 인수인계 체크 기록 (site-expert 소관 예외)
 │   ├─ components/
 │   │   ├─ ui/                  — 공통 UI (feedback/, overlay/)
 │   │   └─ admin/               — 관리자 전용 컴포넌트
 │   ├─ lib/
 │   │   ├─ auth/                — NextAuth 5 config·세션 핸들러
+│   │   ├─ middleware/           — store-scope.ts(resolveStoreScope), admin-auth.ts(requireAdmin)
+│   │   ├─ timezone.ts          — IANA 타임존 기준 자정 계산 (멀티 매장 DST 대응, kst.ts와 분리)
 │   │   ├─ prisma.ts            — Prisma 싱글톤
 │   │   └─ crypto.ts            — AES-256-GCM 암복호화
 │   ├─ i18n/messages/           — 5개 언어 번역 (en, ja, ko, vi, zh)
 │   ├─ types/auth/              — 인증 관련 타입 (login, signup, logout, resolve-user)
 │   └─ generated/prisma/        — Prisma 자동 생성 클라이언트
 ├─ prisma/
-│   └─ schema/                  — 모듈형 스키마 9파일
+│   └─ schema/                  — 모듈형 스키마 10파일
 │       ├─ Base.prisma          — generator·datasource 설정
-│       ├─ User.prisma          — User, UserInfo, Country, SearchKeyword, ExcelMapping
+│       ├─ User.prisma          — User, UserInfo(+storeId), SearchKeyword, ExcelMapping
+│       ├─ Country.prisma       — Country
 │       ├─ ReferralEdge.prisma  — ReferralEdge (REFERRER/SPONSOR 엣지)
 │       ├─ Board.prisma         — Post, Comment, Attachment, SupportAssignment
 │       ├─ Sales.prisma         — DailySales, CardTransaction, SaleItem
 │       ├─ Purchase.prisma      — PurchaseItem
 │       ├─ Item.prisma          — ItemClassification, ItemCategory, ExcelFilter
-│       └─ Profit.prisma        — Settlement
+│       ├─ Profit.prisma        — Settlement
+│       └─ Staff.prisma         — AttendanceLog(+storeId), Store(@@unique([name])), HandoverItem/ShiftSlot/Check/Comment/Approval(모두 storeId 필수), EmployeeVote, Payslip
 └─ public/                      — 정적 파일
 ```
 
@@ -61,7 +80,7 @@ seolgiok/
 - **모든 UI는 5개 로케일 필수** — en, ja, ko, vi, zh. 하드코딩 문자열 금지, 반드시 `next-intl` 키 사용.
 - **운영 DB 직접 SQL 변경 금지** — `SELECT` read-only만 허용.
 - **Git 히스토리 작업은 `deploy-manager` 에이전트 전용** — `commit`·`push` 등.
-- **Prisma 마이그레이션은 `domain-expert` 전용** — `prisma migrate dev`, `prisma db push` 등 스키마 변경.
+- **Prisma 마이그레이션(스키마 변경 실행)은 `db-expert` 전용** — `prisma migrate dev`, `prisma db push` 등. `domain-expert`는 리뷰만 담당(코드 수정 X).
 - **인증은 NextAuth 5 세션 패턴만** — 자체 JWT 발급 금지. `auth()` / `getSession()` 사용.
 - **암호화 데이터 직접 수정 금지** — `src/lib/crypto.ts`의 AES 유틸리티 경유만 허용.
 - **i18n 변경은 `i18n-expert` 경유** — 번역 키 추가·수정·로케일 라우팅 변경 시 반드시 i18n-expert 호출.
@@ -89,7 +108,7 @@ seolgiok/
 | `product-planner` | sonnet | FRD·화면 기획·플로우·엣지 케이스 정의 |
 | `ui-ux-designer` | sonnet | 디자인 시스템·UX 플로우·레이아웃 스펙 |
 | `growth-pm` | sonnet | 성장 전략·온보딩·리텐션·KPI |
-| `domain-expert` | **opus** | 도메인 로직 리뷰·Prisma 마이그레이션 전담 (코드 수정 X) |
+| `domain-expert` | **opus** | 도메인 로직 리뷰 전담·Prisma 마이그레이션 리뷰 (코드 수정 X, 실행은 db-expert) |
 | `db-expert` | **opus** | Prisma 스키마 변경·마이그레이션·seed 스크립트 전담 |
 | `qa-lead` | sonnet | 테스트 시나리오·리그레션·배포 판단 |
 | `deploy-manager` | sonnet | git add·commit·push·배포 상태 체크 |
@@ -99,8 +118,8 @@ seolgiok/
 | `doc-generator` | sonnet | docs/ 문서 초기 생성·업데이트 |
 | `i18n-expert` | sonnet | 5개 로케일 번역 키 추가·누락 감지·하드코딩 탐지 |
 | `security-expert` | **opus** | 보안 감사 전용 (코드 수정 X) — 인증·암호화·XSS·인젝션 리뷰 |
-| `site-expert` | sonnet | 공개 사이트·인증·개인계정 코드 작성 (`(site)/` + `api/(site)/` + `api/user/`) |
-| `admin-expert` | sonnet | 관리자 전체 코드 작성 (`admin/` + `api/admin/` — 회계·게시판·회원) |
+| `site-expert` | sonnet | 공개 사이트·인증·개인계정·직원 출퇴근 코드 작성 (`(site)/` + `api/(site)/` + `api/user/` + `staff/` + `api/staff/`). 예외로 `admin/staff/handover/*`(인수인계, 직원 도메인)도 담당 |
+| `admin-expert` | sonnet | 관리자 전체 코드 작성 (`admin/` + `api/admin/` — 회계·게시판·회원·매장). `admin/staff/handover/*`는 site-expert 소관 예외 |
 
 ### 호출 가이드
 

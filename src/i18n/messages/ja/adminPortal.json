@@ -6,5 +6,10 @@
     "revokeBtn": "取消確認",
     "submittedBy": "申請者",
     "noApproval": "未申請"
+  },
+  "handoverStoreSelector": {
+    "label": "店舗選択",
+    "allStores": "全店舗",
+    "notAssignedGuidance": "所属店舗が割り当てられていないため、この機能を利用できません。管理者にお問い合わせください。"
   }
 }

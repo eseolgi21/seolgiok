@@ -34,6 +34,10 @@
       "user": "일반유저 (Lv.1)",
       "staff": "스텝 (Lv.10)",
       "manager": "매니져 (Lv.15)"
-    }
+    },
+    "storeLabel": "소속 매장",
+    "selectStorePlaceholder": "매장 선택",
+    "noStoreOption": "매장 없음",
+    "inactiveStoreSuffix": "비활성"
   }
 }

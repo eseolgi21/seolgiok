@@ -6,22 +6,59 @@ enum AttendanceType {
 }
 
 model AttendanceLog {
-  id        String         @id @default(cuid())
-  userId    String
-  user      User           @relation("StaffAttendance", fields: [userId], references: [id], onDelete: Cascade)
-  type      AttendanceType
-  clockedAt DateTime       @default(now())
-  note      String?
-  createdAt DateTime       @default(now())
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation("StaffAttendance", fields: [userId], references: [id], onDelete: Cascade)
+  type           AttendanceType
+  clockedAt      DateTime       @default(now())
+  note           String?
+  latitude       Float?
+  longitude      Float?
+  distanceMeters Float?
+  storeId        String?
+  store          Store?         @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  createdAt      DateTime       @default(now())
 
   @@index([userId, clockedAt])
   @@index([clockedAt])
+  @@index([storeId, clockedAt])
+}
+
+// ===== 매장 (멀티매장 지오펜싱 기준점) =====
+
+model Store {
+  id           String   @id @default(cuid())
+  name         String
+  address      String?
+  latitude     Float
+  longitude    Float
+  radiusMeters Int      @default(100)
+  timezone     String   @default("Asia/Seoul")
+  isActive     Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+  updatedBy    String?
+  updater      User?    @relation("StoreUpdater", fields: [updatedBy], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+
+  members        UserInfo[]
+  attendanceLogs AttendanceLog[]
+
+  handoverItems     HandoverItem[]
+  handoverSlots     HandoverShiftSlot[]
+  handoverChecks    HandoverCheck[]
+  handoverComments  HandoverComment[]
+  handoverApprovals HandoverApproval[]
+
+  @@unique([name])
+  @@index([isActive])
 }
 
 // ===== 인수인계 체크리스트 =====
 
 model HandoverItem {
   id        String          @id @default(cuid())
+  storeId   String
+  store     Store           @relation(fields: [storeId], references: [id], onDelete: Restrict)
   label     String
   category  String          @default("HALL")
   order     Int             @default(0)
@@ -32,10 +69,13 @@ model HandoverItem {
 
   @@index([isActive, order])
   @@index([category, isActive, order])
+  @@index([storeId, isActive, order])
 }
 
 model HandoverShiftSlot {
   id        String             @id @default(cuid())
+  storeId   String
+  store     Store              @relation(fields: [storeId], references: [id], onDelete: Restrict)
   label     String
   category  String             @default("HALL")
   order     Int                @default(0)
@@ -47,10 +87,13 @@ model HandoverShiftSlot {
   updatedAt DateTime           @updatedAt
 
   @@index([isActive, category, order])
+  @@index([storeId, isActive, category, order])
 }
 
 model HandoverCheck {
   id          String            @id @default(cuid())
+  storeId     String
+  store       Store             @relation(fields: [storeId], references: [id], onDelete: Restrict)
   itemId      String
   item        HandoverItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)
   shiftDate   DateTime          @db.Date
@@ -60,13 +103,16 @@ model HandoverCheck {
   checkedUser User              @relation("StaffHandoverCheck", fields: [checkedBy], references: [id], onDelete: Cascade)
   checkedAt   DateTime          @default(now())
 
-  @@unique([itemId, shiftDate, shiftSlotId, checkedBy])
+  @@unique([storeId, itemId, shiftDate, shiftSlotId, checkedBy])
+  @@index([storeId, shiftDate, shiftSlotId])
   @@index([shiftDate, shiftSlotId])
   @@index([checkedBy])
 }
 
 model HandoverComment {
   id          String            @id @default(cuid())
+  storeId     String
+  store       Store             @relation(fields: [storeId], references: [id], onDelete: Restrict)
   shiftDate   DateTime          @db.Date
   shiftSlotId String
   shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
@@ -78,25 +124,29 @@ model HandoverComment {
   createdAt   DateTime          @default(now())
 
   @@index([shiftDate, shiftSlotId, category])
+  @@index([storeId, shiftDate, shiftSlotId, category])
   @@index([authorId])
 }
 
 model HandoverApproval {
-  id           String            @id @default(cuid())
-  shiftDate    DateTime          @db.Date
-  shiftSlotId  String
-  shiftSlot    HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
-  category     String
-  status       String            @default("PENDING")
-  submittedBy  String
-  submitter    User              @relation("HandoverApprovalSubmitter", fields: [submittedBy], references: [id], onDelete: Restrict)
-  submittedAt  DateTime          @default(now())
-  confirmedBy  String?
-  confirmer    User?             @relation("HandoverApprovalConfirmer", fields: [confirmedBy], references: [id], onDelete: SetNull)
-  confirmedAt  DateTime?
-  note         String?
+  id          String            @id @default(cuid())
+  storeId     String
+  store       Store             @relation(fields: [storeId], references: [id], onDelete: Restrict)
+  shiftDate   DateTime          @db.Date
+  shiftSlotId String
+  shiftSlot   HandoverShiftSlot @relation(fields: [shiftSlotId], references: [id], onDelete: Restrict)
+  category    String
+  status      String            @default("PENDING")
+  submittedBy String
+  submitter   User              @relation("HandoverApprovalSubmitter", fields: [submittedBy], references: [id], onDelete: Restrict)
+  submittedAt DateTime          @default(now())
+  confirmedBy String?
+  confirmer   User?             @relation("HandoverApprovalConfirmer", fields: [confirmedBy], references: [id], onDelete: SetNull)
+  confirmedAt DateTime?
+  note        String?
 
-  @@unique([shiftDate, shiftSlotId, category])
+  @@unique([storeId, shiftDate, shiftSlotId, category])
+  @@index([storeId, shiftDate, shiftSlotId])
   @@index([shiftDate, shiftSlotId])
 }
 

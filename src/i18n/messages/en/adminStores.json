@@ -1,0 +1,61 @@
+{
+  "page": {
+    "title": "Admin · Store Management"
+  },
+  "table": {
+    "name": "Store Name",
+    "address": "Address",
+    "coordinates": "Coordinates",
+    "radiusMeters": "Allowed Radius",
+    "timezone": "Timezone",
+    "memberCount": "Members",
+    "isActive": "Active",
+    "updatedAt": "Updated At",
+    "actions": "Actions",
+    "noData": "No data available."
+  },
+  "loading": "Loading…",
+  "refresh": "Refresh",
+  "actions": {
+    "create": "Add Store",
+    "edit": "Edit",
+    "deleteSelected": "Delete Selected ({count})"
+  },
+  "form": {
+    "createTitle": "Add Store",
+    "editTitle": "Edit Store",
+    "name": "Store Name",
+    "address": "Address",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "radiusMeters": "Allowed Radius (m)",
+    "timezoneHelper": "The timezone used to calculate and display staff attendance times.",
+    "isActive": "Active",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "deleteDialog": {
+    "confirmTitle": "Delete Store",
+    "confirmDesc": "This will delete {count} store(s). This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "toast": {
+    "createSuccess": "Store added successfully.",
+    "updateSuccess": "Store updated successfully.",
+    "toggleActiveSuccess": "Active status changed.",
+    "deleteSuccess": "Store deleted successfully.",
+    "storeInUse": "Cannot delete: staff are still assigned to this store. Deactivate it instead.",
+    "storeNameDuplicate": "A store with this name already exists.",
+    "notFound": "Store not found.",
+    "validationError": "Please check your input.",
+    "loadError": "An error occurred while loading data.",
+    "networkError": "A network error occurred. Please try again.",
+    "genericError": "An error occurred while processing your request."
+  },
+  "timezoneSearch": {
+    "label": "Timezone",
+    "placeholder": "Search timezone",
+    "noOptions": "No matching timezone."
+  }
+}

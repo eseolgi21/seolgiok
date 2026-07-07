@@ -1,8 +1,8 @@
 // prisma/schema/User.prisma
 model User {
-  id           String  @id @default(cuid())
-  username     String  @unique @db.Citext
-  email        String  @unique @db.Citext
+  id           String @id @default(cuid())
+  username     String @unique @db.Citext
+  email        String @unique @db.Citext
   name         String
   passwordHash String
 
@@ -12,25 +12,26 @@ model User {
   downlines ReferralEdge[] @relation("EdgeParent")
   uplines   ReferralEdge[] @relation("EdgeChild")
 
-  info   UserInfo?   @relation("User_UserInfo")
+  info UserInfo? @relation("User_UserInfo")
 
   // ✅ Board.prisma의 named relation에 대응하는 반대편 필드(Back relation)
-  postsAuthored         Post[]              @relation("PostAuthor")
-  commentsAuthored      Comment[]           @relation("CommentAuthor")
-  ticketAssignments     SupportAssignment[] @relation("TicketAssignee")
-  
-  searchKeywords        SearchKeyword[]
-  excelMappings         ExcelMapping[]
+  postsAuthored     Post[]              @relation("PostAuthor")
+  commentsAuthored  Comment[]           @relation("CommentAuthor")
+  ticketAssignments SupportAssignment[] @relation("TicketAssignee")
 
-  attendanceLogs AttendanceLog[] @relation("StaffAttendance")
-  handoverChecks HandoverCheck[] @relation("StaffHandoverCheck")
+  searchKeywords SearchKeyword[]
+  excelMappings  ExcelMapping[]
+
+  attendanceLogs                AttendanceLog[]    @relation("StaffAttendance")
+  storeUpdates                  Store[]            @relation("StoreUpdater")
+  handoverChecks                HandoverCheck[]    @relation("StaffHandoverCheck")
   handoverComments              HandoverComment[]  @relation("StaffHandoverComment")
   handoverApprovalSubmissions   HandoverApproval[] @relation("HandoverApprovalSubmitter")
   handoverApprovalConfirmations HandoverApproval[] @relation("HandoverApprovalConfirmer")
-  votesGiven     EmployeeVote[]  @relation("VoteCaster")
-  votesReceived  EmployeeVote[]  @relation("VoteReceiver")
-  payslips         Payslip[]     @relation("StaffPayslip")
-  uploadedPayslips Payslip[]     @relation("PayslipUploader")
+  votesGiven                    EmployeeVote[]     @relation("VoteCaster")
+  votesReceived                 EmployeeVote[]     @relation("VoteReceiver")
+  payslips                      Payslip[]          @relation("StaffPayslip")
+  uploadedPayslips              Payslip[]          @relation("PayslipUploader")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,6 +55,9 @@ model UserInfo {
   // level
   level Int @default(1)
 
+  // 소속 매장 (멀티매장)
+  storeId String?
+  store   Store?  @relation(fields: [storeId], references: [id], onDelete: Restrict)
 
   // Google OTP
   googleOtpEnabled Boolean @default(false)
@@ -64,13 +68,13 @@ model UserInfo {
 }
 
 model SearchKeyword {
-  id        String   @id @default(cuid())
-  
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  keyword   String
-  type      KeywordType // PURCHASE, SALES
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  keyword String
+  type    KeywordType // PURCHASE, SALES
 
   createdAt DateTime @default(now())
 
@@ -78,25 +82,25 @@ model SearchKeyword {
 }
 
 model ExcelMapping {
-  id          String   @id @default(cuid())
-  
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  name        String   // e.g. "KB Card", "Shinhan Bank"
-  type        KeywordType // Reuse KeywordType (PURCHASE, SALES) or create new one if needed, reusing for now as it matches context
-  
-  colDate     String
-  colItem     String
-  colAmount   String
-  colCategory String?
-  colNote     String?
-  colPayment  String? // For Sales
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String // e.g. "KB Card", "Shinhan Bank"
+  type KeywordType // Reuse KeywordType (PURCHASE, SALES) or create new one if needed, reusing for now as it matches context
+
+  colDate       String
+  colItem       String
+  colAmount     String
+  colCategory   String?
+  colNote       String?
+  colPayment    String? // For Sales
   filterExclude String? // 제외 필터
   filterInclude String? // 포함 필터
 
-  createdAt   DateTime @default(now())
-  
+  createdAt DateTime @default(now())
+
   @@index([userId, type])
 }
 

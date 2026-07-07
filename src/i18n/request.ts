@@ -23,6 +23,7 @@ const NAMESPACES = [
   "adminBoards",
   "adminSales",
   "adminPurchase",
+  "adminStores",
   "staffPortal",
   "adminPortal",
 ] as const;

@@ -6,5 +6,10 @@
     "revokeBtn": "撤销确认",
     "submittedBy": "提交人",
     "noApproval": "未提交"
+  },
+  "handoverStoreSelector": {
+    "label": "选择门店",
+    "allStores": "所有门店",
+    "notAssignedGuidance": "由于尚未分配所属门店，无法使用此功能。请联系管理员。"
   }
 }

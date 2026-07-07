@@ -22,7 +22,16 @@
     "clockOut": "Clock Out",
     "history": "Today's Log",
     "alreadyClockedIn": "Already clocked in.",
-    "alreadyClockedOut": "Already clocked out."
+    "alreadyClockedOut": "Already clocked out.",
+    "locating": "Locating...",
+    "locationPermissionDenied": "Location permission denied. Please allow location access in your browser settings.",
+    "locationUnavailable": "Unable to determine your current location.",
+    "locationTimeout": "Location request timed out. Please try again.",
+    "locationUnsupported": "Location services are not supported on this device.",
+    "outOfRange": "You are {distance}m away from the store (allowed radius: {radius}m).",
+    "storeLocationNotConfigured": "Store location is not configured, so attendance cannot be processed. Please contact your administrator.",
+    "storeNotAssigned": "You are not assigned to a store, so attendance cannot be processed. Please contact your administrator.",
+    "genericError": "An error occurred while processing attendance. Please try again."
   },
   "handover": {
     "pageTitle": "Shift Handover",

@@ -22,7 +22,16 @@
     "clockOut": "退勤",
     "history": "本日の記録",
     "alreadyClockedIn": "すでに出勤済みです。",
-    "alreadyClockedOut": "すでに退勤済みです。"
+    "alreadyClockedOut": "すでに退勤済みです。",
+    "locating": "位置情報を確認中...",
+    "locationPermissionDenied": "位置情報の権限が拒否されました。ブラウザの設定で位置情報アクセスを許可してください。",
+    "locationUnavailable": "現在地を確認できません。",
+    "locationTimeout": "位置情報の取得がタイムアウトしました。もう一度お試しください。",
+    "locationUnsupported": "この端末では位置情報機能を利用できません。",
+    "outOfRange": "店舗から{distance}m離れています（許容範囲{radius}m）。",
+    "storeLocationNotConfigured": "店舗位置が設定されていないため、出退勤を処理できません。管理者にお問い合わせください。",
+    "storeNotAssigned": "所属店舗が割り当てられていないため、出退勤できません。管理者にお問い合わせください。",
+    "genericError": "出退勤処理中にエラーが発生しました。もう一度お試しください。"
   },
   "handover": {
     "pageTitle": "引き継ぎ",
