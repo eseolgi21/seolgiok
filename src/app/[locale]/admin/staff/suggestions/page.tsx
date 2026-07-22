@@ -9,6 +9,7 @@ import {
   Divider,
   CircularProgress,
 } from "@mui/material";
+import { sanitizeHtmlAllowBasic } from "@/app/[locale]/admin/boards/announcements/gaurd/announcements";
 
 type Post = {
   id: string;
@@ -53,7 +54,9 @@ export default function StaffSuggestionsPage() {
                       {new Date(p.createdAt).toLocaleDateString()}
                       <br />
                       <span
-                        dangerouslySetInnerHTML={{ __html: p.bodyHtml }}
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtmlAllowBasic(p.bodyHtml),
+                        }}
                       />
                     </>
                   }

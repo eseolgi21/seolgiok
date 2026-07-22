@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
+import { sanitizeHtmlAllowBasic } from "@/app/[locale]/admin/boards/announcements/gaurd/announcements";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, code: "VALIDATION_ERROR" }, { status: 400 });
   }
 
+  // Stored XSS 방지: 관리자 화면(admin/staff/suggestions)에서 렌더링되므로 저장 전 살균한다.
+  const safeBodyHtml = sanitizeHtmlAllowBasic(body.trim());
+
   const post = await prisma.post.create({
     data: {
       boardType: "SUGGESTION",
@@ -45,7 +49,7 @@ export async function POST(req: Request) {
       visibility: "PRIVATE",
       title: title.trim(),
       bodyRaw: body.trim(),
-      bodyHtml: body.trim(),
+      bodyHtml: safeBodyHtml,
       isPublished: true,
       publishedAt: new Date(),
     },

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Typography, Box, CircularProgress, Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRouter } from "next/navigation";
+import { sanitizeHtmlAllowBasic } from "@/app/[locale]/admin/boards/announcements/gaurd/announcements";
 
 type Notice = { id: string; title: string; bodyHtml: string; publishedAt: string | null };
 
@@ -19,6 +20,13 @@ export default function NoticeDetailPage({ params }: { params: { id: string } })
       .finally(() => setLoading(false));
   }, [params.id]);
 
+  // 방어심층: 저장 시점에 이미 살균되어야 하지만(write측), 렌더 직전에도 한 번 더 살균해
+  // 이중 방어한다(Stored XSS 방어심층 갭 대응).
+  const safeBodyHtml = useMemo(
+    () => (notice ? sanitizeHtmlAllowBasic(notice.bodyHtml) : ""),
+    [notice]
+  );
+
   if (loading) return <CircularProgress />;
   if (!notice) return <Typography>공지를 찾을 수 없습니다.</Typography>;
 
@@ -31,7 +39,7 @@ export default function NoticeDetailPage({ params }: { params: { id: string } })
       <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 2 }}>
         {new Date(notice.publishedAt ?? "").toLocaleDateString()}
       </Typography>
-      <Box dangerouslySetInnerHTML={{ __html: notice.bodyHtml }} />
+      <Box dangerouslySetInnerHTML={{ __html: safeBodyHtml }} />
     </Box>
   );
 }

@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
+import { sanitizeHtmlAllowBasic } from "@/app/[locale]/admin/boards/announcements/gaurd/announcements";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +26,9 @@ export async function POST(req: Request) {
   const authorId = session.user!.id as string;
   const { title, bodyRaw, isPublished } = await req.json() as { title: string; bodyRaw: string; isPublished?: boolean };
   if (!title?.trim() || !bodyRaw?.trim()) return NextResponse.json({ ok: false, code: "VALIDATION_ERROR" }, { status: 400 });
+  const safeHtml = sanitizeHtmlAllowBasic(bodyRaw.trim());
   const post = await prisma.post.create({
-    data: { boardType: "INTERNAL", authorId, title: title.trim(), bodyRaw: bodyRaw.trim(), bodyHtml: bodyRaw.trim(), visibility: "PUBLIC", isPublished: !!isPublished, publishedAt: isPublished ? new Date() : null },
+    data: { boardType: "INTERNAL", authorId, title: title.trim(), bodyRaw: bodyRaw.trim(), bodyHtml: safeHtml, visibility: "PUBLIC", isPublished: !!isPublished, publishedAt: isPublished ? new Date() : null },
   });
   return NextResponse.json({ ok: true, post: { id: post.id } }, { status: 201 });
 }
@@ -39,7 +41,7 @@ export async function PATCH(req: Request) {
   if (!id) return NextResponse.json({ ok: false, code: "MISSING_ID" }, { status: 400 });
   const post = await prisma.post.update({
     where: { id },
-    data: { ...(title && { title }), ...(bodyRaw && { bodyRaw, bodyHtml: bodyRaw }), ...(isPublished !== undefined && { isPublished, publishedAt: isPublished ? new Date() : null }) },
+    data: { ...(title && { title }), ...(bodyRaw && { bodyRaw, bodyHtml: sanitizeHtmlAllowBasic(bodyRaw) }), ...(isPublished !== undefined && { isPublished, publishedAt: isPublished ? new Date() : null }) },
   });
   return NextResponse.json({ ok: true, post: { id: post.id } });
 }

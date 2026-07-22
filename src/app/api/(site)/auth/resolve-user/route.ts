@@ -2,12 +2,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { auth } from "@/lib/auth/auth";
+import { checkAndRecord, getClientIp } from "@/lib/middleware/rate-limit";
 import type {
   ResolveUserResponse,
   ResolvedUser,
 } from "@/types/auth/resolve-user/types";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+// 사용자 열거/PII 노출 방지: 로그인한 사용자만 조회 가능(비인증 접근 차단).
+// 인증 후에도 남용을 막기 위해 IP당 5분에 30건으로 제한(defense in depth).
+const RESOLVE_USER_WINDOW_MS = 5 * 60 * 1000;
+const RESOLVE_USER_LIMIT_PER_IP = 30;
 
 /** ---------------- Helpers ---------------- */
 function json<T>(body: T, init?: number | ResponseInit): NextResponse<T> {
@@ -101,12 +108,45 @@ async function findUserByQuery(query: string): Promise<ResolvedUser | null> {
   return null;
 }
 
+/** ---------------- 인증/rate limit 가드 ---------------- */
+// 비인증 사용자가 임의 email/username/id/referralCode로 계정 이메일을 조회할 수 있던
+// 문제(사용자 열거·PII 노출)를 막기 위해, 로그인 세션이 없으면 즉시 거부한다.
+async function guard(
+  req: NextRequest
+): Promise<NextResponse<ResolveUserResponse> | null> {
+  const session = await auth();
+  if (!session?.user) {
+    return json<ResolveUserResponse>(
+      { ok: false, code: "UNAUTHORIZED", message: "Login required" },
+      401
+    );
+  }
+
+  const ip = getClientIp(req);
+  const rl = checkAndRecord(
+    `resolve-user:${ip}`,
+    RESOLVE_USER_LIMIT_PER_IP,
+    RESOLVE_USER_WINDOW_MS
+  );
+  if (rl.limited) {
+    return json<ResolveUserResponse>(
+      { ok: false, code: "RATE_LIMITED", message: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } }
+    );
+  }
+
+  return null;
+}
+
 /** ---------------- Routes ---------------- */
 // GET /api/auth/resolve-user?query=...  (레거시: ?q=... 도 허용)
 export async function GET(
   req: NextRequest
 ): Promise<NextResponse<ResolveUserResponse>> {
   try {
+    const guardRes = await guard(req);
+    if (guardRes) return guardRes;
+
     const { searchParams } = new URL(req.url);
     const raw = searchParams.get("query") ?? searchParams.get("q") ?? "";
     const parsed = QuerySchema.safeParse({ query: raw });
@@ -145,6 +185,9 @@ export async function POST(
   req: NextRequest
 ): Promise<NextResponse<ResolveUserResponse>> {
   try {
+    const guardRes = await guard(req);
+    if (guardRes) return guardRes;
+
     const body = (await req.json()) as { query?: string; q?: string };
     const parsed = QuerySchema.safeParse({ query: body.query ?? body.q ?? "" });
 

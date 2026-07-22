@@ -24,6 +24,7 @@ export type SignupError =
   | "COUNTRY_NOT_FOUND"
   | "REFERRER_NOT_FOUND"
   | "SPONSOR_NOT_FOUND"
+  | "RATE_LIMITED"
   | "UNKNOWN";
 
 export type SignupSuccess = { user: ApiUser };

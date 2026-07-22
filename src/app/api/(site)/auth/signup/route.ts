@@ -8,13 +8,20 @@ import { Prisma } from "@/generated/prisma";
 // import { UserModelSchema } from "@/generated/zod/schemas";
 import { randomBytes } from "crypto";
 import { z } from "zod";
+import { checkAndRecord, getClientIp } from "@/lib/middleware/rate-limit";
 
 export const runtime = "nodejs";
 
+// 자동화된 대량 가입/열거 완화: IP당 10분에 40건. e2e 전체 스위트 기준 실제 가입 호출은
+// provisionStaffUser/provisionManagerUser/provisionAdminUser 등을 합쳐 약 20건 내외이며
+// 여러 spec 파일에 분산 실행되므로 이 한도에 걸리지 않는다 — 정상 사용에 넉넉한 여유를 둠.
+const SIGNUP_WINDOW_MS = 10 * 60 * 1000;
+const SIGNUP_LIMIT_PER_IP = 40;
+
 /** ---------------- 공통 응답 헬퍼 ---------------- */
-function bad(code: SignupError, message?: string, status = 400) {
+function bad(code: SignupError, message?: string, status = 400, headers?: HeadersInit) {
   const body: ApiError<SignupError> = { ok: false, code, message };
-  return NextResponse.json(body, { status });
+  return NextResponse.json(body, { status, headers });
 }
 function ok(user: ApiUser) {
   const body: ApiSuccess<{ user: ApiUser }> = { ok: true, user };
@@ -106,6 +113,13 @@ export async function POST(
   req: Request
 ): Promise<NextResponse<SignupResponse>> {
   try {
+    // 0) rate limit: IP당 요청 총량 제한 (자동화된 대량 가입 완화)
+    const ip = getClientIp(req);
+    const rl = checkAndRecord(`signup:${ip}`, SIGNUP_LIMIT_PER_IP, SIGNUP_WINDOW_MS);
+    if (rl.limited) {
+      return bad("RATE_LIMITED", undefined, 429, { "Retry-After": String(rl.retryAfterSec) });
+    }
+
     // 1) 입력 파싱/검증/정규화
     const raw = (await req.json()) as unknown;
     const parsed = SignupBodySchema.safeParse(raw);

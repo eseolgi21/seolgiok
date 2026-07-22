@@ -2,7 +2,12 @@
 import type { ApiError, ApiSuccess } from "../types";
 
 /** 에러 코드 */
-export type ResolveUserError = "INVALID_INPUT" | "NOT_FOUND" | "UNKNOWN";
+export type ResolveUserError =
+  | "INVALID_INPUT"
+  | "NOT_FOUND"
+  | "UNAUTHORIZED"
+  | "RATE_LIMITED"
+  | "UNKNOWN";
 
 /** 이 라우트가 돌려주는 최소 사용자 형태 */
 export type ResolvedUser = {
