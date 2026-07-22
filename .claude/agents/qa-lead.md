@@ -9,6 +9,13 @@ model: sonnet
 
 # QA Lead — 프로젝트 QA
 
+## 자동 테스트 현황 (doc-keeper 자동 갱신)
+
+> 이 숫자는 `scripts/sync-harness-docs.sh`(무옵션 실행 시)가 `npm run test:e2e` 결과를 파싱해
+> 자동 갱신한다. 수동으로 고치지 말 것 — 다음 sync 실행 시 덮어써진다.
+
+현재 자동 감지된 통과 케이스 수: 147케이스
+
 ## seolgiok 특화 테스트 케이스
 
 ### 권한 레벨 경계값 TC
@@ -157,7 +164,7 @@ bash /Users/aidenyun/project/brand-seolgiok/scripts/sync-harness-docs.sh --drift
 이 에이전트가 생성·유지하는 파일:
 - `docs/qa/test-cases.md` — 테스트 케이스 목록, 시나리오, 재현 단계
 - `docs/qa/checklist.md` — QA 체크리스트, 배포 전 검증 항목
-- `tests/` (또는 `__tests__/`) — 테스트 코드 파일 생성·보완
+- `__tests__/` — 플레이스홀더 단위테스트(Jest 성격) 생성·보완. `e2e/tests/`(Playwright)는 `test-harness-engineer` 소관.
 
 doc-generator 에이전트로부터 호출 시:
 - 코드·테스트 파일을 Read/Grep 으로 분석 후 작성 (추측 금지)

@@ -1,8 +1,9 @@
+<!-- Last updated: 2026-07-22 (QA 전략 문구 stale 서술 정정 - Playwright e2e/tests/ 26개 스펙 실존 및 test:e2e 스크립트 반영, doc-keeper) -->
 <!-- Last updated: 2026-07-07 (Phase 4 멀티매장 확장 마무리 - TC-72 화면 UX 최종 PASS 재확인 + TC-74 Store.name 유니크 제약 신규 추가, qa-lead) -->
 
 # seolgiok 테스트 케이스
 
-> **QA 전략**: 자동화 테스트 파일 없음 (`__tests__/sample.test.js` 는 플레이스홀더). CI = `npm run lint` 단일. 아래 케이스는 **수동 테스트** 기준이며, 향후 Playwright E2E 또는 Jest 단위 테스트로 자동화 예정.
+> **QA 전략**: Playwright E2E 스위트 존재 (`e2e/tests/{public,admin,staff,auth,prod}/*.spec.ts` 26개). `npm run test:e2e`(헤드리스) / `test:e2e:ui`(UI 모드) / `test:e2e:report`(리포트)로 실행 가능. CI = `npm run lint` 단일(E2E는 CI 미연동, 로컬 실행 기준). 최근 실행 결과(통과/실패 수치)는 하네스 점검 패키지 참조. 아래 케이스는 **수동 테스트** 기준으로 유지하며, 일부는 위 E2E 스펙으로 자동화됨.
 
 ---
 

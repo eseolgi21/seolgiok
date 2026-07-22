@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-07-07 -->
+<!-- Last updated: 2026-07-22 (test-cases/checklist/runbook 드리프트 날짜 동기화, doc-keeper) -->
 
 # seolgiok 문서 인덱스
 
@@ -23,8 +23,8 @@
 ### QA (qa/)
 | 파일 | 담당 에이전트 | 마지막 업데이트 | 설명 |
 |---|---|---|---|
-| [test-cases.md](qa/test-cases.md) | qa-lead | 2026-06-17 | 비즈니스 크리티컬 테스트 케이스 |
-| [checklist.md](qa/checklist.md) | qa-lead | 2026-06-17 | 배포 전·변경 후 체크리스트 |
+| [test-cases.md](qa/test-cases.md) | qa-lead | 2026-07-22 | 비즈니스 크리티컬 테스트 케이스 |
+| [checklist.md](qa/checklist.md) | qa-lead | 2026-07-22 | 배포 전·변경 후 체크리스트 |
 
 ### 도메인 리뷰 (루트)
 | 파일 | 담당 에이전트 | 마지막 업데이트 | 설명 |
@@ -34,7 +34,7 @@
 ### 배포 (deployment/)
 | 파일 | 담당 에이전트 | 마지막 업데이트 | 설명 |
 |---|---|---|---|
-| [runbook.md](deployment/runbook.md) | deploy-manager | 2026-06-17 | 배포 절차, 환경변수, 롤백 |
+| [runbook.md](deployment/runbook.md) | deploy-manager | 2026-07-22 | 배포 절차, 환경변수, 롤백 |
 
 ## 에이전트 팀
 

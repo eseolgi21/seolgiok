@@ -1,8 +1,8 @@
-<!-- Last updated: 2026-06-17 -->
+<!-- Last updated: 2026-07-22 (자동화 테스트 stale 서술 정정 - Playwright e2e/tests/ 26개 스펙 실존 반영, doc-keeper) -->
 
 # seolgiok QA 체크리스트
 
-> **기준**: 자동화 테스트 없음. CI = `npm run lint` 단일. 아래 체크리스트는 수동 검증 기준.
+> **기준**: Playwright E2E 스위트 존재 (`e2e/tests/` 26개 스펙, `npm run test:e2e`로 실행). CI = `npm run lint` 단일(E2E는 CI 미연동). 아래 체크리스트는 수동 검증 기준이며, 해당 항목 다수가 E2E 스펙으로 커버된다.
 
 ---
 
@@ -129,6 +129,7 @@
 | 도메인 핵심 로직 (회계·정산) | `domain-expert` (opus) diff 리뷰 |
 | git commit·push·배포 | `deploy-manager` (sonnet) |
 | 상위 기획·기능 우선순위 | `pm` (sonnet) |
+| Playwright 스펙(`e2e/tests/*.spec.ts`) 작성·수정, E2E 실패 트리아지 | `test-harness-engineer` (sonnet) |
 
 ---
 
@@ -152,7 +153,7 @@ npm run dev
 
 ## 알려진 제약사항
 
-- 자동화 테스트 프레임워크 미설정 (`__tests__/sample.test.js` 는 플레이스홀더)
-- `playwright` devDependency 설치됨 — E2E 테스트 작성 시 활용 가능
-- 모든 QA는 현재 수동 + lint 기반
+- Playwright E2E 스위트 구축됨 (`e2e/tests/{public,admin,staff,auth,prod}/*.spec.ts` 26개, `npm run test:e2e` / `test:e2e:ui` / `test:e2e:report`)
+- E2E는 CI에 미연동 — 로컬 실행 기준. CI는 여전히 `npm run lint` 단일
+- 최근 실행 결과(통과/실패 수치)는 하네스 점검 패키지 참조
 - 운영 DB 직접 SQL 변경 금지 (`SELECT` read-only만 허용)

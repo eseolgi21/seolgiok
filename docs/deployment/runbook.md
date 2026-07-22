@@ -1,4 +1,4 @@
-<!-- Last updated: 2026-06-17 -->
+<!-- Last updated: 2026-07-22 (Prisma 스키마 파일 수 드리프트 정정 - 9개→10개, Country.prisma·Staff.prisma 반영, doc-keeper) -->
 
 # seolgiok 배포 런북
 
@@ -80,7 +80,7 @@ npm run generate
 npx prisma migrate dev
 ```
 
-> Prisma 스키마는 `prisma/schema/` 하위 9개 파일로 분리되어 있다 (`Base.prisma`, `User.prisma`, `ReferralEdge.prisma`, `Board.prisma`, `Sales.prisma`, `Purchase.prisma`, `Item.prisma`, `Profit.prisma`). 클라이언트 생성물은 `src/generated/prisma/`에 출력된다.
+> Prisma 스키마는 `prisma/schema/` 하위 10개 파일로 분리되어 있다 (`Base.prisma`, `User.prisma`, `Country.prisma`, `ReferralEdge.prisma`, `Board.prisma`, `Sales.prisma`, `Purchase.prisma`, `Item.prisma`, `Profit.prisma`, `Staff.prisma`). 클라이언트 생성물은 `src/generated/prisma/`에 출력된다.
 
 ### 5. (선택) 시드 데이터 삽입
 

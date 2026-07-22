@@ -38,14 +38,15 @@ doc-generator 에이전트로부터 호출 시:
 
 ## 실행 절차
 
-```bash
-ROOT=$(git rev-parse --show-toplevel)
+> brand-seolgiok는 git 저장소가 아니므로 `git rev-parse` 등 git 의존 방식 사용 금지.
+> 다른 에이전트(admin-expert·qa-lead 등)와 동일하게 절대경로를 직접 사용한다.
 
+```bash
 # 드리프트 검사 + 케이스 수 동기화
-bash "$ROOT/sync-harness-docs.sh" --drift
+bash /Users/aidenyun/project/brand-seolgiok/scripts/sync-harness-docs.sh --drift
 
 # 테스트 케이스 수까지 동기화 필요한 경우
-bash "$ROOT/sync-harness-docs.sh"
+bash /Users/aidenyun/project/brand-seolgiok/scripts/sync-harness-docs.sh
 ```
 
 ## 자동 수정 범위
