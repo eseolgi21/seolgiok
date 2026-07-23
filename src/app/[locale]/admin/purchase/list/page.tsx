@@ -129,7 +129,7 @@ export default function PurchasePage() {
 
     const fetchMappings = useCallback(async () => {
         try {
-            const res = await fetch("/api/user/excel-mappings");
+            const res = await fetch("/api/user/excel-mappings?type=PURCHASE");
             if (res.ok) {
                 const data = await res.json();
                 setMappings(data.mappings || []);

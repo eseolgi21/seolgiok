@@ -130,7 +130,7 @@ export default function SalesListPage() {
 
     const fetchMappings = useCallback(async () => {
         try {
-            const res = await fetch("/api/user/excel-mappings");
+            const res = await fetch("/api/user/excel-mappings?type=SALES");
             if (res.ok) {
                 const data = await res.json();
                 setMappings(data.mappings || []);
